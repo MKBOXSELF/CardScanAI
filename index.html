@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CardScan AI - Scanner Documenti Formato Tessera</title>
+<meta name="theme-color" content="#1E7BE8">
+
+<!-- Favicon SVG inline (CardScan AI) -->
+<link rel="icon" type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%235BB0FF'/%3E%3Cstop%20offset='1'%20stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x='8'%20y='8'%20width='184'%20height='184'%20rx='44'%20fill='url(%23b)'/%3E%3Crect%20x='44'%20y='64'%20width='112'%20height='72'%20rx='8'%20fill='none'%20stroke='%23fff'%20stroke-width='4'/%3E%3Ccircle%20cx='69'%20cy='86'%20r='7'%20fill='none'%20stroke='%23fff'%20stroke-width='3'/%3E%3Cpath%20d='M%2056%20103%20Q%2069%2093%2082%20103'%20fill='none'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='82'%20x2='140'%20y2='82'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='90'%20x2='134'%20y2='90'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='98'%20x2='126'%20y2='98'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Crect%20x='60'%20y='112'%20width='24'%20height='17'%20rx='2.5'%20fill='none'%20stroke='%23fff'%20stroke-width='2.5'/%3E%3Cline%20x1='67'%20y1='112'%20x2='67'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='76'%20y1='112'%20x2='76'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='60'%20y1='120'%20x2='84'%20y2='120'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='30'%20y1='100'%20x2='170'%20y2='100'%20stroke='%2300FFB0'%20stroke-width='4'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon"
+      href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%235BB0FF'/%3E%3Cstop%20offset='1'%20stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x='8'%20y='8'%20width='184'%20height='184'%20rx='44'%20fill='url(%23b)'/%3E%3Crect%20x='44'%20y='64'%20width='112'%20height='72'%20rx='8'%20fill='none'%20stroke='%23fff'%20stroke-width='4'/%3E%3Ccircle%20cx='69'%20cy='86'%20r='7'%20fill='none'%20stroke='%23fff'%20stroke-width='3'/%3E%3Cpath%20d='M%2056%20103%20Q%2069%2093%2082%20103'%20fill='none'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='82'%20x2='140'%20y2='82'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='90'%20x2='134'%20y2='90'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='98'%20x2='126'%20y2='98'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Crect%20x='60'%20y='112'%20width='24'%20height='17'%20rx='2.5'%20fill='none'%20stroke='%23fff'%20stroke-width='2.5'/%3E%3Cline%20x1='67'%20y1='112'%20x2='67'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='76'%20y1='112'%20x2='76'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='60'%20y1='120'%20x2='84'%20y2='120'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='30'%20y1='100'%20x2='170'%20y2='100'%20stroke='%2300FFB0'%20stroke-width='4'/%3E%3C/svg%3E">
+
+<!-- OpenCV.js -->
+<script async src="https://docs.opencv.org/4.8.0/opencv.js"></script>
+<!-- jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- PDF.js (per rendering cross-platform dell'anteprima) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f7f6;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* ============================================================
+       HEADER APPLICAZIONE (logo CardScan AI + titolo)
+       ============================================================ */
+    .app-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        margin: 0 0 8px;
+        flex-wrap: wrap;
+    }
+    .app-header .app-icon {
+        width: 64px;
+        height: 64px;
+        flex-shrink: 0;
+        filter: drop-shadow(0 3px 8px rgba(30,123,232,0.35));
+        transition: transform .25s ease;
+    }
+    .app-header .app-icon:hover {
+        transform: scale(1.05) rotate(-1.5deg);
+    }
+    @media (max-width: 480px) {
+        .app-header .app-icon { width: 52px; height: 52px; }
+    }
+    .app-header h1 {
+        color: #1a1a1a;
+        margin: 0;
+        font-size: 26px;
+        letter-spacing: 0.3px;
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+    }
+    .app-header h1 .brand-ai {
+        background: linear-gradient(135deg, #1E7BE8 0%, #00D9A5 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 900;
+        letter-spacing: 0.5px;
+    }
+    @media (max-width: 480px) {
+        .app-header h1 { font-size: 21px; }
+    }
+
+    .container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        max-width: 760px;
+        width: 100%;
+        text-align: center;
+    }
+    #cv-status {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    .doc-section {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 10px 15px 15px;
+        margin: 15px 0;
+        background: #fbfbfb;
+        position: relative;
+        transition: opacity .25s, transform .25s;
+    }
+    .doc-section.removing {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    .doc-section h2 {
+        font-size: 16px;
+        color: #444;
+        margin: 5px 0 10px;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+    .doc-section h2 .doc-title {
+        flex: 1;
+        text-align: left;
+    }
+    .btn-remove-doc {
+        background-color: #dc3545;
+        font-size: 11px;
+        padding: 5px 10px;
+        margin: 0;
+    }
+    .btn-remove-doc:hover:not(:disabled) { background-color: #b02a37; }
+    .btn-remove-doc:disabled { background-color: #e0aeb3; cursor: not-allowed; }
+
+    .doc-slots {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    @media (max-width: 560px) {
+        .doc-slots { grid-template-columns: 1fr; }
+    }
+
+    .card-slot {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 10px;
+        background: #fafafa;
+        transition: border-color .2s, background .2s;
+        text-align: center;
+    }
+    .card-slot h3 {
+        font-size: 13px;
+        color: #555;
+        margin: 0 0 8px;
+    }
+    .card-slot.active  { border-color: #007bff; background: #eef5ff; }
+    .card-slot.success { border-color: #28a745; background: #eef9f1; }
+    .card-slot.error   { border-color: #dc3545; background: #fdf2f2; }
+
+    .preview {
+        max-width: 100%;
+        height: auto;
+        max-height: 160px;
+        margin-top: 8px;
+        border-radius: 4px;
+        display: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+        background: #fff;
+    }
+    input[type="file"] { display: none; }
+
+    .btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        margin: 3px;
+    }
+    .btn:hover { background-color: #0056b3; }
+    .btn:disabled { background-color: #ccc; cursor: not-allowed; }
+    .btn-pdf { background-color: #28a745; font-size: 16px; padding: 12px 25px; }
+    .btn-pdf:hover:not(:disabled) { background-color: #218838; }
+    .btn-preview { background-color: #fd7e14; font-size: 16px; padding: 12px 25px; }
+    .btn-preview:hover:not(:disabled) { background-color: #e36a0a; }
+    .btn-reset { background-color: #6c757d; font-size: 11px; padding: 5px 10px; }
+    .btn-reset:hover { background-color: #5a6268; }
+    .btn-add {
+        background-color: #17a2b8;
+        font-size: 14px;
+        padding: 10px 20px;
+        margin-top: 10px;
+    }
+    .btn-add:hover:not(:disabled) { background-color: #138496; }
+    .btn-webcam {
+        background-color: #6f42c1;
+        font-size: 12px;
+        padding: 7px 12px;
+    }
+    .btn-webcam:hover:not(:disabled) { background-color: #5a32a3; }
+
+    .status-msg {
+        font-size: 12px;
+        margin-top: 6px;
+        font-weight: bold;
+        min-height: 15px;
+    }
+    .status-msg.error   { color: #dc3545; }
+    .status-msg.success { color: #28a745; }
+    .status-msg.info    { color: #007bff; }
+
+    .filename-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0 10px;
+        flex-wrap: wrap;
+    }
+    .filename-row label {
+        font-size: 14px;
+        color: #444;
+    }
+    .filename-row input[type="text"] {
+        padding: 8px 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        width: 260px;
+    }
+
+    /* Barra di stato / contatore */
+    .progress-row {
+        margin: 15px 0 5px;
+        font-size: 13px;
+        color: #555;
+        font-weight: bold;
+    }
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 6px 0 10px;
+    }
+    .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #28a745, #5cb85c);
+        transition: width .3s ease;
+    }
+
+    .export-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .hint {
+        font-size: 12px;
+        color: #777;
+        margin-top: 12px;
+        line-height: 1.5;
+    }
+    canvas#proc-canvas { display: none; }
+
+    /* ============================================================
+       MODAL ANTEPRIMA PDF (con PDF.js canvas rendering)
+       ============================================================ */
+    .pdf-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.65);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .pdf-modal-overlay.open { display: flex; }
+
+    .pdf-modal {
+        background: #fff;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 900px;
+        height: 90vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        overflow: hidden;
+    }
+    .pdf-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .pdf-modal-header h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+    }
+    .pdf-modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .pdf-modal-body {
+        flex: 1;
+        background: #525659;
+        overflow-y: auto;
+        overflow-x: hidden;
+        position: relative;
+        -webkit-overflow-scrolling: touch;   /* scroll fluido su iOS */
+    }
+
+    /* Container per le pagine renderizzate da PDF.js */
+    #pdf-pages-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        min-height: 100%;
+    }
+    .pdf-page-canvas {
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        border-radius: 2px;
+        max-width: 100%;
+        height: auto;
+    }
+    .pdf-loading {
+        color: #fff;
+        font-size: 14px;
+        padding: 40px 20px;
+        text-align: center;
+    }
+    .pdf-error {
+        color: #ffb3b3;
+        font-size: 14px;
+        padding: 40px 20px;
+        text-align: center;
+        max-width: 400px;
+    }
+
+    /* Fallback quando il PDF non può essere renderizzato */
+    .pdf-fallback {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        background: #525659;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+    }
+    .pdf-fallback.visible { display: flex; }
+    .pdf-fallback p {
+        margin: 0;
+        font-size: 14px;
+        max-width: 400px;
+    }
+    .pdf-fallback .btn { font-size: 14px; padding: 10px 20px; }
+    .pdf-fallback-hint {
+        font-size: 12px;
+        color: #bbb;
+        max-width: 400px;
+        line-height: 1.5;
+    }
+
+    .pdf-modal-footer {
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+    }
+    .btn-close-preview { background-color: #dc3545; }
+    .btn-close-preview:hover { background-color: #b02a37; }
+    .btn-refresh-preview { background-color: #007bff; }
+    .btn-refresh-preview:hover { background-color: #0056b3; }
+    .btn-download-preview { background-color: #28a745; }
+    .btn-download-preview:hover { background-color: #218838; }
+    .btn-open-tab { background-color: #6f42c1; }
+    .btn-open-tab:hover { background-color: #5a32a3; }
+
+    /* ============================================================
+       MODAL WEBCAM
+       ============================================================ */
+    .webcam-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.85);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .webcam-modal-overlay.open { display: flex; }
+
+    .webcam-modal {
+        background: #fff;
+        border-radius: 8px;
+        width: 100%;
+        max-width: 720px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        overflow: hidden;
+    }
+    .webcam-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .webcam-modal-header h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+    }
+    .webcam-modal-body {
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        flex: 1;
+        min-height: 240px;
+    }
+    #webcam-video {
+        width: 100%;
+        height: auto;
+        max-height: 65vh;
+        display: block;
+        background: #000;
+        object-fit: contain;
+    }
+    .webcam-modal-footer {
+        padding: 12px 16px;
+        background: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .btn-capture {
+        background-color: #28a745;
+        font-size: 15px;
+        padding: 12px 30px;
+        font-weight: bold;
+    }
+    .btn-capture:hover { background-color: #218838; }
+    .btn-close-webcam { background-color: #dc3545; }
+    .btn-close-webcam:hover { background-color: #b02a37; }
+    .btn-switch-cam { background-color: #17a2b8; }
+    .btn-switch-cam:hover { background-color: #138496; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <!-- ============ HEADER CON LOGO CardScan AI ============ -->
+    <div class="app-header">
+        <svg class="app-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
+            <title>CardScan AI</title>
+            <defs>
+                <linearGradient id="csBg" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#5BB0FF"/>
+                    <stop offset="55%" stop-color="#1E7BE8"/>
+                    <stop offset="100%" stop-color="#0B4DA0"/>
+                </linearGradient>
+                <radialGradient id="csHi" cx="50%" cy="38%" r="65%">
+                    <stop offset="0%" stop-color="#7CC4FF" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#7CC4FF" stop-opacity="0"/>
+                </radialGradient>
+                <linearGradient id="csScan" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%"   stop-color="#00FFB0" stop-opacity="0"/>
+                    <stop offset="15%"  stop-color="#00FFB0" stop-opacity="0.55"/>
+                    <stop offset="50%"  stop-color="#7CFFE5" stop-opacity="1"/>
+                    <stop offset="85%"  stop-color="#00FFB0" stop-opacity="0.55"/>
+                    <stop offset="100%" stop-color="#00FFB0" stop-opacity="0"/>
+                </linearGradient>
+                <filter id="csGlow" x="-30%" y="-300%" width="160%" height="700%">
+                    <feGaussianBlur stdDeviation="3.5" result="b"/>
+                    <feMerge>
+                        <feMergeNode in="b"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+
+            <!-- Sfondo app: quadrato arrotondato con gradiente blu -->
+            <rect x="8" y="8" width="184" height="184" rx="44" fill="url(#csBg)"/>
+            <circle cx="100" cy="88" r="72" fill="url(#csHi)"/>
+
+            <!-- Tessera (outline bianco) -->
+            <rect x="44" y="64" width="112" height="72" rx="8"
+                  fill="none" stroke="#ffffff" stroke-width="3.2"/>
+
+            <!-- Persona (testa) -->
+            <circle cx="69" cy="86" r="7"
+                    fill="none" stroke="#ffffff" stroke-width="2.6"/>
+            <!-- Persona (spalle) -->
+            <path d="M 56 103 Q 69 93 82 103"
+                  fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+
+            <!-- Linee di testo -->
+            <line x1="92" y1="82" x2="140" y2="82"
+                  stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="92" y1="90" x2="134" y2="90"
+                  stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+            <line x1="92" y1="98" x2="126" y2="98"
+                  stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
+
+            <!-- Chip / codice a barre -->
+            <rect x="60" y="112" width="24" height="17" rx="2.5"
+                  fill="none" stroke="#ffffff" stroke-width="2.2"/>
+            <line x1="67" y1="112" x2="67" y2="129"
+                  stroke="#ffffff" stroke-width="1.6"/>
+            <line x1="76" y1="112" x2="76" y2="129"
+                  stroke="#ffffff" stroke-width="1.6"/>
+            <line x1="60" y1="120" x2="84" y2="120"
+                  stroke="#ffffff" stroke-width="1.6"/>
+
+            <!-- Scan line verde/ciano con glow -->
+            <line x1="20" y1="100" x2="180" y2="100"
+                  stroke="url(#csScan)" stroke-width="5" filter="url(#csGlow)"/>
+            <line x1="45" y1="100" x2="155" y2="100"
+                  stroke="#00FFB0" stroke-width="2.4"/>
+        </svg>
+        <h1>CardScan <span class="brand-ai">AI</span></h1>
+    </div>
+
+    <p>by Spina Michele<br>
+<p>Fronte e retro per ogni tessera.<br>
+       Ogni documento verrà riconosciuto, ritagliato e raddrizzato automaticamente.</p>
+    <div id="cv-status">Caricamento motore di scansione…</div>
+
+    <!-- ============ CONTENITORE DOCUMENTI DINAMICO ============ -->
+    <div id="docs-container"></div>
+
+    <button id="btn-add" class="btn btn-add" disabled onclick="addDocument()">
+        + Aggiungi tessera
+    </button>
+
+    <!-- ============ CONTATORE DI COMPLETAMENTO ============ -->
+    <div class="progress-row" id="progress-row">0/1 tessere complete</div>
+    <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
+
+    <!-- ============ NOME FILE + EXPORT ============ -->
+    <div class="filename-row">
+        <label for="pdf-filename">Nome file PDF:</label>
+        <input type="text" id="pdf-filename" value="documenti_tessera" spellcheck="false">
+    </div>
+
+    <div class="export-actions">
+        <button id="btn-preview" class="btn btn-preview" disabled onclick="openPreviewModal()">
+            Anteprima PDF
+        </button>
+        <button id="btn-export" class="btn btn-pdf" disabled onclick="generatePDF()">
+            Esporta PDF (A4 - 8 tessere per pagina)
+        </button>
+    </div>
+
+    <div class="hint">
+        Layout PDF su A4: <strong>8 tessere per pagina</strong> (4 righe × 2 colonne).<br>
+        Ogni riga contiene fronte + retro della stessa tessera.<br>
+        Consigli di scatto: sfondo scuro e contrastato, un piccolo margine attorno alla tessera,
+        luce uniforme, evita ombre nette e riflessi.
+    </div>
+</div>
+
+<canvas id="proc-canvas"></canvas>
+
+<!-- ============================================================
+     MODAL ANTEPRIMA PDF
+     ============================================================ -->
+<div id="pdf-modal-overlay" class="pdf-modal-overlay" onclick="if(event.target===this) closePreviewModal()">
+    <div class="pdf-modal" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
+        <div class="pdf-modal-header">
+            <h3 id="pdf-modal-title">Anteprima PDF</h3>
+            <div class="pdf-modal-actions">
+                <button class="btn btn-refresh-preview" onclick="refreshPreview()">↻ Aggiorna</button>
+                <button class="btn btn-open-tab" onclick="openPreviewInNewTab()">↗ Apri in nuova scheda</button>
+                <button class="btn btn-download-preview" onclick="downloadFromPreview()">⬇ Scarica PDF</button>
+                <button class="btn btn-close-preview" onclick="closePreviewModal()">✕ Chiudi anteprima</button>
+            </div>
+        </div>
+        <div class="pdf-modal-body" id="pdf-modal-body">
+            <div id="pdf-pages-container"></div>
+            <div id="pdf-fallback" class="pdf-fallback">
+                <p>Non è stato possibile mostrare l'anteprima PDF all'interno della pagina.</p>
+                <p class="pdf-fallback-hint">Puoi aprirla in una nuova scheda oppure scaricare direttamente il file.</p>
+                <div>
+                    <button class="btn btn-open-tab" onclick="openPreviewInNewTab()">↗ Apri in nuova scheda</button>
+                    <button class="btn btn-download-preview" onclick="downloadFromPreview()">⬇ Scarica PDF</button>
+                </div>
+            </div>
+        </div>
+        <div class="pdf-modal-footer" id="pdf-modal-info">
+            L'anteprima mostra il layout reale su A4 (8 tessere per pagina).
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL WEBCAM
+     ============================================================ -->
+<div id="webcam-modal-overlay" class="webcam-modal-overlay">
+    <div class="webcam-modal" role="dialog" aria-modal="true" aria-labelledby="webcam-modal-title">
+        <div class="webcam-modal-header">
+            <h3 id="webcam-modal-title">Scatta con Webcam</h3>
+            <button class="btn btn-close-webcam" onclick="closeWebcamModal()" title="Chiudi">✕</button>
+        </div>
+        <div class="webcam-modal-body">
+            <video id="webcam-video" autoplay playsinline muted></video>
+        </div>
+        <div class="webcam-modal-footer">
+            <button class="btn btn-switch-cam" id="btn-switch-cam" onclick="switchCamera()" style="display:none;">🔄 Cambia camera</button>
+            <button class="btn btn-capture" onclick="captureWebcam()">📸 Cattura</button>
+            <button class="btn btn-reset" onclick="closeWebcamModal()">Annulla</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURAZIONE
+   ============================================================ */
+const CONFIG = {
+    cardWidthMM:  85.6,
+    cardHeightMM: 53.9,
+    cornerRadiusMM: 3.18,
+    gapMM:        6,
+    targetWidth:  1012,
+    targetHeight: 638,
+    maxSrcDim:    2400,
+    minSharpness: 35,
+    minBrightness: 40,
+    maxBrightness: 240,
+    jpegQuality:  0.92,
+    maxDocs:      12,
+    docsPerPage:  8
+};
+
+const SIDES = ['fronte', 'retro'];
+const STORAGE_KEY = 'scanner_tessere_state_v2';
+
+let currentDocs = 0;
+const processedImages = {};
+const keyOf = (doc, side) => `${doc}-${side}`;
+
+/* Stato anteprima */
+let previewOpen = false;
+let currentBlobUrl = null;
+let currentBlob = null;
+let renderToken = 0;   // per annullare rendering PDF.js precedenti
+
+/* Stato webcam */
+let webcamStream = null;
+let webcamTarget = null;   // {doc, side}
+let webcamFacingMode = 'environment';   // 'environment' o 'user'
+
+/* ============================================================
+   PDF.JS WORKER
+   ============================================================ */
+(function initPdfJsWorker() {
+    if (window.pdfjsLib) {
+        try {
+            pdfjsLib.GlobalWorkerOptions.workerSrc =
+                'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        } catch (e) {
+            console.warn('PDF.js worker non inizializzato:', e);
+        }
+    }
+})();
+
+/* ============================================================
+   PERSISTENZA (sessionStorage)
+   ============================================================ */
+function saveState() {
+    try {
+        const payload = {
+            currentDocs: currentDocs,
+            filename: document.getElementById('pdf-filename').value,
+            images: {}
+        };
+        for (let d = 1; d <= currentDocs; d++) {
+            for (const s of SIDES) {
+                payload.images[keyOf(d, s)] = processedImages[keyOf(d, s)] || null;
+            }
+        }
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch (e) {
+        console.warn('Impossibile salvare lo stato:', e);
+    }
+}
+
+function loadState() {
+    try {
+        const raw = sessionStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const payload = JSON.parse(raw);
+        if (!payload || !payload.currentDocs || !payload.images) return null;
+        return payload;
+    } catch (e) {
+        console.warn('Impossibile caricare lo stato:', e);
+        return null;
+    }
+}
+
+function clearState() {
+    try { sessionStorage.removeItem(STORAGE_KEY); } catch (_) {}
+}
+
+/* ============================================================
+   OPENCV READY
+   ============================================================ */
+let cvReady = false;
+let cvReadyCallbacks = [];
+
+function whenCvReady(cb) {
+    if (cvReady) cb();
+    else cvReadyCallbacks.push(cb);
+}
+
+function markCvReady() {
+    if (cvReady) return;
+    cvReady = true;
+    document.getElementById('cv-status').textContent = 'Scanner pronto.';
+    document.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
+    document.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
+    document.getElementById('btn-add').disabled = false;
+    cvReadyCallbacks.forEach(cb => { try { cb(); } catch (e) { console.error(e); } });
+    cvReadyCallbacks = [];
+}
+
+(function pollCv() {
+    if (typeof cv === 'undefined') { setTimeout(pollCv, 150); return; }
+    try {
+        const m = new cv.Mat(); m.delete();
+        markCvReady();
+    } catch (e) {
+        try { cv['onRuntimeInitialized'] = markCvReady; } catch (_) {}
+        setTimeout(pollCv, 200);
+    }
+})();
+
+/* ============================================================
+   UI HELPERS
+   ============================================================ */
+function triggerInput(id) { document.getElementById(id).click(); }
+
+/* ============================================================
+   GESTIONE DOCUMENTI DINAMICI
+   ============================================================ */
+function buildDocSection(docNum) {
+    const section = document.createElement('div');
+    section.className = 'doc-section';
+    section.id = `doc-section-${docNum}`;
+    section.dataset.docNum = docNum;
+
+    section.innerHTML = `
+        <h2>
+            <span class="doc-title">Documento ${docNum}</span>
+            <button class="btn btn-remove-doc" title="Rimuovi questa tessera"
+                    onclick="removeDocument(${docNum})">✕ Rimuovi</button>
+        </h2>
+        <div class="doc-slots">
+            <div class="card-slot" id="slot-${docNum}-fronte">
+                <h3>FRONTE</h3>
+                <button class="btn scan-btn" disabled onclick="triggerInput('input-${docNum}-fronte')">Scatta / Carica</button>
+                <button class="btn btn-webcam webcam-btn" disabled onclick="openWebcamModal(${docNum}, 'fronte')">📷 Webcam</button>
+                <button class="btn btn-reset" onclick="resetSlot(${docNum}, 'fronte')">Annulla</button>
+                <input type="file" id="input-${docNum}-fronte" accept="image/*" capture="environment"
+                       onchange="processImage(this, ${docNum}, 'fronte')">
+                <div><img id="preview-${docNum}-fronte" class="preview" alt="Anteprima ${docNum} Fronte"></div>
+                <div id="msg-${docNum}-fronte" class="status-msg"></div>
+            </div>
+            <div class="card-slot" id="slot-${docNum}-retro">
+                <h3>RETRO</h3>
+                <button class="btn scan-btn" disabled onclick="triggerInput('input-${docNum}-retro')">Scatta / Carica</button>
+                <button class="btn btn-webcam webcam-btn" disabled onclick="openWebcamModal(${docNum}, 'retro')">📷 Webcam</button>
+                <button class="btn btn-reset" onclick="resetSlot(${docNum}, 'retro')">Annulla</button>
+                <input type="file" id="input-${docNum}-retro" accept="image/*" capture="environment"
+                       onchange="processImage(this, ${docNum}, 'retro')">
+                <div><img id="preview-${docNum}-retro" class="preview" alt="Anteprima ${docNum} Retro"></div>
+                <div id="msg-${docNum}-retro" class="status-msg"></div>
+            </div>
+        </div>
+    `;
+    return section;
+}
+
+function addDocument(skipSave) {
+    if (currentDocs >= CONFIG.maxDocs) return;
+
+    currentDocs++;
+    const section = buildDocSection(currentDocs);
+    document.getElementById('docs-container').appendChild(section);
+
+    for (const s of SIDES) processedImages[keyOf(currentDocs, s)] = null;
+
+    if (cvReady) {
+        section.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
+        section.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
+    }
+
+    updateAddButton();
+    updateRemoveButtons();
+    updateProgress();
+    checkExportStatus();
+    if (!skipSave) saveState();
+}
+
+function removeDocument(docNum) {
+    if (currentDocs <= 1) {
+        alert('Deve rimanere almeno una tessera. Usa "Annulla" sui singoli lati per svuotarla.');
+        return;
+    }
+
+    const hasData = SIDES.some(s => !!processedImages[keyOf(docNum, s)]);
+    if (hasData) {
+        if (!confirm(`La tessera ${docNum} contiene foto già caricate.\nVuoi davvero rimuoverla?`)) return;
+    }
+
+    const section = document.getElementById(`doc-section-${docNum}`);
+    if (!section) return;
+
+    section.classList.add('removing');
+
+    setTimeout(() => {
+        section.remove();
+        reindexDocuments();
+    }, 250);
+}
+
+function reindexDocuments() {
+    const container = document.getElementById('docs-container');
+    const sections = Array.from(container.querySelectorAll('.doc-section'));
+
+    const collected = sections.map(sec => {
+        const oldNum = parseInt(sec.dataset.docNum, 10);
+        return {
+            fronte: processedImages[keyOf(oldNum, 'fronte')] || null,
+            retro:  processedImages[keyOf(oldNum, 'retro')]  || null
+        };
+    });
+
+    container.innerHTML = '';
+    for (const k in processedImages) delete processedImages[k];
+
+    currentDocs = collected.length;
+    collected.forEach((data, idx) => {
+        const newNum = idx + 1;
+        const section = buildDocSection(newNum);
+        container.appendChild(section);
+
+        if (cvReady) {
+            section.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
+            section.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
+        }
+
+        for (const s of SIDES) {
+            const dataUrl = data[s];
+            processedImages[keyOf(newNum, s)] = dataUrl || null;
+
+            if (dataUrl) {
+                const prev = document.getElementById(`preview-${newNum}-${s}`);
+                prev.src = dataUrl;
+                prev.style.display = 'block';
+                setStatus(newNum, s, 'success', 'Ritagliato e raddrizzato.');
+            }
+        }
+    });
+
+    updateAddButton();
+    updateRemoveButtons();
+    updateProgress();
+    checkExportStatus();
+    saveState();
+    refreshPreviewIfOpen();
+}
+
+function updateRemoveButtons() {
+    const onlyOne = currentDocs <= 1;
+    document.querySelectorAll('.btn-remove-doc').forEach(btn => {
+        btn.disabled = onlyOne;
+        btn.title = onlyOne
+            ? 'Deve rimanere almeno una tessera'
+            : 'Rimuovi questa tessera';
+    });
+}
+
+function updateAddButton() {
+    const btn = document.getElementById('btn-add');
+    if (currentDocs >= CONFIG.maxDocs) {
+        btn.disabled = true;
+        btn.textContent = `Limite massimo raggiunto (${CONFIG.maxDocs})`;
+    } else {
+        btn.disabled = !cvReady;
+        btn.textContent = '+ Aggiungi tessera';
+    }
+}
+
+function updateProgress() {
+    const total = currentDocs * SIDES.length;
+    let done = 0;
+    for (let d = 1; d <= currentDocs; d++) {
+        for (const s of SIDES) {
+            if (processedImages[keyOf(d, s)]) done++;
+        }
+    }
+    const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('progress-row').textContent =
+        `${done}/${total} lati completati (${currentDocs} tesser${currentDocs === 1 ? 'a' : 'e'})`;
+    document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+/* ============================================================
+   INIZIALIZZAZIONE
+   ============================================================ */
+function initializeApp() {
+    const saved = loadState();
+
+    if (saved && saved.currentDocs >= 1) {
+        if (saved.filename) {
+            document.getElementById('pdf-filename').value = saved.filename;
+        }
+
+        currentDocs = 0;
+        for (let i = 0; i < saved.currentDocs; i++) {
+            currentDocs++;
+            const newNum = currentDocs;
+            const section = buildDocSection(newNum);
+            document.getElementById('docs-container').appendChild(section);
+            if (cvReady) {
+                section.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
+                section.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
+            }
+            for (const s of SIDES) {
+                const dataUrl = saved.images[keyOf(newNum, s)] || null;
+                processedImages[keyOf(newNum, s)] = dataUrl;
+                if (dataUrl) {
+                    const prev = document.getElementById(`preview-${newNum}-${s}`);
+                    prev.src = dataUrl;
+                    prev.style.display = 'block';
+                    setStatus(newNum, s, 'success', 'Ripristinato dalla sessione.');
+                }
+            }
+        }
+
+        updateAddButton();
+        updateRemoveButtons();
+        updateProgress();
+        checkExportStatus();
+    } else {
+        addDocument();
+    }
+}
+
+initializeApp();
+
+/* ============================================================
+   RESET / STATUS
+   ============================================================ */
+function resetSlot(doc, side) {
+    const k = keyOf(doc, side);
+    processedImages[k] = null;
+
+    const input = document.getElementById(`input-${k}`);
+    if (input) input.value = '';
+
+    const preview = document.getElementById(`preview-${k}`);
+    preview.src = '';
+    preview.style.display = 'none';
+
+    document.getElementById(`slot-${k}`).className = 'card-slot';
+
+    const msg = document.getElementById(`msg-${k}`);
+    msg.className = 'status-msg';
+    msg.innerText = '';
+
+    updateProgress();
+    checkExportStatus();
+    saveState();
+    refreshPreviewIfOpen();
+}
+
+function checkExportStatus() {
+    let allDone = currentDocs > 0;
+    for (let d = 1; d <= currentDocs && allDone; d++) {
+        for (const s of SIDES) {
+            if (!processedImages[keyOf(d, s)]) { allDone = false; break; }
+        }
+    }
+    document.getElementById('btn-export').disabled = !allDone;
+    document.getElementById('btn-preview').disabled = !allDone;
+}
+
+function setStatus(doc, side, type, text) {
+    const k = keyOf(doc, side);
+    const cls = type === 'error' ? 'error' : type === 'success' ? 'success' : 'active';
+    document.getElementById(`slot-${k}`).className = 'card-slot ' + cls;
+    const m = document.getElementById(`msg-${k}`);
+    m.className = 'status-msg ' + (type || '');
+    m.innerText = text || '';
+}
+
+/* ============================================================
+   PIPELINE
+   ============================================================ */
+function processImage(input, doc, side) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    input.value = '';   // reset immediato
+    processImageFromBlob(file, doc, side);
+}
+
+/* Nuova funzione che accetta un Blob/File da qualsiasi sorgente
+   (input file o webcam). */
+function processImageFromBlob(blob, doc, side) {
+    if (!blob) return;
+
+    if (!cvReady) {
+        setStatus(doc, side, 'info', 'Attendo il motore di scansione…');
+        whenCvReady(() => processImageFromBlob(blob, doc, side));
+        return;
+    }
+
+    setStatus(doc, side, 'info', 'Analisi immagine in corso…');
+    document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
+
+    const reader = new FileReader();
+    reader.onerror = () => fail(doc, side, 'impossibile leggere il file', null);
+    reader.onload = e => {
+        const img = new Image();
+        img.onerror = () => fail(doc, side, 'formato immagine non supportato', null);
+        img.onload  = () => runScanner(img, doc, side, null);
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(blob);
+}
+
+function fail(doc, side, reason, input) {
+    setStatus(doc, side, 'error',
+        'Foto rifiutata: ' + reason + '. Riprova con più luce e buon contrasto di sfondo.');
+    document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
+    processedImages[keyOf(doc, side)] = null;
+    updateProgress();
+    checkExportStatus();
+    saveState();
+    refreshPreviewIfOpen();
+    if (input) input.value = '';
+}
+
+function runScanner(img, doc, side, input) {
+    let src = null;
+    let warpedDataUrl = null;
+
+    try {
+        src = readSourceMat(img);
+        const corners = detectCard(src);
+
+        if (!corners) {
+            src.delete();
+            fail(doc, side, 'documento non riconosciuto (bordi non rilevati)', input);
+            return;
+        }
+
+        warpedDataUrl = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
+        src.delete();
+        src = null;
+    } catch (err) {
+        console.error(err);
+        if (src) src.delete();
+        fail(doc, side, 'errore durante l\'elaborazione', input);
+        return;
+    }
+
+    loadImage(warpedDataUrl).then(warpedImg => {
+        const q = checkQuality(warpedImg);
+        if (!q.isValid) { fail(doc, side, q.reason, input); return; }
+
+        const prev = document.getElementById(`preview-${keyOf(doc, side)}`);
+        prev.src = warpedDataUrl;
+        prev.style.display = 'block';
+
+        setStatus(doc, side, 'success', 'Ritagliato e raddrizzato.');
+        processedImages[keyOf(doc, side)] = warpedDataUrl;
+        updateProgress();
+        checkExportStatus();
+        saveState();
+        refreshPreviewIfOpen();
+        if (input) input.value = '';
+    }).catch(() => fail(doc, side, 'errore durante la verifica', input));
+}
+
+/* ============================================================
+   WEBCAM
+   ============================================================ */
+function isWebcamSupported() {
+    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+}
+
+async function openWebcamModal(doc, side) {
+    if (!isWebcamSupported()) {
+        alert('La webcam non è disponibile su questo dispositivo/browser.\n' +
+              'Usa "Scatta / Carica" per selezionare un file.');
+        return;
+    }
+
+    webcamTarget = { doc, side };
+    webcamFacingMode = 'environment';   // di default camera posteriore su mobile
+
+    document.getElementById('webcam-modal-overlay').classList.add('open');
+    await startWebcam();
+}
+
+async function startWebcam() {
+    stopWebcamStream();   // chiudi eventuale stream precedente
+
+    const video = document.getElementById('webcam-video');
+    const constraints = {
+        audio: false,
+        video: {
+            facingMode: { ideal: webcamFacingMode },
+            width:  { ideal: 1920 },
+            height: { ideal: 1080 }
+        }
+    };
+
+    try {
+        webcamStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = webcamStream;
+        await video.play().catch(() => {});
+
+        // Mostra il pulsante "cambia camera" solo se ci sono più videocamere
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const cams = devices.filter(d => d.kind === 'videoinput');
+            document.getElementById('btn-switch-cam').style.display = cams.length > 1 ? '' : 'none';
+        } catch (_) {
+            document.getElementById('btn-switch-cam').style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Errore accesso webcam:', err);
+        let msg = 'Impossibile accedere alla webcam.';
+        if (err.name === 'NotAllowedError')      msg += '\nPermesso negato dall\'utente.';
+        else if (err.name === 'NotFoundError')   msg += '\nNessuna webcam trovata.';
+        else if (err.name === 'NotReadableError')msg += '\nWebcam occupata da un\'altra applicazione.';
+        alert(msg);
+        closeWebcamModal();
+    }
+}
+
+function stopWebcamStream() {
+    if (webcamStream) {
+        webcamStream.getTracks().forEach(t => { try { t.stop(); } catch (_) {} });
+        webcamStream = null;
+    }
+    const video = document.getElementById('webcam-video');
+    if (video) video.srcObject = null;
+}
+
+function switchCamera() {
+    webcamFacingMode = (webcamFacingMode === 'environment') ? 'user' : 'environment';
+    startWebcam();
+}
+
+function captureWebcam() {
+    if (!webcamTarget || !webcamStream) return;
+    const video = document.getElementById('webcam-video');
+
+    if (!video.videoWidth || !video.videoHeight) {
+        alert('La webcam non è ancora pronta. Attendi un momento e riprova.');
+        return;
+    }
+
+    const c = document.createElement('canvas');
+    c.width  = video.videoWidth;
+    c.height = video.videoHeight;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(video, 0, 0, c.width, c.height);
+
+    const { doc, side } = webcamTarget;
+    c.toBlob(blob => {
+        closeWebcamModal();
+        if (blob) processImageFromBlob(blob, doc, side);
+    }, 'image/jpeg', CONFIG.jpegQuality);
+}
+
+function closeWebcamModal() {
+    document.getElementById('webcam-modal-overlay').classList.remove('open');
+    stopWebcamStream();
+    webcamTarget = null;
+}
+
+/* ============================================================
+   LETTURA SORGENTE
+   ============================================================ */
+function readSourceMat(img) {
+    const maxDim = Math.max(img.naturalWidth, img.naturalHeight);
+    if (maxDim <= CONFIG.maxSrcDim) return cv.imread(img);
+
+    const scale = CONFIG.maxSrcDim / maxDim;
+    const c = document.createElement('canvas');
+    c.width  = Math.round(img.naturalWidth  * scale);
+    c.height = Math.round(img.naturalHeight * scale);
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    return cv.imread(c);
+}
+
+/* ============================================================
+   RICONOSCIMENTO TESSERA
+   ============================================================ */
+function detectCard(src) {
+    const maxDim = 900;
+    const scale  = Math.min(1, maxDim / Math.max(src.cols, src.rows));
+
+    const work = new cv.Mat();
+    if (scale < 1) {
+        cv.resize(src, work,
+            new cv.Size(Math.round(src.cols * scale), Math.round(src.rows * scale)),
+            0, 0, cv.INTER_AREA);
+    } else {
+        src.copyTo(work);
+    }
+
+    const gray    = new cv.Mat();
+    const blurred = new cv.Mat();
+    cv.cvtColor(work, gray, cv.COLOR_RGBA2GRAY);
+    cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
+
+    const W = work.cols, H = work.rows;
+    const minArea = W * H * 0.05;
+    const targetAspect = CONFIG.cardWidthMM / CONFIG.cardHeightMM;
+
+    const cannyParams = [[25, 80], [40, 120], [60, 180]];
+    const epsilons    = [0.01, 0.02, 0.03, 0.04, 0.05];
+
+    let best = null, bestScore = 0;
+
+    for (const [lo, hi] of cannyParams) {
+        const edges   = new cv.Mat();
+        const kernel  = cv.Mat.ones(3, 3, cv.CV_8U);
+        const dilated = new cv.Mat();
+        cv.Canny(blurred, edges, lo, hi);
+        cv.dilate(edges, dilated, kernel);
+
+        const contours  = new cv.MatVector();
+        const hierarchy = new cv.Mat();
+        cv.findContours(dilated, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE);
+
+        for (let i = 0; i < contours.size(); i++) {
+            const cnt  = contours.get(i);
+            const area = cv.contourArea(cnt);
+            if (area < minArea) { cnt.delete(); continue; }
+
+            const peri = cv.arcLength(cnt, true);
+
+            for (const eps of epsilons) {
+                const approx = new cv.Mat();
+                cv.approxPolyDP(cnt, approx, eps * peri, true);
+
+                if (approx.rows === 4 && cv.isContourConvex(approx)) {
+                    const pts = [];
+                    for (let j = 0; j < 4; j++) {
+                        pts.push({
+                            x: approx.data32S[j * 2]     / scale,
+                            y: approx.data32S[j * 2 + 1] / scale
+                        });
+                    }
+                    const ordered = orderPoints(pts);
+                    const aspect  = computeAspect(ordered);
+
+                    if (aspect > 1.15 && aspect < 2.2) {
+                        const aspectScore = 1 - Math.min(1, Math.abs(aspect - targetAspect) / targetAspect);
+                        const areaScore   = area / (W * H);
+                        const score       = aspectScore * 0.55 + areaScore * 0.45;
+
+                        if (score > bestScore) { bestScore = score; best = ordered; }
+                    }
+                }
+                approx.delete();
+            }
+            cnt.delete();
+        }
+
+        edges.delete(); kernel.delete(); dilated.delete();
+        contours.delete(); hierarchy.delete();
+    }
+
+    work.delete(); gray.delete(); blurred.delete();
+    return best;
+}
+
+/* ============================================================
+   WARP PROSPETTICO + ANGOLI ARROTONDATI
+   ============================================================ */
+function warpCard(src, corners, W, H) {
+    const srcPts = cv.matFromArray(4, 1, cv.CV_32FC2, [
+        corners[0].x, corners[0].y,
+        corners[1].x, corners[1].y,
+        corners[2].x, corners[2].y,
+        corners[3].x, corners[3].y
+    ]);
+    const dstPts = cv.matFromArray(4, 1, cv.CV_32FC2, [
+        0, 0, W, 0, W, H, 0, H
+    ]);
+
+    const M = cv.getPerspectiveTransform(srcPts, dstPts);
+    const warped = new cv.Mat();
+    cv.warpPerspective(src, warped, M, new cv.Size(W, H),
+        cv.INTER_LINEAR, cv.BORDER_CONSTANT,
+        new cv.Scalar(255, 255, 255, 255));
+
+    const tmp = document.createElement('canvas');
+    cv.imshow(tmp, warped);
+
+    const out = document.getElementById('proc-canvas');
+    out.width = W; out.height = H;
+    const octx = out.getContext('2d');
+    octx.globalCompositeOperation = 'source-over';
+    octx.clearRect(0, 0, W, H);
+    octx.fillStyle = '#ffffff';
+    octx.fillRect(0, 0, W, H);
+    octx.drawImage(tmp, 0, 0);
+
+    const radius = Math.min(W, H) * (CONFIG.cornerRadiusMM / CONFIG.cardHeightMM);
+    octx.globalCompositeOperation = 'destination-in';
+    octx.beginPath();
+    roundRectPath(octx, 0, 0, W, H, radius);
+    octx.fillStyle = '#000000';
+    octx.fill();
+    octx.globalCompositeOperation = 'source-over';
+
+    const dataUrl = out.toDataURL('image/png');
+
+    srcPts.delete(); dstPts.delete(); M.delete(); warped.delete();
+    return dataUrl;
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+}
+
+/* ============================================================
+   GEOMETRIA
+   ============================================================ */
+function orderPoints(pts) {
+    const sums  = pts.map(p => p.x + p.y);
+    const diffs = pts.map(p => p.y - p.x);
+    const tl = pts[sums.indexOf(Math.min.apply(null, sums))];
+    const br = pts[sums.indexOf(Math.max.apply(null, sums))];
+    const tr = pts[diffs.indexOf(Math.min.apply(null, diffs))];
+    const bl = pts[diffs.indexOf(Math.max.apply(null, diffs))];
+    return [tl, tr, br, bl];
+}
+
+function dist(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+function computeAspect(o) {
+    const avgW = (dist(o[0], o[1]) + dist(o[3], o[2])) / 2;
+    const avgH = (dist(o[0], o[3]) + dist(o[1], o[2])) / 2;
+    return avgW / avgH;
+}
+
+/* ============================================================
+   QUALITÀ
+   ============================================================ */
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const i = new Image();
+        i.onload = () => resolve(i);
+        i.onerror = reject;
+        i.src = src;
+    });
+}
+
+function checkQuality(img) {
+    const c = document.createElement('canvas');
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    const w = 300, h = 200;
+    c.width = w; c.height = h;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(img, 0, 0, w, h);
+
+    const data = ctx.getImageData(0, 0, w, h).data;
+    const gray = new Float32Array(w * h);
+    let total = 0;
+
+    for (let i = 0, p = 0; i < data.length; i += 4, p++) {
+        const v = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+        gray[p] = v; total += v;
+    }
+    const avg = total / (w * h);
+
+    if (avg < CONFIG.minBrightness) return { isValid: false, reason: 'immagine troppo buia' };
+    if (avg > CONFIG.maxBrightness) return { isValid: false, reason: 'immagine troppo luminosa o con riflessi' };
+
+    let sum = 0, sq = 0, n = 0;
+    for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+            const idx = y * w + x;
+            const lap = gray[idx - w] + gray[idx - 1] + gray[idx + 1] + gray[idx + w] - 4 * gray[idx];
+            sum += lap; sq += lap * lap; n++;
+        }
+    }
+    const mean = sum / n;
+    const variance = (sq / n) - (mean * mean);
+
+    if (variance < CONFIG.minSharpness) {
+        return { isValid: false, reason: 'immagine sfocata o poco leggibile' };
+    }
+    return { isValid: true };
+}
+
+/* ============================================================
+   COSTRUZIONE PDF — 8 TESSERE PER PAGINA A4
+   ============================================================ */
+function buildPDFDocument() {
+    for (let d = 1; d <= currentDocs; d++) {
+        for (const s of SIDES) {
+            if (!processedImages[keyOf(d, s)]) {
+                alert('Completa tutte le tessere prima di esportare.');
+                return null;
+            }
+        }
+    }
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('Libreria PDF non disponibile.');
+        return null;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+
+    const pageW = 210, pageH = 297;
+    const cW = CONFIG.cardWidthMM;
+    const cH = CONFIG.cardHeightMM;
+    const gap = CONFIG.gapMM;
+
+    const pairW = cW * 2 + gap;
+    const leftMargin = (pageW - pairW) / 2;
+
+    const rowH = cH;
+    const rowsPerPage = CONFIG.docsPerPage / 2;
+    const blockH = rowH * rowsPerPage + gap * (rowsPerPage - 1);
+    const maxBlockH = pageH - 20;
+    let startY, actualGap = gap;
+    if (blockH > maxBlockH) {
+        actualGap = Math.max(2, (maxBlockH - rowH * rowsPerPage) / (rowsPerPage - 1));
+        startY = (pageH - (rowH * rowsPerPage + actualGap * (rowsPerPage - 1))) / 2;
+    } else {
+        startY = (pageH - blockH) / 2;
+    }
+
+    const docsPerPage = CONFIG.docsPerPage;
+    const pages = Math.ceil(currentDocs / docsPerPage);
+
+    for (let p = 0; p < pages; p++) {
+        if (p > 0) doc.addPage();
+
+        for (let r = 0; r < rowsPerPage; r++) {
+            const docIndex = p * docsPerPage + r;
+            const docNum   = docIndex + 1;
+
+            if (docNum > currentDocs) break;
+
+            const y = startY + r * (rowH + actualGap);
+
+            doc.addImage(processedImages[keyOf(docNum, 'fronte')], 'PNG',
+                leftMargin, y, cW, cH);
+            doc.addImage(processedImages[keyOf(docNum, 'retro')], 'PNG',
+                leftMargin + cW + gap, y, cW, cH);
+        }
+    }
+
+    return doc;
+}
+
+function getCleanFilename() {
+    let name = (document.getElementById('pdf-filename').value || '').trim();
+    if (!name) name = 'documenti_tessera';
+    name = name.replace(/[\\/:*?"<>|]/g, '_');
+    if (!/\.pdf$/i.test(name)) name += '.pdf';
+    return name;
+}
+
+/* ============================================================
+   SALVATAGGIO PDF CON VERIFICA SOVRASCRITTURA
+   ============================================================ */
+async function savePDFWithPicker(doc, filename) {
+    if (window.showSaveFilePicker) {
+        try {
+            const handle = await window.showSaveFilePicker({
+                suggestedName: filename,
+                types: [{
+                    description: 'Documento PDF',
+                    accept: { 'application/pdf': ['.pdf'] }
+                }]
+            });
+            const writable = await handle.createWritable();
+            const blob = doc.output('blob');
+            await writable.write(blob);
+            await writable.close();
+            return { ok: true, method: 'picker' };
+        } catch (err) {
+            if (err && err.name === 'AbortError') {
+                return { ok: false, method: 'picker', reason: 'annullato' };
+            }
+            console.warn('File System Access API fallita, fallback a doc.save():', err);
+        }
+    }
+
+    doc.save(filename);
+    return { ok: true, method: 'jsPDF' };
+}
+
+async function generatePDF() {
+    const doc = buildPDFDocument();
+    if (!doc) return;
+
+    saveState();
+
+    const filename = getCleanFilename();
+    const result = await savePDFWithPicker(doc, filename);
+
+    if (!result.ok) return;
+
+    setTimeout(() => {
+        const ok = confirm(
+            'PDF salvato correttamente.\n\n' +
+            'Vuoi ricaricare la pagina con le tessere ancora caricate?\n' +
+            '(Potrai aggiungerne altre o modificarle senza perdere il lavoro.)'
+        );
+        if (ok) {
+            window.location.reload();
+        }
+    }, 400);
+}
+
+/* ============================================================
+   ANTEPRIMA PDF — PDF.js (funziona anche su Android/iOS)
+   ============================================================ */
+function showPdfFallback(show) {
+    const fb = document.getElementById('pdf-fallback');
+    const pages = document.getElementById('pdf-pages-container');
+    if (show) {
+        fb.classList.add('visible');
+        pages.style.visibility = 'hidden';
+    } else {
+        fb.classList.remove('visible');
+        pages.style.visibility = 'visible';
+    }
+}
+
+function openPreviewModal() {
+    const btn = document.getElementById('btn-preview');
+    if (btn.disabled) return;
+
+    previewOpen = true;
+    document.getElementById('pdf-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    refreshPreview();
+}
+
+function closePreviewModal() {
+    previewOpen = false;
+    document.getElementById('pdf-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+
+    // Annulla eventuale rendering in corso
+    renderToken++;
+
+    if (currentBlobUrl) {
+        try { URL.revokeObjectURL(currentBlobUrl); } catch (_) {}
+        currentBlobUrl = null;
+    }
+    currentBlob = null;
+
+    // Svuota il container delle pagine per liberare memoria
+    const pages = document.getElementById('pdf-pages-container');
+    if (pages) pages.innerHTML = '';
+    showPdfFallback(false);
+}
+
+/* Rigenera il contenuto dell'anteprima usando PDF.js.
+   Ritorna una Promise. */
+async function refreshPreview() {
+    if (!previewOpen) return;
+
+    const myToken = ++renderToken;
+
+    const doc = buildPDFDocument();
+    if (!doc) {
+        closePreviewModal();
+        return;
+    }
+
+    // Rilascia blob precedente
+    if (currentBlobUrl) {
+        try { URL.revokeObjectURL(currentBlobUrl); } catch (_) {}
+        currentBlobUrl = null;
+    }
+    currentBlob = null;
+
+    // Genera il nuovo blob (lo teniamo anche per riaprire in nuova scheda)
+    try {
+        currentBlob = doc.output('blob');
+        currentBlobUrl = URL.createObjectURL(currentBlob);
+    } catch (e) {
+        console.error('Errore generazione blob PDF:', e);
+        showPdfFallback(true);
+        return;
+    }
+
+    // Aggiorna info nel footer
+    const pages = doc.internal.getNumberOfPages();
+    const tessere = currentDocs;
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const ss = String(now.getSeconds()).padStart(2, '0');
+    document.getElementById('pdf-modal-info').textContent =
+        `${tessere} tesser${tessere === 1 ? 'a' : 'e'} · ${pages} pagin${pages === 1 ? 'a' : 'e'} A4 · aggiornato alle ${hh}:${mm}:${ss}`;
+
+    // Rendering con PDF.js
+    const container = document.getElementById('pdf-pages-container');
+    if (!container) return;
+
+    // Se PDF.js non è disponibile, mostra il fallback
+    if (!window.pdfjsLib) {
+        showPdfFallback(true);
+        return;
+    }
+
+    showPdfFallback(false);
+    container.innerHTML = '<div class="pdf-loading">Rendering PDF…</div>';
+
+    try {
+        const arrayBuffer = await currentBlob.arrayBuffer();
+
+        // Interrotto nel frattempo?
+        if (myToken !== renderToken) return;
+
+        const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
+
+        if (myToken !== renderToken) return;
+
+        container.innerHTML = '';
+
+        // Calcola la larghezza disponibile nel container
+        const availableWidth = Math.max(200, container.clientWidth - 30);
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+            if (myToken !== renderToken) return;
+
+            const page = await pdf.getPage(i);
+            const unscaledViewport = page.getViewport({ scale: 1 });
+            // Scala per adattarsi alla larghezza disponibile
+            const scale = availableWidth / unscaledViewport.width;
+            const viewport = page.getViewport({ scale });
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'pdf-page-canvas';
+            // Usa devicePixelRatio per una resa più nitida su mobile/retina
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width  = Math.floor(viewport.width  * dpr);
+            canvas.height = Math.floor(viewport.height * dpr);
+            canvas.style.width  = Math.floor(viewport.width)  + 'px';
+            canvas.style.height = Math.floor(viewport.height) + 'px';
+
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.scale(dpr, dpr);
+
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+
+            await page.render(renderContext).promise;
+
+            if (myToken !== renderToken) return;
+
+            container.appendChild(canvas);
+        }
+    } catch (e) {
+        console.error('Errore rendering PDF.js:', e);
+        if (myToken === renderToken) {
+            container.innerHTML = '<div class="pdf-error">Errore durante il rendering dell\'anteprima.</div>';
+            showPdfFallback(true);
+        }
+    }
+}
+
+/* Apre il PDF in una nuova scheda del browser */
+function openPreviewInNewTab() {
+    if (!currentBlob) {
+        const doc = buildPDFDocument();
+        if (!doc) return;
+        currentBlob = doc.output('blob');
+    }
+    const url = URL.createObjectURL(currentBlob);
+    const win = window.open(url, '_blank');
+    if (!win) {
+        alert('Il browser ha bloccato l\'apertura della nuova scheda. Consenti i popup e riprova.');
+    }
+    setTimeout(() => { try { URL.revokeObjectURL(url); } catch (_) {} }, 60000);
+}
+
+/* Scarica il PDF direttamente dal modal */
+async function downloadFromPreview() {
+    const doc = buildPDFDocument();
+    if (!doc) return;
+
+    saveState();
+    const filename = getCleanFilename();
+    const result = await savePDFWithPicker(doc, filename);
+
+    if (!result.ok) return;
+
+    const info = document.getElementById('pdf-modal-info');
+    info.textContent = '✓ PDF salvato. L\'anteprima resta aperta.';
+    setTimeout(refreshPreview, 1200);
+}
+
+/* Se l'anteprima è aperta, la ricarica con i dati correnti. */
+function refreshPreviewIfOpen() {
+    if (!previewOpen) return;
+    const btn = document.getElementById('btn-preview');
+    if (btn.disabled) {
+        closePreviewModal();
+        return;
+    }
+    refreshPreview();
+}
+
+/* Chiudi con ESC */
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        if (webcamStream) {
+            closeWebcamModal();
+        } else if (previewOpen) {
+            closePreviewModal();
+        }
+    }
+});
+
+/* Salva lo stato quando si cambia il nome file o si chiude la pagina */
+document.getElementById('pdf-filename').addEventListener('input', saveState);
+window.addEventListener('beforeunload', saveState);
+</script>
+
+</body>
+</html>
