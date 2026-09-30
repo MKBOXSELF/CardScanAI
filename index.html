@@ -75,7 +75,6 @@
         --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
         --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.45);
 
-        /* Superfici modali / sezioni */
         --modal-bg:        linear-gradient(180deg, #1a2344 0%, #10163a 100%);
         --modal-header-bg: rgba(255, 255, 255, 0.035);
         --modal-body-bg:   #2b3040;
@@ -93,9 +92,6 @@
         --topbtn-color:    #f1f5f9;
     }
 
-    /* ============================================================
-       TEMA CHIARO
-       ============================================================ */
     [data-theme="light"] {
         --bg-deep:      #eef2f7;
         --bg-mid:       #e2e8f0;
@@ -130,9 +126,6 @@
         --topbtn-color:    #0f172a;
     }
 
-    /* ============================================================
-       RESET / BASE
-       ============================================================ */
     * { box-sizing: border-box; }
 
     html, body { min-height: 100%; }
@@ -171,7 +164,6 @@
             linear-gradient(180deg, #eef2f7 0%, #e2e8f0 55%, #eef2f7 100%);
     }
 
-    /* Orb luminosi animati */
     body::before,
     body::after {
         content: '';
@@ -218,9 +210,6 @@
         50%      { transform: translate(-90px, -70px) scale(1.15); }
     }
 
-    /* ============================================================
-       HEADER APPLICAZIONE
-       ============================================================ */
     .app-header {
         display: flex;
         align-items: center;
@@ -275,9 +264,6 @@
         .app-header h1 { font-size: 23px; }
     }
 
-    /* ============================================================
-       TOP ACTIONS (theme toggle + install)
-       ============================================================ */
     .top-actions {
         position: absolute;
         top: 14px;
@@ -315,9 +301,6 @@
         .btn-icon { width: 34px; height: 34px; font-size: 14px; }
     }
 
-    /* ============================================================
-       CONTAINER PRINCIPALE (glassmorphism)
-       ============================================================ */
     .container {
         position: relative;
         z-index: 1;
@@ -397,9 +380,6 @@
         transition: color .3s, border-color .3s, background .3s;
     }
 
-    /* ============================================================
-       SEZIONI DOCUMENTO
-       ============================================================ */
     .doc-section {
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
@@ -458,7 +438,6 @@
         .doc-slots { grid-template-columns: 1fr; }
     }
 
-    /* Slot fronte/retro */
     .card-slot {
         border: 2px dashed var(--slot-border);
         border-radius: var(--radius-md);
@@ -504,7 +483,6 @@
     }
     .card-slot.error h3 { color: #fca5a5; }
 
-    /* Drag & drop stato */
     .card-slot.dragover {
         border-color: rgba(6, 182, 212, 0.9) !important;
         border-style: solid !important;
@@ -549,9 +527,6 @@
     }
     input[type="file"] { display: none; }
 
-    /* ============================================================
-       DETECTION OVERLAY (bordi rilevati)
-       ============================================================ */
     .detection-wrap {
         display: none;
         margin-top: 10px;
@@ -591,9 +566,6 @@
         background: #fff;
     }
 
-    /* ============================================================
-       MULTI-SCAN PANEL
-       ============================================================ */
     .multiscan-panel {
         margin: 16px 0 6px;
         padding: 16px 18px;
@@ -671,9 +643,6 @@
         color: var(--text-primary);
     }
 
-    /* ============================================================
-       PULSANTI
-       ============================================================ */
     .btn {
         position: relative;
         display: inline-flex;
@@ -846,7 +815,6 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.3);
     }
 
-    /* Svuota tutto */
     .btn-clear-all {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%);
         font-size: 12px;
@@ -864,9 +832,43 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.25);
     }
 
-    /* ============================================================
-       STATUS MESSAGES
-       ============================================================ */
+    .btn-jpg {
+        background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 55%, #10b981 100%);
+        font-size: 15px;
+        padding: 14px 28px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(6, 182, 212, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        background-size: 200% 200%;
+        animation: gradientShift 6s ease infinite;
+    }
+    .btn-jpg:hover:not(:disabled) {
+        box-shadow:
+            0 12px 32px rgba(6, 182, 212, 0.6),
+            0 0 40px rgba(59, 130, 246, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-import {
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 55%, #ef4444 100%);
+        font-size: 14px;
+        padding: 13px 26px;
+        margin-top: 14px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(249, 115, 22, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        background-size: 200% 200%;
+        animation: gradientShift 6s ease infinite;
+    }
+    .btn-import:hover:not(:disabled) {
+        box-shadow:
+            0 12px 32px rgba(249, 115, 22, 0.6),
+            0 0 40px rgba(239, 68, 68, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
     .status-msg {
         font-size: 11.5px;
         margin-top: 8px;
@@ -881,9 +883,6 @@
     [data-theme="light"] .status-msg.success { color: #059669; }
     [data-theme="light"] .status-msg.info    { color: #2563eb; }
 
-    /* ============================================================
-       FILENAME ROW
-       ============================================================ */
     .filename-row {
         display: flex;
         align-items: center;
@@ -925,9 +924,6 @@
             0 0 24px rgba(59, 130, 246, 0.25);
     }
 
-    /* ============================================================
-       PROGRESS BAR
-       ============================================================ */
     .progress-row {
         margin: 20px 0 8px;
         font-size: 12.5px;
@@ -968,9 +964,6 @@
         100% { background-position: 200% 0; }
     }
 
-    /* ============================================================
-       EXPORT ACTIONS
-       ============================================================ */
     .export-actions {
         display: flex;
         justify-content: center;
@@ -979,9 +972,6 @@
         margin-top: 12px;
     }
 
-    /* ============================================================
-       HINT
-       ============================================================ */
     .hint {
         font-size: 12px;
         color: var(--text-muted);
@@ -1009,9 +999,6 @@
 
     canvas#proc-canvas { display: none; }
 
-    /* ============================================================
-       MODAL ANTEPRIMA PDF
-       ============================================================ */
     .pdf-modal-overlay {
         display: none;
         position: fixed;
@@ -1202,9 +1189,6 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
 
-    /* ============================================================
-       MODAL WEBCAM
-       ============================================================ */
     .webcam-modal-overlay {
         display: none;
         position: fixed;
@@ -1313,9 +1297,6 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
 
-    /* ============================================================
-       SCROLLBAR
-       ============================================================ */
     ::-webkit-scrollbar { width: 10px; height: 10px; }
     ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
     ::-webkit-scrollbar-thumb {
@@ -1329,14 +1310,11 @@
         background-clip: padding-box;
     }
 
-    /* ============================================================
-       RESPONSIVE
-       ============================================================ */
     @media (max-width: 560px) {
         body { padding: 16px 12px 40px; }
         .container { padding: 46px 16px 20px; border-radius: var(--radius-lg); }
         .filename-row input[type="text"] { width: 100%; max-width: 320px; }
-        .btn-pdf, .btn-preview { width: 100%; max-width: 340px; padding: 13px 20px; }
+        .btn-pdf, .btn-preview, .btn-jpg { width: 100%; max-width: 340px; padding: 13px 20px; }
         .pdf-modal-actions .btn { font-size: 11.5px; padding: 8px 12px; }
     }
 
@@ -1352,7 +1330,6 @@
 <body>
 
 <div class="container">
-    <!-- TOP ACTIONS: theme toggle + install -->
     <div class="top-actions">
         <button id="btn-install" class="btn btn-icon" title="Installa app sul dispositivo"
                 style="display:none;" aria-label="Installa app">
@@ -1372,7 +1349,6 @@
         </button>
     </div>
 
-    <!-- ============ HEADER CON LOGO CardScan AI ============ -->
     <div class="app-header">
         <svg class="app-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
             <title>CardScan AI</title>
@@ -1432,11 +1408,10 @@
     </div>
 
     <p>by Spina Michele<br>
-<p>Fronte e retro per ogni tessera.<br>
+    <p>Fronte e retro per ogni tessera.<br>
        Ogni documento verrà riconosciuto, ritagliato e raddrizzato automaticamente.</p>
     <div id="cv-status">Caricamento motore di scansione…</div>
 
-    <!-- ============ MULTI-SCAN PANEL ============ -->
     <div id="multiscan-panel" class="multiscan-panel hidden">
         <h3>Tessere rilevate nella foto</h3>
         <p id="multiscan-info">Rilevate 0 tessere. Verifica l'anteprima e conferma per aggiungerle automaticamente ai primi slot liberi.</p>
@@ -1447,7 +1422,6 @@
         </div>
     </div>
 
-    <!-- ============ CONTENITORE DOCUMENTI DINAMICO ============ -->
     <div id="docs-container"></div>
 
     <button id="btn-add" class="btn btn-add" disabled onclick="addDocument()">
@@ -1459,11 +1433,15 @@
     </button>
     <input type="file" id="multiscan-input" accept="image/*" capture="environment" onchange="handleMultiScanInput(this)">
 
-    <!-- ============ CONTATORE DI COMPLETAMENTO ============ -->
+    <!-- Pulsante Import da PDF -->
+    <button id="btn-import-pdf" class="btn btn-import" disabled onclick="triggerImportPDF()">
+        📄 Importa da PDF
+    </button>
+    <input type="file" id="import-pdf-input" accept="application/pdf" onchange="handleImportPDFInput(this)">
+
     <div class="progress-row" id="progress-row">0/1 tessere complete</div>
     <div class="progress-bar"><div class="progress-bar-fill" id="progress-fill"></div></div>
 
-    <!-- ============ NOME FILE + EXPORT ============ -->
     <div class="filename-row">
         <label for="pdf-filename">Nome file PDF:</label>
         <input type="text" id="pdf-filename" value="documenti_tessera" spellcheck="false">
@@ -1476,9 +1454,11 @@
         <button id="btn-export" class="btn btn-pdf" disabled onclick="generatePDF()">
             Esporta PDF (A4 - 8 tessere per pagina)
         </button>
+        <button id="btn-export-jpg" class="btn btn-jpg" disabled onclick="exportJPG_A4()">
+            🖼 Esporta JPG (A4)
+        </button>
     </div>
 
-    <!-- ============ SVUOTA TUTTO ============ -->
     <button id="btn-clear-all" class="btn btn-clear-all" onclick="clearAllData()">
         🗑 Svuota tutto
     </button>
@@ -1491,6 +1471,10 @@
         un <strong>mini-anteprima dei bordi rilevati</strong>.<br>
         <strong>Multi-Scan:</strong> con "📸 Acquisisci più tessere" puoi fotografare più tessere
         insieme: verranno rilevate, ritagliate e assegnate in sequenza ai primi slot liberi.<br>
+        <strong>Import PDF:</strong> con "📄 Importa da PDF" puoi caricare un PDF le cui pagine
+        verranno analizzate automaticamente per estrarre le tessere.<br>
+        <strong>Esporta JPG:</strong> con "🖼 Esporta JPG (A4)" puoi salvare il layout in formato
+        JPG A4 (una immagine per ogni pagina).<br>
         Consigli di scatto: sfondo scuro e contrastato, un piccolo margine attorno alla tessera,
         luce uniforme, evita ombre nette e riflessi.
     </div>
@@ -1498,9 +1482,6 @@
 
 <canvas id="proc-canvas"></canvas>
 
-<!-- ============================================================
-     MODAL ANTEPRIMA PDF
-     ============================================================ -->
 <div id="pdf-modal-overlay" class="pdf-modal-overlay" onclick="if(event.target===this) closePreviewModal()">
     <div class="pdf-modal" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
         <div class="pdf-modal-header">
@@ -1529,9 +1510,6 @@
     </div>
 </div>
 
-<!-- ============================================================
-     MODAL WEBCAM
-     ============================================================ -->
 <div id="webcam-modal-overlay" class="webcam-modal-overlay">
     <div class="webcam-modal" role="dialog" aria-modal="true" aria-labelledby="webcam-modal-title">
         <div class="webcam-modal-header">
@@ -1574,29 +1552,24 @@ const STORAGE_KEY = 'scanner_tessere_state_v2';
 
 let currentDocs = 0;
 const processedImages = {};
-/* NUOVO: overlay dei bordi rilevati (solo per la sessione corrente) */
 const detectionImages = {};
 const keyOf = (doc, side) => `${doc}-${side}`;
 
-/* Stato anteprima */
 let previewOpen = false;
 let currentBlobUrl = null;
 let currentBlob = null;
 let renderToken = 0;
 
-/* Stato webcam */
 let webcamStream = null;
 let webcamTarget = null;
 let webcamFacingMode = 'environment';
 
-/* Stato install PWA */
 let deferredInstallPrompt = null;
 
-/* Stato multi-scan */
-let multiScanPending = null; // { cards: [{dataUrl, corners}], previewUrl }
+let multiScanPending = null;
 
 /* ============================================================
-   TEMA CHIARO / SCURO
+   TEMA
    ============================================================ */
 function applyTheme(theme) {
     if (theme !== 'light' && theme !== 'dark') theme = 'dark';
@@ -1609,7 +1582,6 @@ function applyTheme(theme) {
             : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
         btn.setAttribute('title', theme === 'light' ? 'Passa al tema scuro' : 'Passa al tema chiaro');
     }
-    /* aggiorna theme-color della barra del browser */
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', theme === 'light' ? '#eef2f7' : '#0a0e27');
     try { localStorage.setItem('cardsCanTheme', theme); } catch (_) {}
@@ -1620,7 +1592,6 @@ function toggleTheme() {
     applyTheme(cur === 'light' ? 'dark' : 'light');
 }
 
-/* Applica il tema salvato al primo paint */
 (function initThemeUi() {
     let saved = 'dark';
     try { saved = localStorage.getItem('cardsCanTheme') || 'dark'; } catch (_) {}
@@ -1628,7 +1599,7 @@ function toggleTheme() {
 })();
 
 /* ============================================================
-   PWA — manifest inline + install prompt
+   PWA
    ============================================================ */
 (function injectManifest() {
     try {
@@ -1655,7 +1626,6 @@ function toggleTheme() {
         const json = JSON.stringify(manifest);
         const link = document.createElement('link');
         link.rel = 'manifest';
-        /* data URI è più affidabile di blob: per i manifest inline */
         link.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(json);
         document.head.appendChild(link);
     } catch (e) {
@@ -1663,7 +1633,6 @@ function toggleTheme() {
     }
 })();
 
-/* Install prompt */
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
@@ -1704,7 +1673,7 @@ document.getElementById('btn-install').addEventListener('click', async () => {
 })();
 
 /* ============================================================
-   PERSISTENZA (sessionStorage)
+   PERSISTENZA
    ============================================================ */
 function saveState() {
     try {
@@ -1761,6 +1730,8 @@ function markCvReady() {
     document.getElementById('btn-add').disabled = false;
     const msBtn = document.getElementById('btn-multiscan');
     if (msBtn) msBtn.disabled = false;
+    const impBtn = document.getElementById('btn-import-pdf');
+    if (impBtn) impBtn.disabled = false;
     cvReadyCallbacks.forEach(cb => { try { cb(); } catch (e) { console.error(e); } });
     cvReadyCallbacks = [];
 }
@@ -1782,7 +1753,7 @@ function markCvReady() {
 function triggerInput(id) { document.getElementById(id).click(); }
 
 /* ============================================================
-   GESTIONE DOCUMENTI DINAMICI
+   DOCUMENTI DINAMICI
    ============================================================ */
 function buildDocSection(docNum) {
     const section = document.createElement('div');
@@ -1983,25 +1954,20 @@ function clearAllData() {
 
     clearState();
 
-    /* Svuota i container e gli stati */
     document.getElementById('docs-container').innerHTML = '';
     for (const k in processedImages) delete processedImages[k];
     for (const k in detectionImages) delete detectionImages[k];
     currentDocs = 0;
 
-    /* Chiudi eventuale anteprima aperta */
     if (previewOpen) closePreviewModal();
     cancelMultiScan();
 
-    /* Reset del nome file */
     document.getElementById('pdf-filename').value = 'documenti_tessera';
 
-    /* Ricrea una sezione vuota */
     addDocument();
     updateProgress();
     checkExportStatus();
 
-    /* Piccolo feedback visivo */
     const btn = document.getElementById('btn-clear-all');
     const oldText = btn.textContent;
     btn.textContent = '✓ Fatto!';
@@ -2060,7 +2026,6 @@ initializeApp();
    DRAG & DROP
    ============================================================ */
 (function initDragAndDrop() {
-    /* Evita che il browser apra il file droppato fuori dagli slot */
     const isFileDrag = (e) => {
         if (!e.dataTransfer) return false;
         const types = e.dataTransfer.types;
@@ -2108,7 +2073,6 @@ initializeApp();
     container.addEventListener('dragleave', (e) => {
         const slot = e.target.closest('.card-slot');
         if (!slot) return;
-        /* Se usciamo dallo slot (non da un figlio), rimuovi evidenziazione */
         if (!slot.contains(e.relatedTarget)) {
             slot.classList.remove('dragover');
         }
@@ -2122,7 +2086,6 @@ initializeApp();
         e.stopPropagation();
         slot.classList.remove('dragover');
 
-        /* Estrai doc/side dall'id: "slot-<num>-<fronte|retro>" */
         const m = slot.id.match(/^slot-(\d+)-(fronte|retro)$/);
         if (!m) return;
         const doc = parseInt(m[1], 10);
@@ -2180,6 +2143,7 @@ function checkExportStatus() {
     }
     document.getElementById('btn-export').disabled = !allDone;
     document.getElementById('btn-preview').disabled = !allDone;
+    document.getElementById('btn-export-jpg').disabled = !allDone;
 }
 
 function setStatus(doc, side, type, text) {
@@ -2213,7 +2177,6 @@ function processImageFromBlob(blob, doc, side) {
     setStatus(doc, side, 'info', 'Analisi immagine in corso…');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
 
-    /* Nasconde overlay bordi precedente */
     const detWrapPrev = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
     if (detWrapPrev) detWrapPrev.classList.remove('visible');
 
@@ -2256,7 +2219,6 @@ function runScanner(img, doc, side, input) {
             return;
         }
 
-        /* Costruisce l'overlay con i bordi rilevati sull'originale */
         try {
             detectionDataUrl = buildDetectionOverlay(src, corners);
         } catch (e) {
@@ -2282,7 +2244,6 @@ function runScanner(img, doc, side, input) {
         prev.src = warpedDataUrl;
         prev.style.display = 'block';
 
-        /* Mostra overlay bordi rilevati */
         if (detectionDataUrl) {
             detectionImages[keyOf(doc, side)] = detectionDataUrl;
             const detImg = document.getElementById(`detection-${keyOf(doc, side)}`);
@@ -2304,19 +2265,17 @@ function runScanner(img, doc, side, input) {
 }
 
 /* ============================================================
-   OVERLAY BORDI RILEVATI
+   OVERLAY BORDI
    ============================================================ */
 function buildDetectionOverlay(srcMat, corners) {
     const W = srcMat.cols;
     const H = srcMat.rows;
 
-    /* Canvas a piena risoluzione (ridimensionato poi via CSS/HTML) */
     const full = document.createElement('canvas');
     full.width  = W;
     full.height = H;
     const fctx = full.getContext('2d');
 
-    /* srcMat è RGBA (CV_8UC4) — compatibile con ImageData */
     try {
         const imgData = new ImageData(
             new Uint8ClampedArray(srcMat.data),
@@ -2324,12 +2283,10 @@ function buildDetectionOverlay(srcMat, corners) {
         );
         fctx.putImageData(imgData, 0, 0);
     } catch (e) {
-        /* Fallback: prova via cv.imshow */
         try { cv.imshow(full, srcMat); }
         catch (err) { console.warn('Impossibile disegnare srcMat:', err); }
     }
 
-    /* Scala a dimensione thumbnail per non appesantire */
     const maxDim = 500;
     const scale = Math.min(1, maxDim / Math.max(W, H));
     const tw = Math.max(1, Math.round(W * scale));
@@ -2340,15 +2297,12 @@ function buildDetectionOverlay(srcMat, corners) {
     thumb.height = th;
     const tctx = thumb.getContext('2d');
 
-    /* Sfondo bianco */
     tctx.fillStyle = '#ffffff';
     tctx.fillRect(0, 0, tw, th);
     tctx.drawImage(full, 0, 0, tw, th);
 
-    /* Disegna il quadrilatero rilevato */
     const pts = corners.map(p => ({ x: p.x * scale, y: p.y * scale }));
 
-    /* Ombra luminosa verde/ciano */
     tctx.save();
     tctx.shadowColor = 'rgba(0, 255, 176, 0.9)';
     tctx.shadowBlur = 12;
@@ -2362,7 +2316,6 @@ function buildDetectionOverlay(srcMat, corners) {
     tctx.stroke();
     tctx.restore();
 
-    /* Punti agli angoli */
     const dotR = Math.max(3, tw / 130);
     tctx.fillStyle = '#00ffb0';
     tctx.strokeStyle = '#003c2e';
@@ -2374,7 +2327,6 @@ function buildDetectionOverlay(srcMat, corners) {
         tctx.stroke();
     }
 
-    /* Etichette numeriche sugli angoli (TL, TR, BR, BL) */
     tctx.fillStyle = '#00ffb0';
     tctx.font = `bold ${Math.max(9, tw / 55)}px 'Inter', sans-serif`;
     tctx.textBaseline = 'middle';
@@ -2383,7 +2335,6 @@ function buildDetectionOverlay(srcMat, corners) {
         const off = dotR * 2.2;
         let tx = pts[i].x + off;
         let ty = pts[i].y + off;
-        /* Evita che il numero esca dal canvas */
         tx = Math.min(tx, tw - 4);
         ty = Math.min(ty, th - 4);
         tctx.fillText(labels[i], tx, ty);
@@ -2393,14 +2344,8 @@ function buildDetectionOverlay(srcMat, corners) {
 }
 
 /* ============================================================
-   MULTI-SCAN — Rilevamento di più tessere in una singola foto
+   MULTI-SCAN
    ============================================================ */
-
-/**
- * Rileva TUTTI i quadrilateri candidati in una immagine,
- * li ordina top-left → bottom-right e restituisce un array
- * di corner sets (uno per tessera).
- */
 function detectMultipleCards(src) {
     const maxDim = 1200;
     const scale  = Math.min(1, maxDim / Math.max(src.cols, src.rows));
@@ -2420,7 +2365,7 @@ function detectMultipleCards(src) {
     cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
 
     const W = work.cols, H = work.rows;
-    const minArea = W * H * 0.02;   // accetta tessere anche piccole in foto multi
+    const minArea = W * H * 0.02;
     const targetAspect = CONFIG.cardWidthMM / CONFIG.cardHeightMM;
 
     const cannyParams = [[25, 80], [40, 120], [60, 180]];
@@ -2485,16 +2430,13 @@ function detectMultipleCards(src) {
 
     work.delete(); gray.delete(); blurred.delete();
 
-    /* Deduplica: elimina quadrilateri che si sovrappongono significativamente */
     const deduped = deduplicateCards(candidates);
 
-    /* Ordina per posizione: prima per Y (dall'alto in basso), poi per X (sinistra → destra) */
     deduped.sort((a, b) => {
         const ya = (a.corners[0].y + a.corners[1].y + a.corners[2].y + a.corners[3].y) / 4;
         const yb = (b.corners[0].y + b.corners[1].y + b.corners[2].y + b.corners[3].y) / 4;
         const xa = (a.corners[0].x + a.corners[1].x + a.corners[2].x + a.corners[3].x) / 4;
         const xb = (b.corners[0].x + b.corners[1].x + b.corners[2].x + b.corners[3].x) / 4;
-        // Raggruppa per fasce orizzontali approssimative (tolleranza)
         const rowTol = H * 0.08;
         if (Math.abs(ya - yb) > rowTol) return ya - yb;
         return xa - xb;
@@ -2503,13 +2445,9 @@ function detectMultipleCards(src) {
     return deduped.map(c => c.corners);
 }
 
-/**
- * Rimuove rilevamenti duplicati confrontando i centroidi.
- * Se due quadrilateri hanno centroidi molto vicini, tiene quello con score più alto.
- */
 function deduplicateCards(candidates) {
     const result = [];
-    const tol = 30; // px (a risoluzione originale, dopo lo scaling)
+    const tol = 30;
 
     for (const cand of candidates) {
         const cx = (cand.corners[0].x + cand.corners[1].x + cand.corners[2].x + cand.corners[3].x) / 4;
@@ -2520,7 +2458,6 @@ function deduplicateCards(candidates) {
             const ex = (existing.corners[0].x + existing.corners[1].x + existing.corners[2].x + existing.corners[3].x) / 4;
             const ey = (existing.corners[0].y + existing.corners[1].y + existing.corners[2].y + existing.corners[3].y) / 4;
             if (Math.hypot(cx - ex, cy - ey) < tol) {
-                /* Tieni quello con score più alto */
                 if (cand.score > existing.score) {
                     existing.corners = cand.corners;
                     existing.score = cand.score;
@@ -2540,9 +2477,6 @@ function deduplicateCards(candidates) {
     return result;
 }
 
-/**
- * Costruisce l'overlay multi-tessera con numeri progressivi.
- */
 function buildMultiDetectionOverlay(srcMat, cards) {
     const W = srcMat.cols;
     const H = srcMat.rows;
@@ -2596,7 +2530,6 @@ function buildMultiDetectionOverlay(srcMat, cards) {
         tctx.stroke();
         tctx.restore();
 
-        /* Numero etichetta al centro */
         const cx = (pts[0].x + pts[1].x + pts[2].x + pts[3].x) / 4;
         const cy = (pts[0].y + pts[1].y + pts[2].y + pts[3].y) / 4;
         const r = Math.max(10, tw / 60);
@@ -2616,9 +2549,6 @@ function buildMultiDetectionOverlay(srcMat, cards) {
     return thumb.toDataURL('image/png');
 }
 
-/* ============================================================
-   MULTI-SCAN — Trigger e conferma
-   ============================================================ */
 function triggerMultiScan() {
     if (!cvReady) {
         alert('Il motore di scansione non è ancora pronto. Attendi qualche secondo.');
@@ -2660,10 +2590,8 @@ function runMultiScan(img) {
             return;
         }
 
-        /* Genera anteprima con i bordi evidenziati */
         const previewDataUrl = buildMultiDetectionOverlay(src, cardsCorners);
 
-        /* Warpa ciascuna tessera */
         const cards = [];
         for (const corners of cardsCorners) {
             try {
@@ -2687,7 +2615,6 @@ function runMultiScan(img) {
             previewUrl: previewDataUrl
         };
 
-        /* Mostra pannello di conferma */
         document.getElementById('multiscan-preview').src = previewDataUrl;
         document.getElementById('multiscan-info').textContent =
             `Rilevate ${cards.length} tesser${cards.length === 1 ? 'a' : 'e'}. ` +
@@ -2717,7 +2644,6 @@ async function confirmMultiScan() {
 
     const cards = multiScanPending.cards.slice();
 
-    /* Trova tutti gli slot liberi (fronte/retro) in ordine documento, fronte→retro */
     function findNextFreeSlot() {
         for (let d = 1; d <= currentDocs; d++) {
             for (const s of SIDES) {
@@ -2736,7 +2662,7 @@ async function confirmMultiScan() {
 
         if (!slot) {
             if (currentDocs < CONFIG.maxDocs) {
-                addDocument(true); // aggiunge senza salvare ad ogni iterazione
+                addDocument(true);
                 slot = { doc: currentDocs, side: 'fronte' };
             } else {
                 alert(`Limite massimo di ${CONFIG.maxDocs} tessere raggiunto. ` +
@@ -2747,17 +2673,14 @@ async function confirmMultiScan() {
 
         const { doc, side } = slot;
 
-        /* Assegna l'immagine */
         processedImages[keyOf(doc, side)] = card.dataUrl;
 
-        /* Aggiorna anteprima */
         const prev = document.getElementById(`preview-${keyOf(doc, side)}`);
         if (prev) {
             prev.src = card.dataUrl;
             prev.style.display = 'block';
         }
 
-        /* Overlay bordi individuale per questa tessera */
         try {
             const detOverlay = buildDetectionOverlayFromCorners(card.corners);
             if (detOverlay) {
@@ -2777,7 +2700,6 @@ async function confirmMultiScan() {
         assigned++;
     }
 
-    /* Aggiorna UI globale */
     updateProgress();
     checkExportStatus();
     updateAddButton();
@@ -2795,13 +2717,7 @@ async function confirmMultiScan() {
     }
 }
 
-/**
- * Genera un overlay dei bordi partendo dai corners (in coordinate originali)
- * ma senza avere la srcMat: disegna solo il quadrilatero su sfondo trasparente.
- * Usato per l'overlay individuale dopo il multi-scan.
- */
 function buildDetectionOverlayFromCorners(corners) {
-    /* Calcola bounding box dei corners */
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     for (const p of corners) {
         if (p.x < minX) minX = p.x;
@@ -2969,7 +2885,7 @@ function readSourceMat(img) {
 }
 
 /* ============================================================
-   RICONOSCIMENTO TESSERA (singola)
+   RICONOSCIMENTO SINGOLO
    ============================================================ */
 function detectCard(src) {
     const maxDim = 900;
@@ -3053,7 +2969,7 @@ function detectCard(src) {
 }
 
 /* ============================================================
-   WARP PROSPETTICO + ANGOLI ARROTONDATI
+   WARP
    ============================================================ */
 function warpCard(src, corners, W, H) {
     const srcPts = cv.matFromArray(4, 1, cv.CV_32FC2, [
@@ -3252,38 +3168,46 @@ function getCleanFilename() {
     let name = (document.getElementById('pdf-filename').value || '').trim();
     if (!name) name = 'documenti_tessera';
     name = name.replace(/[\\/:*?"<>|]/g, '_');
-    if (!/\.pdf$/i.test(name)) name += '.pdf';
     return name;
 }
 
 /* ============================================================
-   SALVATAGGIO PDF CON VERIFICA SOVRASCRITTURA
+   SALVATAGGIO CON SCELTA POSIZIONE
    ============================================================ */
-async function savePDFWithPicker(doc, filename) {
+async function saveFileWithPicker(data, defaultName, mimeType, extensions) {
     if (window.showSaveFilePicker) {
         try {
             const handle = await window.showSaveFilePicker({
-                suggestedName: filename,
+                suggestedName: defaultName,
                 types: [{
-                    description: 'Documento PDF',
-                    accept: { 'application/pdf': ['.pdf'] }
+                    description: 'File',
+                    accept: { [mimeType]: extensions }
                 }]
             });
             const writable = await handle.createWritable();
-            const blob = doc.output('blob');
-            await writable.write(blob);
+            await writable.write(data);
             await writable.close();
             return { ok: true, method: 'picker' };
         } catch (err) {
             if (err && err.name === 'AbortError') {
                 return { ok: false, method: 'picker', reason: 'annullato' };
             }
-            console.warn('File System Access API fallita, fallback a doc.save():', err);
+            console.warn('File System Access API fallita, fallback download classico:', err);
         }
     }
 
-    doc.save(filename);
-    return { ok: true, method: 'jsPDF' };
+    // Fallback: download classico
+    const blob = data instanceof Blob ? data : new Blob([data], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = defaultName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+
+    return { ok: true, method: 'download' };
 }
 
 async function generatePDF() {
@@ -3292,8 +3216,21 @@ async function generatePDF() {
 
     saveState();
 
-    const filename = getCleanFilename();
-    const result = await savePDFWithPicker(doc, filename);
+    const base = getCleanFilename();
+    const filename = /\.pdf$/i.test(base) ? base : base + '.pdf';
+
+    let blob;
+    try {
+        blob = doc.output('blob');
+    } catch (e) {
+        console.error(e);
+        alert('Errore nella generazione del PDF.');
+        return;
+    }
+
+    const result = await saveFileWithPicker(
+        blob, filename, 'application/pdf', ['.pdf']
+    );
 
     if (!result.ok) return;
 
@@ -3310,7 +3247,7 @@ async function generatePDF() {
 }
 
 /* ============================================================
-   ANTEPRIMA PDF — PDF.js
+   ANTEPRIMA PDF
    ============================================================ */
 function showPdfFallback(show) {
     const fb = document.getElementById('pdf-fallback');
@@ -3472,8 +3409,21 @@ async function downloadFromPreview() {
     if (!doc) return;
 
     saveState();
-    const filename = getCleanFilename();
-    const result = await savePDFWithPicker(doc, filename);
+    const base = getCleanFilename();
+    const filename = /\.pdf$/i.test(base) ? base : base + '.pdf';
+
+    let blob;
+    try {
+        blob = doc.output('blob');
+    } catch (e) {
+        console.error(e);
+        alert('Errore nella generazione del PDF.');
+        return;
+    }
+
+    const result = await saveFileWithPicker(
+        blob, filename, 'application/pdf', ['.pdf']
+    );
 
     if (!result.ok) return;
 
@@ -3492,7 +3442,308 @@ function refreshPreviewIfOpen() {
     refreshPreview();
 }
 
-/* Chiudi con ESC */
+/* ============================================================
+   IMPORT DA PDF
+   ============================================================ */
+function triggerImportPDF() {
+    if (!cvReady) {
+        alert('Il motore di scansione non è ancora pronto. Attendi qualche secondo.');
+        return;
+    }
+    document.getElementById('import-pdf-input').click();
+}
+
+function handleImportPDFInput(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    input.value = '';
+    processImportPDFBlob(file);
+}
+
+async function processImportPDFBlob(blob) {
+    if (!window.pdfjsLib) {
+        alert('PDF.js non è disponibile. Impossibile importare PDF.');
+        return;
+    }
+    if (!cvReady) {
+        setStatus(1, 'fronte', 'info', 'Attendo il motore di scansione…');
+        whenCvReady(() => processImportPDFBlob(blob));
+        return;
+    }
+
+    setStatus(1, 'fronte', 'info', 'Analisi PDF in corso…');
+
+    let pdf;
+    try {
+        const arrayBuffer = await blob.arrayBuffer();
+        pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    } catch (e) {
+        console.error(e);
+        alert('Impossibile leggere il PDF.');
+        setStatus(1, 'fronte', 'error', 'Errore nella lettura del PDF.');
+        return;
+    }
+
+    let totalCardsFound = 0;
+
+    for (let p = 1; p <= pdf.numPages; p++) {
+        let page;
+        try {
+            page = await pdf.getPage(p);
+        } catch (e) {
+            console.warn(`Pagina ${p} non leggibile:`, e);
+            continue;
+        }
+
+        const viewport = page.getViewport({ scale: 2.0 });
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(viewport.width);
+        canvas.height = Math.round(viewport.height);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        try {
+            await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+        } catch (e) {
+            console.warn(`Errore rendering pagina ${p}:`, e);
+            continue;
+        }
+
+        const img = await loadImage(canvas.toDataURL('image/png'));
+
+        let cardsCorners = [];
+        try {
+            const src = readSourceMat(img);
+            cardsCorners = detectMultipleCards(src);
+            src.delete();
+        } catch (e) {
+            console.warn(`Errore rilevamento pagina ${p}:`, e);
+        }
+
+        if (!cardsCorners || cardsCorners.length === 0) {
+            // Prova come singola tessera
+            let singleCorners = null;
+            try {
+                const src = readSourceMat(img);
+                singleCorners = detectCard(src);
+                src.delete();
+            } catch (e) { /* ignore */ }
+
+            if (singleCorners) cardsCorners = [singleCorners];
+        }
+
+        if (cardsCorners.length === 0) {
+            console.info(`Pagina ${p}: nessuna tessera rilevata.`);
+            continue;
+        }
+
+        // Assegna le tessere rilevate agli slot liberi
+        for (const corners of cardsCorners) {
+            let slot = findNextFreeSlot();
+            if (!slot) {
+                if (currentDocs < CONFIG.maxDocs) {
+                    addDocument(true);
+                    slot = { doc: currentDocs, side: 'fronte' };
+                } else {
+                    alert(`Limite massimo di ${CONFIG.maxDocs} tessere raggiunto.`);
+                    totalCardsFound += 1;
+                    continue;
+                }
+            }
+            const { doc, side } = slot;
+
+            try {
+                const src = readSourceMat(img);
+                const warped = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
+                const detOverlay = buildDetectionOverlayFromCorners(corners);
+                src.delete();
+
+                processedImages[keyOf(doc, side)] = warped;
+
+                const prev = document.getElementById(`preview-${keyOf(doc, side)}`);
+                if (prev) {
+                    prev.src = warped;
+                    prev.style.display = 'block';
+                }
+
+                if (detOverlay) {
+                    detectionImages[keyOf(doc, side)] = detOverlay;
+                    const detImg = document.getElementById(`detection-${keyOf(doc, side)}`);
+                    const detWrap = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
+                    if (detImg && detWrap) {
+                        detImg.src = detOverlay;
+                        detWrap.classList.add('visible');
+                    }
+                }
+
+                setStatus(doc, side, 'success', `Importata da PDF pag. ${p}.`);
+                totalCardsFound++;
+            } catch (e) {
+                console.warn('Errore estrazione da PDF:', e);
+            }
+        }
+    }
+
+    updateProgress();
+    checkExportStatus();
+    updateAddButton();
+    updateRemoveButtons();
+    saveState();
+    refreshPreviewIfOpen();
+
+    if (totalCardsFound === 0) {
+        alert('Nessuna tessera riconosciuta nel PDF.\n\nSuggerimenti:\n• Assicurati che le tessere abbiano bordi netti e contrastati\n• Evita PDF con sfondi complessi o immagini troppo piccole');
+    } else {
+        alert(`✓ Importate ${totalCardsFound} tesser${totalCardsFound === 1 ? 'a' : 'e'} dal PDF.`);
+    }
+}
+
+function findNextFreeSlot() {
+    for (let d = 1; d <= currentDocs; d++) {
+        for (const s of SIDES) {
+            if (!processedImages[keyOf(d, s)]) {
+                return { doc: d, side: s };
+            }
+        }
+    }
+    return null;
+}
+
+/* ============================================================
+   ESPORTAZIONE JPG A4
+   ============================================================ */
+async function exportJPG_A4() {
+    // Verifica completezza
+    for (let d = 1; d <= currentDocs; d++) {
+        for (const s of SIDES) {
+            if (!processedImages[keyOf(d, s)]) {
+                alert('Completa tutte le tessere prima di esportare.');
+                return;
+            }
+        }
+    }
+
+    // Dimensioni A4 a 300 DPI
+    const DPI = 300;
+    const A4_W_MM = 210;
+    const A4_H_MM = 297;
+    const pxPerMM = DPI / 25.4;
+    const A4_W_PX = Math.round(A4_W_MM * pxPerMM);
+    const A4_H_PX = Math.round(A4_H_MM * pxPerMM);
+
+    const cW = CONFIG.cardWidthMM;
+    const cH = CONFIG.cardHeightMM;
+    const gap = CONFIG.gapMM;
+
+    const pairW = cW * 2 + gap;
+    const leftMargin = (A4_W_MM - pairW) / 2;
+
+    const rowH = cH;
+    const rowsPerPage = CONFIG.docsPerPage / 2;
+    const blockH = rowH * rowsPerPage + gap * (rowsPerPage - 1);
+    const maxBlockH = A4_H_MM - 20;
+    let startY, actualGap = gap;
+    if (blockH > maxBlockH) {
+        actualGap = Math.max(2, (maxBlockH - rowH * rowsPerPage) / (rowsPerPage - 1));
+        startY = (A4_H_MM - (rowH * rowsPerPage + actualGap * (rowsPerPage - 1))) / 2;
+    } else {
+        startY = (A4_H_MM - blockH) / 2;
+    }
+
+    const docsPerPage = CONFIG.docsPerPage;
+    const pages = Math.ceil(currentDocs / docsPerPage);
+
+    // Precarica tutte le immagini coinvolte
+    const images = {};
+    for (let d = 1; d <= currentDocs; d++) {
+        for (const s of SIDES) {
+            const k = keyOf(d, s);
+            if (!images[k]) {
+                images[k] = await loadImage(processedImages[k]);
+            }
+        }
+    }
+
+    const baseName = (document.getElementById('pdf-filename').value || 'documenti_tessera')
+        .replace(/[\\/:*?"<>|]/g, '_').replace(/\.(pdf|jpg|jpeg)$/i, '');
+
+    for (let p = 0; p < pages; p++) {
+        const canvas = document.createElement('canvas');
+        canvas.width = A4_W_PX;
+        canvas.height = A4_H_PX;
+        const ctx = canvas.getContext('2d');
+
+        // Sfondo bianco
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, A4_W_PX, A4_H_PX);
+
+        for (let r = 0; r < rowsPerPage; r++) {
+            const docIndex = p * docsPerPage + r;
+            const docNum = docIndex + 1;
+            if (docNum > currentDocs) break;
+
+            const yMM = startY + r * (rowH + actualGap);
+
+            const frontX = leftMargin;
+            const backX  = leftMargin + cW + gap;
+
+            const fImg = images[keyOf(docNum, 'fronte')];
+            const bImg = images[keyOf(docNum, 'retro')];
+
+            if (fImg) {
+                const fx = frontX * pxPerMM;
+                const fy = yMM * pxPerMM;
+                const fw = cW * pxPerMM;
+                const fh = cH * pxPerMM;
+
+                // Arrotonda gli angoli anche in JPG
+                ctx.save();
+                roundRectPath(ctx, fx, fy, fw, fh, CONFIG.cornerRadiusMM * pxPerMM);
+                ctx.clip();
+                ctx.drawImage(fImg, fx, fy, fw, fh);
+                ctx.restore();
+            }
+
+            if (bImg) {
+                const bx = backX * pxPerMM;
+                const by = yMM * pxPerMM;
+                const bw = cW * pxPerMM;
+                const bh = cH * pxPerMM;
+
+                ctx.save();
+                roundRectPath(ctx, bx, by, bw, bh, CONFIG.cornerRadiusMM * pxPerMM);
+                ctx.clip();
+                ctx.drawImage(bImg, bx, by, bw, bh);
+                ctx.restore();
+            }
+        }
+
+        const jpgData = canvas.toDataURL('image/jpeg', 0.95);
+        const jpgBlob = await (await fetch(jpgData)).blob();
+
+        const filename = pages === 1
+            ? `${baseName}.jpg`
+            : `${baseName}_pagina${p + 1}.jpg`;
+
+        const result = await saveFileWithPicker(
+            jpgBlob, filename, 'image/jpeg', ['.jpg', '.jpeg']
+        );
+
+        if (!result.ok) {
+            // Utente ha annullato: interrompi
+            return;
+        }
+    }
+
+    setTimeout(() => {
+        alert('✓ Esportazione JPG completata.');
+    }, 300);
+}
+
+/* ============================================================
+   TASTIERA
+   ============================================================ */
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         if (webcamStream) {
@@ -3505,7 +3756,6 @@ document.addEventListener('keydown', e => {
     }
 });
 
-/* Salva lo stato quando si cambia il nome file o si chiude la pagina */
 document.getElementById('pdf-filename').addEventListener('input', saveState);
 window.addEventListener('beforeunload', saveState);
 </script>
