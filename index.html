@@ -1,16 +1,38 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CardScan AI - Scanner Documenti Formato Tessera</title>
-<meta name="theme-color" content="#1E7BE8">
+<meta name="theme-color" content="#0a0e27">
+
+<!-- PWA meta -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CardScan AI">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="CardScan AI">
 
 <!-- Favicon SVG inline (CardScan AI) -->
 <link rel="icon" type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%235BB0FF'/%3E%3Cstop%20offset='1'%20stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x='8'%20y='8'%20width='184'%20height='184'%20rx='44'%20fill='url(%23b)'/%3E%3Crect%20x='44'%20y='64'%20width='112'%20height='72'%20rx='8'%20fill='none'%20stroke='%23fff'%20stroke-width='4'/%3E%3Ccircle%20cx='69'%20cy='86'%20r='7'%20fill='none'%20stroke='%23fff'%20stroke-width='3'/%3E%3Cpath%20d='M%2056%20103%20Q%2069%2093%2082%20103'%20fill='none'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='82'%20x2='140'%20y2='82'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='90'%20x2='134'%20y2='90'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='98'%20x2='126'%20y2='98'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Crect%20x='60'%20y='112'%20width='24'%20height='17'%20rx='2.5'%20fill='none'%20stroke='%23fff'%20stroke-width='2.5'/%3E%3Cline%20x1='67'%20y1='112'%20x2='67'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='76'%20y1='112'%20x2='76'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='60'%20y1='120'%20x2='84'%20y2='120'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='30'%20y1='100'%20x2='170'%20y2='100'%20stroke='%2300FFB0'%20stroke-width='4'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon"
       href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%235BB0FF'/%3E%3Cstop%20offset='1'%20stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x='8'%20y='8'%20width='184'%20height='184'%20rx='44'%20fill='url(%23b)'/%3E%3Crect%20x='44'%20y='64'%20width='112'%20height='72'%20rx='8'%20fill='none'%20stroke='%23fff'%20stroke-width='4'/%3E%3Ccircle%20cx='69'%20cy='86'%20r='7'%20fill='none'%20stroke='%23fff'%20stroke-width='3'/%3E%3Cpath%20d='M%2056%20103%20Q%2069%2093%2082%20103'%20fill='none'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='82'%20x2='140'%20y2='82'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='90'%20x2='134'%20y2='90'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='98'%20x2='126'%20y2='98'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Crect%20x='60'%20y='112'%20width='24'%20height='17'%20rx='2.5'%20fill='none'%20stroke='%23fff'%20stroke-width='2.5'/%3E%3Cline%20x1='67'%20y1='112'%20x2='67'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='76'%20y1='112'%20x2='76'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='60'%20y1='120'%20x2='84'%20y2='120'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='30'%20y1='100'%20x2='170'%20y2='100'%20stroke='%2300FFB0'%20stroke-width='4'/%3E%3C/svg%3E">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- Theme init ASAP (evita flash) -->
+<script>
+(function () {
+    var t = 'dark';
+    try { t = localStorage.getItem('cardsCanTheme') || 'dark'; } catch (_) {}
+    if (t !== 'light' && t !== 'dark') t = 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
 
 <!-- OpenCV.js -->
 <script async src="https://docs.opencv.org/4.8.0/opencv.js"></script>
@@ -20,333 +42,1023 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f7f6;
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    /* ============================================================
+       DESIGN SYSTEM — variabili tema (dark di default)
+       ============================================================ */
+    :root {
+        --bg-deep:      #0a0e27;
+        --bg-mid:       #131a3a;
+        --surface:      rgba(255, 255, 255, 0.045);
+        --surface-2:    rgba(255, 255, 255, 0.07);
+        --border:       rgba(255, 255, 255, 0.10);
+        --border-strong:rgba(255, 255, 255, 0.18);
+
+        --blue:   #3b82f6;
+        --cyan:   #06b6d4;
+        --green:  #10b981;
+        --purple: #8b5cf6;
+        --pink:   #ec4899;
+        --amber:  #f59e0b;
+        --red:    #ef4444;
+
+        --text-primary:   #f1f5f9;
+        --text-secondary: #cbd5e1;
+        --text-muted:     #94a3b8;
+        --text-dim:       #64748b;
+
+        --radius-sm: 10px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+        --radius-xl: 26px;
+
+        --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.25);
+        --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
+        --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.45);
+
+        /* Superfici modali / sezioni */
+        --modal-bg:        linear-gradient(180deg, #1a2344 0%, #10163a 100%);
+        --modal-header-bg: rgba(255, 255, 255, 0.035);
+        --modal-body-bg:   #2b3040;
+        --modal-body-grid: rgba(255, 255, 255, 0.015);
+        --doc-section-bg:  linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.015) 100%);
+        --container-bg:    linear-gradient(180deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.025) 100%);
+        --input-bg:        rgba(255, 255, 255, 0.05);
+        --hint-bg:         rgba(59, 130, 246, 0.06);
+        --hint-border:     rgba(59, 130, 246, 0.15);
+        --hint-tip-bg:     #131a3a;
+        --slot-bg:         rgba(255, 255, 255, 0.02);
+        --slot-border:     rgba(255, 255, 255, 0.14);
+        --scrollbar-track: rgba(0, 0, 0, 0.2);
+        --theme-btn-bg:    rgba(255, 255, 255, 0.06);
+        --topbtn-color:    #f1f5f9;
     }
 
     /* ============================================================
-       HEADER APPLICAZIONE (logo CardScan AI + titolo)
+       TEMA CHIARO
+       ============================================================ */
+    [data-theme="light"] {
+        --bg-deep:      #eef2f7;
+        --bg-mid:       #e2e8f0;
+        --surface:      rgba(255, 255, 255, 0.85);
+        --surface-2:    rgba(255, 255, 255, 0.95);
+        --border:       rgba(15, 23, 42, 0.10);
+        --border-strong:rgba(15, 23, 42, 0.18);
+
+        --text-primary:   #0f172a;
+        --text-secondary: #334155;
+        --text-muted:     #64748b;
+        --text-dim:       #94a3b8;
+
+        --shadow-sm: 0 4px 14px rgba(15, 23, 42, 0.08);
+        --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.12);
+        --shadow-lg: 0 20px 60px rgba(15, 23, 42, 0.15);
+
+        --modal-bg:        linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+        --modal-header-bg: rgba(15, 23, 42, 0.03);
+        --modal-body-bg:   #e9eef5;
+        --modal-body-grid: rgba(15, 23, 42, 0.025);
+        --doc-section-bg:  linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+        --container-bg:    linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.75) 100%);
+        --input-bg:        rgba(15, 23, 42, 0.04);
+        --hint-bg:         rgba(59, 130, 246, 0.08);
+        --hint-border:     rgba(59, 130, 246, 0.2);
+        --hint-tip-bg:     #f0f4f8;
+        --slot-bg:         rgba(255, 255, 255, 0.7);
+        --slot-border:     rgba(15, 23, 42, 0.15);
+        --scrollbar-track: rgba(15, 23, 42, 0.06);
+        --theme-btn-bg:    rgba(255, 255, 255, 0.9);
+        --topbtn-color:    #0f172a;
+    }
+
+    /* ============================================================
+       RESET / BASE
+       ============================================================ */
+    * { box-sizing: border-box; }
+
+    html, body { min-height: 100%; }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: var(--text-primary);
+        margin: 0;
+        padding: 24px 20px 48px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        background-color: var(--bg-deep);
+        background-image:
+            radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.18) 0%, transparent 45%),
+            radial-gradient(circle at 85% 90%, rgba(139, 92, 246, 0.16) 0%, transparent 45%),
+            radial-gradient(circle at 85% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+            radial-gradient(circle at 15% 90%, rgba(16, 185, 129, 0.10) 0%, transparent 40%),
+            linear-gradient(180deg, #0a0e27 0%, #0d1330 55%, #0a0e27 100%);
+        background-attachment: fixed;
+        position: relative;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transition: background-color .4s ease, color .4s ease;
+    }
+
+    [data-theme="light"] body {
+        background-color: #eef2f7;
+        background-image:
+            radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.15) 0%, transparent 45%),
+            radial-gradient(circle at 85% 90%, rgba(139, 92, 246, 0.12) 0%, transparent 45%),
+            radial-gradient(circle at 85% 10%, rgba(6, 182, 212, 0.10) 0%, transparent 40%),
+            radial-gradient(circle at 15% 90%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+            linear-gradient(180deg, #eef2f7 0%, #e2e8f0 55%, #eef2f7 100%);
+    }
+
+    /* Orb luminosi animati */
+    body::before,
+    body::after {
+        content: '';
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+        will-change: transform;
+    }
+    body::before {
+        top: -25%;
+        left: -15%;
+        width: 65vw;
+        height: 65vw;
+        max-width: 820px;
+        max-height: 820px;
+        background: radial-gradient(circle at center, rgba(59, 130, 246, 0.40), transparent 65%);
+        animation: floatA 22s ease-in-out infinite;
+    }
+    body::after {
+        bottom: -25%;
+        right: -15%;
+        width: 60vw;
+        height: 60vw;
+        max-width: 750px;
+        max-height: 750px;
+        background: radial-gradient(circle at center, rgba(139, 92, 246, 0.35), transparent 65%);
+        animation: floatB 28s ease-in-out infinite;
+    }
+    [data-theme="light"] body::before {
+        background: radial-gradient(circle at center, rgba(59, 130, 246, 0.25), transparent 65%);
+    }
+    [data-theme="light"] body::after {
+        background: radial-gradient(circle at center, rgba(139, 92, 246, 0.20), transparent 65%);
+    }
+
+    @keyframes floatA {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50%      { transform: translate(80px, 60px) scale(1.12); }
+    }
+    @keyframes floatB {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50%      { transform: translate(-90px, -70px) scale(1.15); }
+    }
+
+    /* ============================================================
+       HEADER APPLICAZIONE
        ============================================================ */
     .app-header {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 14px;
-        margin: 0 0 8px;
+        gap: 16px;
+        margin: 0 0 10px;
         flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
     }
     .app-header .app-icon {
-        width: 64px;
-        height: 64px;
+        width: 68px;
+        height: 68px;
         flex-shrink: 0;
-        filter: drop-shadow(0 3px 8px rgba(30,123,232,0.35));
-        transition: transform .25s ease;
+        filter:
+            drop-shadow(0 6px 16px rgba(59, 130, 246, 0.55))
+            drop-shadow(0 0 26px rgba(0, 255, 176, 0.28));
+        transition: transform .35s cubic-bezier(.2,.9,.3,1.4), filter .35s ease;
     }
     .app-header .app-icon:hover {
-        transform: scale(1.05) rotate(-1.5deg);
+        transform: scale(1.08) rotate(-2deg);
+        filter:
+            drop-shadow(0 8px 22px rgba(59, 130, 246, 0.75))
+            drop-shadow(0 0 34px rgba(0, 255, 176, 0.55));
     }
     @media (max-width: 480px) {
-        .app-header .app-icon { width: 52px; height: 52px; }
+        .app-header .app-icon { width: 54px; height: 54px; }
     }
+
     .app-header h1 {
-        color: #1a1a1a;
+        color: var(--text-primary);
         margin: 0;
-        font-size: 26px;
-        letter-spacing: 0.3px;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
         display: flex;
         align-items: baseline;
-        gap: 6px;
+        gap: 8px;
+        text-shadow: 0 2px 20px rgba(59, 130, 246, 0.35);
     }
     .app-header h1 .brand-ai {
-        background: linear-gradient(135deg, #1E7BE8 0%, #00D9A5 100%);
+        background: linear-gradient(135deg, #60a5fa 0%, #22d3ee 45%, #34d399 100%);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 900;
         letter-spacing: 0.5px;
+        filter: drop-shadow(0 0 14px rgba(34, 211, 238, 0.5));
     }
     @media (max-width: 480px) {
-        .app-header h1 { font-size: 21px; }
+        .app-header h1 { font-size: 23px; }
     }
 
+    /* ============================================================
+       TOP ACTIONS (theme toggle + install)
+       ============================================================ */
+    .top-actions {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        display: flex;
+        gap: 8px;
+        z-index: 3;
+    }
+    .btn-icon {
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 16px;
+        line-height: 1;
+        background: var(--theme-btn-bg) !important;
+        color: var(--topbtn-color) !important;
+        border: 1px solid var(--border) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+    }
+    .btn-icon:hover:not(:disabled) {
+        background: var(--surface-2) !important;
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3) !important;
+    }
+    .btn-icon svg {
+        width: 18px;
+        height: 18px;
+        display: block;
+        margin: 0 auto;
+    }
+    @media (max-width: 480px) {
+        .top-actions { top: 10px; right: 10px; gap: 6px; }
+        .btn-icon { width: 34px; height: 34px; font-size: 14px; }
+    }
+
+    /* ============================================================
+       CONTAINER PRINCIPALE (glassmorphism)
+       ============================================================ */
     .container {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        position: relative;
+        z-index: 1;
+        background: var(--container-bg);
+        backdrop-filter: blur(22px) saturate(140%);
+        -webkit-backdrop-filter: blur(22px) saturate(140%);
+        padding: 30px 26px 26px;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--border);
+        box-shadow:
+            var(--shadow-lg),
+            inset 0 1px 0 rgba(255, 255, 255, 0.09),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.2);
         max-width: 760px;
         width: 100%;
         text-align: center;
+        animation: containerIn .7s cubic-bezier(.2,.8,.3,1) both;
+        transition: background .4s ease, border-color .4s ease, box-shadow .4s ease;
     }
-    #cv-status {
-        font-size: 12px;
-        color: #888;
-        margin-bottom: 10px;
+    [data-theme="light"] .container {
+        box-shadow:
+            var(--shadow-lg),
+            inset 0 1px 0 rgba(255, 255, 255, 0.9),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.03);
     }
 
+    .container::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(135deg,
+                    rgba(59, 130, 246, 0.55) 0%,
+                    rgba(139, 92, 246, 0.35) 40%,
+                    rgba(6, 182, 212, 0.5) 75%,
+                    rgba(16, 185, 129, 0.4) 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                mask-composite: exclude;
+        pointer-events: none;
+        opacity: 0.65;
+    }
+
+    @keyframes containerIn {
+        from { opacity: 0; transform: translateY(24px) scale(.98); }
+        to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .container > p {
+        color: var(--text-secondary);
+        font-size: 13px;
+        line-height: 1.65;
+        margin: 10px auto;
+        max-width: 620px;
+    }
+    .container > p:first-of-type {
+        color: var(--text-muted);
+        font-size: 12px;
+        font-style: italic;
+        letter-spacing: 0.3px;
+        margin-top: 4px;
+        margin-bottom: 2px;
+    }
+
+    #cv-status {
+        display: inline-block;
+        font-size: 11.5px;
+        color: var(--text-muted);
+        margin: 8px 0 4px;
+        padding: 6px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        letter-spacing: 0.4px;
+        transition: color .3s, border-color .3s, background .3s;
+    }
+
+    /* ============================================================
+       SEZIONI DOCUMENTO
+       ============================================================ */
     .doc-section {
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        padding: 10px 15px 15px;
-        margin: 15px 0;
-        background: #fbfbfb;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 14px 18px 18px;
+        margin: 18px 0;
+        background: var(--doc-section-bg);
         position: relative;
-        transition: opacity .25s, transform .25s;
+        transition: opacity .25s, transform .25s, border-color .3s, box-shadow .3s, background .4s;
+        text-align: left;
+    }
+    .doc-section:hover {
+        border-color: rgba(59, 130, 246, 0.32);
+        box-shadow:
+            0 8px 30px rgba(59, 130, 246, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
     }
     .doc-section.removing {
         opacity: 0;
         transform: scale(0.95);
     }
     .doc-section h2 {
-        font-size: 16px;
-        color: #444;
-        margin: 5px 0 10px;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 15px;
+        color: var(--text-primary);
+        margin: 2px 0 12px;
         text-align: left;
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 10px;
+        letter-spacing: 0.2px;
     }
     .doc-section h2 .doc-title {
         flex: 1;
         text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .btn-remove-doc {
-        background-color: #dc3545;
-        font-size: 11px;
-        padding: 5px 10px;
-        margin: 0;
+    .doc-section h2 .doc-title::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--blue), var(--cyan));
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
     }
-    .btn-remove-doc:hover:not(:disabled) { background-color: #b02a37; }
-    .btn-remove-doc:disabled { background-color: #e0aeb3; cursor: not-allowed; }
 
     .doc-slots {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 12px;
     }
     @media (max-width: 560px) {
         .doc-slots { grid-template-columns: 1fr; }
     }
 
+    /* Slot fronte/retro */
     .card-slot {
-        border: 2px dashed #ccc;
-        border-radius: 8px;
-        padding: 10px;
-        background: #fafafa;
-        transition: border-color .2s, background .2s;
+        border: 2px dashed var(--slot-border);
+        border-radius: var(--radius-md);
+        padding: 14px 12px;
+        background: var(--slot-bg);
+        transition: border-color .25s, background .25s, box-shadow .25s, transform .25s;
         text-align: center;
+        position: relative;
     }
     .card-slot h3 {
-        font-size: 13px;
-        color: #555;
-        margin: 0 0 8px;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 1.2px;
+        color: var(--text-muted);
+        margin: 0 0 10px;
+        text-transform: uppercase;
     }
-    .card-slot.active  { border-color: #007bff; background: #eef5ff; }
-    .card-slot.success { border-color: #28a745; background: #eef9f1; }
-    .card-slot.error   { border-color: #dc3545; background: #fdf2f2; }
+    .card-slot.active  {
+        border-color: rgba(59, 130, 246, 0.75);
+        border-style: solid;
+        background: rgba(59, 130, 246, 0.08);
+        box-shadow:
+            0 0 0 4px rgba(59, 130, 246, 0.12),
+            0 0 28px rgba(59, 130, 246, 0.25);
+    }
+    .card-slot.active h3 { color: #93c5fd; }
+    .card-slot.success {
+        border-color: rgba(16, 185, 129, 0.75);
+        border-style: solid;
+        background: rgba(16, 185, 129, 0.08);
+        box-shadow:
+            0 0 0 4px rgba(16, 185, 129, 0.12),
+            0 0 28px rgba(16, 185, 129, 0.2);
+    }
+    .card-slot.success h3 { color: #6ee7b7; }
+    .card-slot.error   {
+        border-color: rgba(239, 68, 68, 0.75);
+        border-style: solid;
+        background: rgba(239, 68, 68, 0.08);
+        box-shadow:
+            0 0 0 4px rgba(239, 68, 68, 0.12),
+            0 0 28px rgba(239, 68, 68, 0.2);
+    }
+    .card-slot.error h3 { color: #fca5a5; }
+
+    /* Drag & drop stato */
+    .card-slot.dragover {
+        border-color: rgba(6, 182, 212, 0.9) !important;
+        border-style: solid !important;
+        background: rgba(6, 182, 212, 0.12) !important;
+        box-shadow:
+            0 0 0 4px rgba(6, 182, 212, 0.2),
+            0 0 34px rgba(6, 182, 212, 0.45) !important;
+        transform: scale(1.015);
+    }
+    .card-slot.dragover::after {
+        content: '⤓ Rilascia qui';
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(6, 182, 212, 0.15);
+        backdrop-filter: blur(2px);
+        border-radius: inherit;
+        color: #22d3ee;
+        font-weight: 800;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-shadow: 0 0 12px rgba(6, 182, 212, 0.8);
+        pointer-events: none;
+        animation: dragoverPulse 1.2s ease-in-out infinite;
+    }
+    @keyframes dragoverPulse {
+        0%, 100% { opacity: 0.75; }
+        50%      { opacity: 1; }
+    }
 
     .preview {
         max-width: 100%;
         height: auto;
         max-height: 160px;
-        margin-top: 8px;
-        border-radius: 4px;
+        margin-top: 10px;
+        border-radius: 8px;
         display: none;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.09);
         background: #fff;
     }
     input[type="file"] { display: none; }
 
-    .btn {
-        background-color: #007bff;
-        color: #fff;
-        padding: 8px 14px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 13px;
-        margin: 3px;
-    }
-    .btn:hover { background-color: #0056b3; }
-    .btn:disabled { background-color: #ccc; cursor: not-allowed; }
-    .btn-pdf { background-color: #28a745; font-size: 16px; padding: 12px 25px; }
-    .btn-pdf:hover:not(:disabled) { background-color: #218838; }
-    .btn-preview { background-color: #fd7e14; font-size: 16px; padding: 12px 25px; }
-    .btn-preview:hover:not(:disabled) { background-color: #e36a0a; }
-    .btn-reset { background-color: #6c757d; font-size: 11px; padding: 5px 10px; }
-    .btn-reset:hover { background-color: #5a6268; }
-    .btn-add {
-        background-color: #17a2b8;
-        font-size: 14px;
-        padding: 10px 20px;
+    /* ============================================================
+       DETECTION OVERLAY (bordi rilevati)
+       ============================================================ */
+    .detection-wrap {
+        display: none;
         margin-top: 10px;
+        padding: 6px 6px 4px;
+        background: rgba(0, 255, 176, 0.05);
+        border: 1px solid rgba(0, 255, 176, 0.22);
+        border-radius: 8px;
+        text-align: center;
+        position: relative;
     }
-    .btn-add:hover:not(:disabled) { background-color: #138496; }
+    .detection-wrap.visible {
+        display: block;
+        animation: detIn .55s cubic-bezier(.2,.9,.3,1.3);
+    }
+    @keyframes detIn {
+        from { opacity: 0; transform: scale(.92) translateY(-6px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .detection-label {
+        display: block;
+        font-size: 9.5px;
+        color: #34d399;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        font-weight: 800;
+        margin-bottom: 4px;
+        text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+    }
+    [data-theme="light"] .detection-label { color: #059669; text-shadow: none; }
+    .detection-img {
+        max-width: 100%;
+        max-height: 110px;
+        border-radius: 4px;
+        display: block;
+        margin: 0 auto;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        background: #fff;
+    }
+
+    /* ============================================================
+       PULSANTI
+       ============================================================ */
+    .btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--cyan) 100%);
+        color: #ffffff;
+        padding: 10px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        margin: 3px;
+        overflow: hidden;
+        isolation: isolate;
+        box-shadow:
+            0 4px 14px rgba(59, 130, 246, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        transition: transform .2s cubic-bezier(.2,.9,.3,1.4),
+                    box-shadow .25s ease,
+                    filter .2s ease,
+                    opacity .2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        left: -100%;
+        width: 100%;
+        background: linear-gradient(110deg,
+                    transparent 20%,
+                    rgba(255, 255, 255, 0.35) 50%,
+                    transparent 80%);
+        transition: left .6s cubic-bezier(.2,.8,.3,1);
+        pointer-events: none;
+        z-index: 1;
+    }
+    .btn:hover:not(:disabled)::before { left: 100%; }
+
+    .btn:hover:not(:disabled) {
+        transform: translateY(-2px) scale(1.015);
+        box-shadow:
+            0 8px 22px rgba(59, 130, 246, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        filter: brightness(1.08);
+    }
+    .btn:active:not(:disabled) {
+        transform: translateY(0) scale(0.985);
+        box-shadow:
+            0 2px 8px rgba(59, 130, 246, 0.35),
+            inset 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+    .btn:focus-visible {
+        outline: none;
+        box-shadow:
+            0 0 0 3px var(--bg-deep),
+            0 0 0 6px rgba(59, 130, 246, 0.55),
+            0 8px 22px rgba(59, 130, 246, 0.5);
+    }
+
+    .btn:disabled {
+        background: var(--surface) !important;
+        color: var(--text-dim) !important;
+        cursor: not-allowed;
+        box-shadow: none !important;
+        border-color: var(--border) !important;
+        transform: none !important;
+        filter: none !important;
+    }
+    .btn:disabled::before { display: none; }
+
+    .btn-pdf {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        font-size: 15px;
+        padding: 14px 28px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(16, 185, 129, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+    .btn-pdf:hover:not(:disabled) {
+        box-shadow:
+            0 12px 32px rgba(16, 185, 129, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-preview {
+        background: linear-gradient(135deg, #f59e0b 0%, #ec4899 100%);
+        font-size: 15px;
+        padding: 14px 28px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(236, 72, 153, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+    .btn-preview:hover:not(:disabled) {
+        box-shadow:
+            0 12px 32px rgba(236, 72, 153, 0.55),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .btn-reset {
+        background: var(--surface);
+        color: var(--text-secondary);
+        font-size: 11px;
+        padding: 6px 12px;
+        border: 1px solid var(--border);
+        box-shadow: none;
+    }
+    .btn-reset:hover:not(:disabled) {
+        background: var(--surface-2);
+        color: var(--text-primary);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 55%, #8b5cf6 100%);
+        font-size: 14px;
+        padding: 13px 26px;
+        margin-top: 14px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(59, 130, 246, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        background-size: 200% 200%;
+        animation: gradientShift 6s ease infinite;
+    }
+    .btn-add:hover:not(:disabled) {
+        box-shadow:
+            0 12px 32px rgba(59, 130, 246, 0.6),
+            0 0 40px rgba(139, 92, 246, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+    @keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50%      { background-position: 100% 50%; }
+    }
+
     .btn-webcam {
-        background-color: #6f42c1;
-        font-size: 12px;
-        padding: 7px 12px;
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        font-size: 11.5px;
+        padding: 8px 12px;
+        box-shadow:
+            0 4px 12px rgba(139, 92, 246, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
     }
-    .btn-webcam:hover:not(:disabled) { background-color: #5a32a3; }
+    .btn-webcam:hover:not(:disabled) {
+        box-shadow:
+            0 8px 22px rgba(139, 92, 246, 0.55),
+            inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    }
 
+    .btn-remove-doc {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        font-size: 11px;
+        padding: 6px 12px;
+        margin: 0;
+        box-shadow:
+            0 4px 12px rgba(239, 68, 68, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-remove-doc:hover:not(:disabled) {
+        box-shadow:
+            0 8px 20px rgba(239, 68, 68, 0.55),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    /* Svuota tutto */
+    .btn-clear-all {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%);
+        font-size: 12px;
+        padding: 10px 20px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        box-shadow:
+            0 4px 14px rgba(239, 68, 68, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        margin-top: 16px;
+    }
+    .btn-clear-all:hover:not(:disabled) {
+        box-shadow:
+            0 8px 22px rgba(239, 68, 68, 0.55),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    /* ============================================================
+       STATUS MESSAGES
+       ============================================================ */
     .status-msg {
-        font-size: 12px;
-        margin-top: 6px;
-        font-weight: bold;
+        font-size: 11.5px;
+        margin-top: 8px;
+        font-weight: 600;
         min-height: 15px;
+        letter-spacing: 0.2px;
     }
-    .status-msg.error   { color: #dc3545; }
-    .status-msg.success { color: #28a745; }
-    .status-msg.info    { color: #007bff; }
+    .status-msg.error   { color: #f87171; }
+    .status-msg.success { color: #34d399; }
+    .status-msg.info    { color: #60a5fa; }
+    [data-theme="light"] .status-msg.error   { color: #dc2626; }
+    [data-theme="light"] .status-msg.success { color: #059669; }
+    [data-theme="light"] .status-msg.info    { color: #2563eb; }
 
+    /* ============================================================
+       FILENAME ROW
+       ============================================================ */
     .filename-row {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
-        margin: 20px 0 10px;
+        margin: 24px 0 12px;
         flex-wrap: wrap;
     }
     .filename-row label {
-        font-size: 14px;
-        color: #444;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        letter-spacing: 0.3px;
     }
     .filename-row input[type="text"] {
-        padding: 8px 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
+        padding: 10px 14px;
+        background: var(--input-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 13.5px;
         width: 260px;
+        color: var(--text-primary);
+        font-family: inherit;
+        transition: all .25s ease;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    .filename-row input[type="text"]::placeholder { color: var(--text-dim); }
+    .filename-row input[type="text"]:hover {
+        border-color: var(--border-strong);
+        background: var(--surface-2);
+    }
+    .filename-row input[type="text"]:focus {
+        outline: none;
+        border-color: rgba(59, 130, 246, 0.75);
+        background: rgba(59, 130, 246, 0.08);
+        box-shadow:
+            0 0 0 4px rgba(59, 130, 246, 0.18),
+            0 0 24px rgba(59, 130, 246, 0.25);
     }
 
-    /* Barra di stato / contatore */
+    /* ============================================================
+       PROGRESS BAR
+       ============================================================ */
     .progress-row {
-        margin: 15px 0 5px;
-        font-size: 13px;
-        color: #555;
-        font-weight: bold;
+        margin: 20px 0 8px;
+        font-size: 12.5px;
+        color: var(--text-secondary);
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
     }
     .progress-bar {
         width: 100%;
-        height: 8px;
-        background: #e9ecef;
-        border-radius: 4px;
+        height: 10px;
+        background: var(--surface);
+        border-radius: 999px;
         overflow: hidden;
-        margin: 6px 0 10px;
+        margin: 6px 0 12px;
+        border: 1px solid var(--border);
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.35);
+        position: relative;
     }
     .progress-bar-fill {
         height: 100%;
         width: 0%;
-        background: linear-gradient(90deg, #28a745, #5cb85c);
-        transition: width .3s ease;
+        background: linear-gradient(90deg,
+                    #10b981 0%,
+                    #06b6d4 40%,
+                    #3b82f6 70%,
+                    #8b5cf6 100%);
+        background-size: 220% 100%;
+        border-radius: 999px;
+        transition: width .45s cubic-bezier(.2,.8,.3,1);
+        box-shadow:
+            0 0 18px rgba(6, 182, 212, 0.65),
+            0 0 10px rgba(16, 185, 129, 0.5);
+        animation: progressShimmer 3.5s linear infinite;
+    }
+    @keyframes progressShimmer {
+        0%   { background-position: 0% 0; }
+        100% { background-position: 200% 0; }
     }
 
+    /* ============================================================
+       EXPORT ACTIONS
+       ============================================================ */
     .export-actions {
         display: flex;
         justify-content: center;
-        gap: 10px;
+        gap: 12px;
         flex-wrap: wrap;
-        margin-top: 10px;
+        margin-top: 12px;
     }
 
+    /* ============================================================
+       HINT
+       ============================================================ */
     .hint {
         font-size: 12px;
-        color: #777;
-        margin-top: 12px;
-        line-height: 1.5;
+        color: var(--text-muted);
+        margin-top: 18px;
+        line-height: 1.65;
+        padding: 14px 18px;
+        background: var(--hint-bg);
+        border: 1px solid var(--hint-border);
+        border-radius: var(--radius-md);
+        text-align: left;
+        position: relative;
     }
+    .hint::before {
+        content: '💡';
+        position: absolute;
+        top: -12px;
+        left: 16px;
+        background: var(--hint-tip-bg);
+        padding: 0 8px;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+    .hint strong { color: #93c5fd; font-weight: 700; }
+    [data-theme="light"] .hint strong { color: #1d4ed8; }
+
     canvas#proc-canvas { display: none; }
 
     /* ============================================================
-       MODAL ANTEPRIMA PDF (con PDF.js canvas rendering)
+       MODAL ANTEPRIMA PDF
        ============================================================ */
     .pdf-modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.65);
+        background: rgba(5, 8, 22, 0.82);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         z-index: 9999;
         justify-content: center;
         align-items: center;
         padding: 20px;
+        animation: overlayIn .25s ease;
+    }
+    [data-theme="light"] .pdf-modal-overlay {
+        background: rgba(15, 23, 42, 0.55);
     }
     .pdf-modal-overlay.open { display: flex; }
+    @keyframes overlayIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
 
     .pdf-modal {
-        background: #fff;
-        border-radius: 8px;
+        background: var(--modal-bg);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
         width: 100%;
         max-width: 900px;
         height: 90vh;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba(255, 255, 255, 0.06),
+            0 0 60px rgba(59, 130, 246, 0.15);
         overflow: hidden;
+        animation: modalIn .35s cubic-bezier(.2,.9,.3,1.2);
     }
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(.94) translateY(16px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
     .pdf-modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 16px;
-        background: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
+        padding: 14px 18px;
+        background: var(--modal-header-bg);
+        border-bottom: 1px solid var(--border);
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 10px;
     }
     .pdf-modal-header h3 {
         margin: 0;
-        font-size: 16px;
-        color: #333;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 15.5px;
+        color: var(--text-primary);
+        letter-spacing: 0.2px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .pdf-modal-header h3::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--amber), var(--pink));
+        box-shadow: 0 0 10px rgba(236, 72, 153, 0.6);
     }
     .pdf-modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
     .pdf-modal-body {
         flex: 1;
-        background: #525659;
+        background: var(--modal-body-bg);
+        background-image:
+            linear-gradient(var(--modal-body-grid) 1px, transparent 1px),
+            linear-gradient(90deg, var(--modal-body-grid) 1px, transparent 1px);
+        background-size: 24px 24px;
         overflow-y: auto;
         overflow-x: hidden;
         position: relative;
-        -webkit-overflow-scrolling: touch;   /* scroll fluido su iOS */
+        -webkit-overflow-scrolling: touch;
     }
 
-    /* Container per le pagine renderizzate da PDF.js */
     #pdf-pages-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 15px;
-        padding: 15px;
+        gap: 18px;
+        padding: 20px;
         min-height: 100%;
     }
     .pdf-page-canvas {
         background: #fff;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        border-radius: 2px;
+        box-shadow:
+            0 8px 30px rgba(0, 0, 0, 0.6),
+            0 0 0 1px rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
         max-width: 100%;
         height: auto;
+        transition: transform .25s ease;
     }
+    .pdf-page-canvas:hover { transform: translateY(-2px); }
     .pdf-loading {
-        color: #fff;
+        color: var(--text-secondary);
         font-size: 14px;
-        padding: 40px 20px;
+        padding: 60px 20px;
         text-align: center;
+        letter-spacing: 0.4px;
+        animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 0.6; }
+        50%      { opacity: 1; }
     }
     .pdf-error {
-        color: #ffb3b3;
+        color: #fca5a5;
         font-size: 14px;
         padding: 40px 20px;
         text-align: center;
         max-width: 400px;
     }
+    [data-theme="light"] .pdf-error { color: #dc2626; }
 
-    /* Fallback quando il PDF non può essere renderizzato */
     .pdf-fallback {
         position: absolute;
         inset: 0;
@@ -355,8 +1067,8 @@
         align-items: center;
         justify-content: center;
         gap: 15px;
-        background: #525659;
-        color: #fff;
+        background: var(--modal-body-bg);
+        color: var(--text-primary);
         text-align: center;
         padding: 20px;
     }
@@ -365,31 +1077,50 @@
         margin: 0;
         font-size: 14px;
         max-width: 400px;
+        color: var(--text-secondary);
     }
     .pdf-fallback .btn { font-size: 14px; padding: 10px 20px; }
     .pdf-fallback-hint {
         font-size: 12px;
-        color: #bbb;
+        color: var(--text-muted);
         max-width: 400px;
-        line-height: 1.5;
+        line-height: 1.55;
     }
 
     .pdf-modal-footer {
-        padding: 8px 16px;
-        background: #f8f9fa;
-        border-top: 1px solid #dee2e6;
+        padding: 10px 18px;
+        background: var(--modal-header-bg);
+        border-top: 1px solid var(--border);
         font-size: 12px;
-        color: #666;
+        color: var(--text-muted);
         text-align: center;
+        letter-spacing: 0.3px;
     }
-    .btn-close-preview { background-color: #dc3545; }
-    .btn-close-preview:hover { background-color: #b02a37; }
-    .btn-refresh-preview { background-color: #007bff; }
-    .btn-refresh-preview:hover { background-color: #0056b3; }
-    .btn-download-preview { background-color: #28a745; }
-    .btn-download-preview:hover { background-color: #218838; }
-    .btn-open-tab { background-color: #6f42c1; }
-    .btn-open-tab:hover { background-color: #5a32a3; }
+
+    .btn-close-preview {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow:
+            0 4px 14px rgba(239, 68, 68, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-refresh-preview {
+        background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+        box-shadow:
+            0 4px 14px rgba(59, 130, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-download-preview {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        box-shadow:
+            0 4px 14px rgba(16, 185, 129, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-open-tab {
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        box-shadow:
+            0 4px 14px rgba(139, 92, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
 
     /* ============================================================
        MODAL WEBCAM
@@ -398,37 +1129,59 @@
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.85);
+        background: rgba(5, 8, 22, 0.9);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         z-index: 10000;
         justify-content: center;
         align-items: center;
         padding: 20px;
+        animation: overlayIn .25s ease;
     }
     .webcam-modal-overlay.open { display: flex; }
 
     .webcam-modal {
-        background: #fff;
-        border-radius: 8px;
+        background: var(--modal-bg);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
         width: 100%;
         max-width: 720px;
         max-height: 90vh;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.7),
+            0 0 0 1px rgba(255, 255, 255, 0.06),
+            0 0 60px rgba(139, 92, 246, 0.2);
         overflow: hidden;
+        animation: modalIn .35s cubic-bezier(.2,.9,.3,1.2);
     }
     .webcam-modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 16px;
-        background: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
+        padding: 14px 18px;
+        background: var(--modal-header-bg);
+        border-bottom: 1px solid var(--border);
     }
     .webcam-modal-header h3 {
         margin: 0;
-        font-size: 16px;
-        color: #333;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 15.5px;
+        color: var(--text-primary);
+        letter-spacing: 0.2px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .webcam-modal-header h3::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--purple), var(--pink));
+        box-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
     }
     .webcam-modal-body {
         background: #000;
@@ -438,6 +1191,7 @@
         overflow: hidden;
         flex: 1;
         min-height: 240px;
+        position: relative;
     }
     #webcam-video {
         width: 100%;
@@ -448,9 +1202,9 @@
         object-fit: contain;
     }
     .webcam-modal-footer {
-        padding: 12px 16px;
-        background: #f8f9fa;
-        border-top: 1px solid #dee2e6;
+        padding: 14px 18px;
+        background: var(--modal-header-bg);
+        border-top: 1px solid var(--border);
         text-align: center;
         display: flex;
         justify-content: center;
@@ -458,21 +1212,86 @@
         flex-wrap: wrap;
     }
     .btn-capture {
-        background-color: #28a745;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         font-size: 15px;
-        padding: 12px 30px;
-        font-weight: bold;
+        padding: 13px 32px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(16, 185, 129, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
     }
-    .btn-capture:hover { background-color: #218838; }
-    .btn-close-webcam { background-color: #dc3545; }
-    .btn-close-webcam:hover { background-color: #b02a37; }
-    .btn-switch-cam { background-color: #17a2b8; }
-    .btn-switch-cam:hover { background-color: #138496; }
+    .btn-close-webcam {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow:
+            0 4px 14px rgba(239, 68, 68, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-switch-cam {
+        background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+        box-shadow:
+            0 4px 14px rgba(6, 182, 212, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    /* ============================================================
+       SCROLLBAR
+       ============================================================ */
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(180deg, rgba(59, 130, 246, 0.55), rgba(139, 92, 246, 0.55));
+        border-radius: 5px;
+        border: 2px solid transparent;
+        background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(180deg, rgba(59, 130, 246, 0.85), rgba(139, 92, 246, 0.85));
+        background-clip: padding-box;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 560px) {
+        body { padding: 16px 12px 40px; }
+        .container { padding: 46px 16px 20px; border-radius: var(--radius-lg); }
+        .filename-row input[type="text"] { width: 100%; max-width: 320px; }
+        .btn-pdf, .btn-preview { width: 100%; max-width: 340px; padding: 13px 20px; }
+        .pdf-modal-actions .btn { font-size: 11.5px; padding: 8px 12px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
 </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- TOP ACTIONS: theme toggle + install -->
+    <div class="top-actions">
+        <button id="btn-install" class="btn btn-icon" title="Installa app sul dispositivo"
+                style="display:none;" aria-label="Installa app">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+        </button>
+        <button id="btn-theme-toggle" class="btn btn-icon" title="Cambia tema"
+                onclick="toggleTheme()" aria-label="Cambia tema">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
+    </div>
+
     <!-- ============ HEADER CON LOGO CardScan AI ============ -->
     <div class="app-header">
         <svg class="app-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img">
@@ -502,31 +1321,20 @@
                     </feMerge>
                 </filter>
             </defs>
-
-            <!-- Sfondo app: quadrato arrotondato con gradiente blu -->
             <rect x="8" y="8" width="184" height="184" rx="44" fill="url(#csBg)"/>
             <circle cx="100" cy="88" r="72" fill="url(#csHi)"/>
-
-            <!-- Tessera (outline bianco) -->
             <rect x="44" y="64" width="112" height="72" rx="8"
                   fill="none" stroke="#ffffff" stroke-width="3.2"/>
-
-            <!-- Persona (testa) -->
             <circle cx="69" cy="86" r="7"
                     fill="none" stroke="#ffffff" stroke-width="2.6"/>
-            <!-- Persona (spalle) -->
             <path d="M 56 103 Q 69 93 82 103"
                   fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
-
-            <!-- Linee di testo -->
             <line x1="92" y1="82" x2="140" y2="82"
                   stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
             <line x1="92" y1="90" x2="134" y2="90"
                   stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
             <line x1="92" y1="98" x2="126" y2="98"
                   stroke="#ffffff" stroke-width="2.8" stroke-linecap="round"/>
-
-            <!-- Chip / codice a barre -->
             <rect x="60" y="112" width="24" height="17" rx="2.5"
                   fill="none" stroke="#ffffff" stroke-width="2.2"/>
             <line x1="67" y1="112" x2="67" y2="129"
@@ -535,8 +1343,6 @@
                   stroke="#ffffff" stroke-width="1.6"/>
             <line x1="60" y1="120" x2="84" y2="120"
                   stroke="#ffffff" stroke-width="1.6"/>
-
-            <!-- Scan line verde/ciano con glow -->
             <line x1="20" y1="100" x2="180" y2="100"
                   stroke="url(#csScan)" stroke-width="5" filter="url(#csGlow)"/>
             <line x1="45" y1="100" x2="155" y2="100"
@@ -576,9 +1382,17 @@
         </button>
     </div>
 
+    <!-- ============ SVUOTA TUTTO ============ -->
+    <button id="btn-clear-all" class="btn btn-clear-all" onclick="clearAllData()">
+        🗑 Svuota tutto
+    </button>
+
     <div class="hint">
         Layout PDF su A4: <strong>8 tessere per pagina</strong> (4 righe × 2 colonne).<br>
         Ogni riga contiene fronte + retro della stessa tessera.<br>
+        <strong>Novità:</strong> puoi anche <strong>trascinare</strong> un'immagine direttamente
+        sullo slot FRONTE o RETRO. Dopo ogni scansione, sotto l'anteprima compare
+        un <strong>mini-anteprima dei bordi rilevati</strong>.<br>
         Consigli di scatto: sfondo scuro e contrastato, un piccolo margine attorno alla tessera,
         luce uniforme, evita ombre nette e riflessi.
     </div>
@@ -662,18 +1476,117 @@ const STORAGE_KEY = 'scanner_tessere_state_v2';
 
 let currentDocs = 0;
 const processedImages = {};
+/* NUOVO: overlay dei bordi rilevati (solo per la sessione corrente) */
+const detectionImages = {};
 const keyOf = (doc, side) => `${doc}-${side}`;
 
 /* Stato anteprima */
 let previewOpen = false;
 let currentBlobUrl = null;
 let currentBlob = null;
-let renderToken = 0;   // per annullare rendering PDF.js precedenti
+let renderToken = 0;
 
 /* Stato webcam */
 let webcamStream = null;
-let webcamTarget = null;   // {doc, side}
-let webcamFacingMode = 'environment';   // 'environment' o 'user'
+let webcamTarget = null;
+let webcamFacingMode = 'environment';
+
+/* Stato install PWA */
+let deferredInstallPrompt = null;
+
+/* ============================================================
+   TEMA CHIARO / SCURO
+   ============================================================ */
+function applyTheme(theme) {
+    if (theme !== 'light' && theme !== 'dark') theme = 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+
+    const btn = document.getElementById('btn-theme-toggle');
+    if (btn) {
+        btn.innerHTML = theme === 'light'
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+        btn.setAttribute('title', theme === 'light' ? 'Passa al tema scuro' : 'Passa al tema chiaro');
+    }
+    /* aggiorna theme-color della barra del browser */
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'light' ? '#eef2f7' : '#0a0e27');
+    try { localStorage.setItem('cardsCanTheme', theme); } catch (_) {}
+}
+
+function toggleTheme() {
+    const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    applyTheme(cur === 'light' ? 'dark' : 'light');
+}
+
+/* Applica il tema salvato al primo paint */
+(function initThemeUi() {
+    let saved = 'dark';
+    try { saved = localStorage.getItem('cardsCanTheme') || 'dark'; } catch (_) {}
+    applyTheme(saved);
+})();
+
+/* ============================================================
+   PWA — manifest inline + install prompt
+   ============================================================ */
+(function injectManifest() {
+    try {
+        const iconSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235BB0FF'/%3E%3Cstop offset='1' stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='8' width='184' height='184' rx='44' fill='url(%23b)'/%3E%3Crect x='44' y='64' width='112' height='72' rx='8' fill='none' stroke='%23fff' stroke-width='4'/%3E%3Ccircle cx='69' cy='86' r='7' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Cpath d='M 56 103 Q 69 93 82 103' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='82' x2='140' y2='82' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='90' x2='134' y2='90' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='98' x2='126' y2='98' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='30' y1='100' x2='170' y2='100' stroke='%2300FFB0' stroke-width='4'/%3E%3C/svg%3E";
+
+        const manifest = {
+            name: 'CardScan AI — Scanner Documenti Formato Tessera',
+            short_name: 'CardScan AI',
+            description: 'Riconosce, ritaglia e raddrizza automaticamente documenti formato tessera. Esporta in PDF A4 (8 tessere per pagina).',
+            start_url: '.',
+            scope: '.',
+            display: 'standalone',
+            orientation: 'any',
+            background_color: '#0a0e27',
+            theme_color: '#0a0e27',
+            lang: 'it',
+            categories: ['productivity', 'utilities', 'photo'],
+            icons: [
+                { src: iconSvg, sizes: '192x192', type: 'image/svg+xml', purpose: 'any' },
+                { src: iconSvg, sizes: '512x512', type: 'image/svg+xml', purpose: 'any maskable' }
+            ]
+        };
+
+        const json = JSON.stringify(manifest);
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        /* data URI è più affidabile di blob: per i manifest inline */
+        link.href = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(json);
+        document.head.appendChild(link);
+    } catch (e) {
+        console.warn('Manifest non iniettato:', e);
+    }
+})();
+
+/* Install prompt */
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const b = document.getElementById('btn-install');
+    if (b) b.style.display = 'inline-flex';
+});
+
+window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    const b = document.getElementById('btn-install');
+    if (b) b.style.display = 'none';
+});
+
+document.getElementById('btn-install').addEventListener('click', async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    try {
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+            document.getElementById('btn-install').style.display = 'none';
+        }
+    } catch (_) {}
+    deferredInstallPrompt = null;
+});
 
 /* ============================================================
    PDF.JS WORKER
@@ -789,6 +1702,10 @@ function buildDocSection(docNum) {
                 <input type="file" id="input-${docNum}-fronte" accept="image/*" capture="environment"
                        onchange="processImage(this, ${docNum}, 'fronte')">
                 <div><img id="preview-${docNum}-fronte" class="preview" alt="Anteprima ${docNum} Fronte"></div>
+                <div class="detection-wrap" id="detection-wrap-${docNum}-fronte">
+                    <span class="detection-label">Bordi rilevati</span>
+                    <img id="detection-${docNum}-fronte" class="detection-img" alt="Bordi rilevati ${docNum} Fronte">
+                </div>
                 <div id="msg-${docNum}-fronte" class="status-msg"></div>
             </div>
             <div class="card-slot" id="slot-${docNum}-retro">
@@ -799,6 +1716,10 @@ function buildDocSection(docNum) {
                 <input type="file" id="input-${docNum}-retro" accept="image/*" capture="environment"
                        onchange="processImage(this, ${docNum}, 'retro')">
                 <div><img id="preview-${docNum}-retro" class="preview" alt="Anteprima ${docNum} Retro"></div>
+                <div class="detection-wrap" id="detection-wrap-${docNum}-retro">
+                    <span class="detection-label">Bordi rilevati</span>
+                    <img id="detection-${docNum}-retro" class="detection-img" alt="Bordi rilevati ${docNum} Retro">
+                </div>
                 <div id="msg-${docNum}-retro" class="status-msg"></div>
             </div>
         </div>
@@ -813,7 +1734,10 @@ function addDocument(skipSave) {
     const section = buildDocSection(currentDocs);
     document.getElementById('docs-container').appendChild(section);
 
-    for (const s of SIDES) processedImages[keyOf(currentDocs, s)] = null;
+    for (const s of SIDES) {
+        processedImages[keyOf(currentDocs, s)] = null;
+        detectionImages[keyOf(currentDocs, s)] = null;
+    }
 
     if (cvReady) {
         section.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
@@ -857,12 +1781,15 @@ function reindexDocuments() {
         const oldNum = parseInt(sec.dataset.docNum, 10);
         return {
             fronte: processedImages[keyOf(oldNum, 'fronte')] || null,
-            retro:  processedImages[keyOf(oldNum, 'retro')]  || null
+            retro:  processedImages[keyOf(oldNum, 'retro')]  || null,
+            fronteDet: detectionImages[keyOf(oldNum, 'fronte')] || null,
+            retroDet:  detectionImages[keyOf(oldNum, 'retro')]  || null
         };
     });
 
     container.innerHTML = '';
     for (const k in processedImages) delete processedImages[k];
+    for (const k in detectionImages) delete detectionImages[k];
 
     currentDocs = collected.length;
     collected.forEach((data, idx) => {
@@ -884,6 +1811,17 @@ function reindexDocuments() {
                 prev.src = dataUrl;
                 prev.style.display = 'block';
                 setStatus(newNum, s, 'success', 'Ritagliato e raddrizzato.');
+            }
+
+            const detUrl = s === 'fronte' ? data.fronteDet : data.retroDet;
+            if (detUrl) {
+                detectionImages[keyOf(newNum, s)] = detUrl;
+                const detImg = document.getElementById(`detection-${newNum}-${s}`);
+                const detWrap = document.getElementById(`detection-wrap-${newNum}-${s}`);
+                if (detImg && detWrap) {
+                    detImg.src = detUrl;
+                    detWrap.classList.add('visible');
+                }
             }
         }
     });
@@ -933,6 +1871,44 @@ function updateProgress() {
 }
 
 /* ============================================================
+   SVUOTA TUTTO
+   ============================================================ */
+function clearAllData() {
+    if (!confirm('🗑 Sei sicuro di voler cancellare TUTTE le tessere caricate?\n\nL\'operazione non è reversibile.')) {
+        return;
+    }
+
+    clearState();
+
+    /* Svuota i container e gli stati */
+    document.getElementById('docs-container').innerHTML = '';
+    for (const k in processedImages) delete processedImages[k];
+    for (const k in detectionImages) delete detectionImages[k];
+    currentDocs = 0;
+
+    /* Chiudi eventuale anteprima aperta */
+    if (previewOpen) closePreviewModal();
+
+    /* Reset del nome file */
+    document.getElementById('pdf-filename').value = 'documenti_tessera';
+
+    /* Ricrea una sezione vuota */
+    addDocument();
+    updateProgress();
+    checkExportStatus();
+
+    /* Piccolo feedback visivo */
+    const btn = document.getElementById('btn-clear-all');
+    const oldText = btn.textContent;
+    btn.textContent = '✓ Fatto!';
+    btn.disabled = true;
+    setTimeout(() => {
+        btn.textContent = oldText;
+        btn.disabled = false;
+    }, 1400);
+}
+
+/* ============================================================
    INIZIALIZZAZIONE
    ============================================================ */
 function initializeApp() {
@@ -977,11 +1953,95 @@ function initializeApp() {
 initializeApp();
 
 /* ============================================================
+   DRAG & DROP
+   ============================================================ */
+(function initDragAndDrop() {
+    /* Evita che il browser apra il file droppato fuori dagli slot */
+    const isFileDrag = (e) => {
+        if (!e.dataTransfer) return false;
+        const types = e.dataTransfer.types;
+        if (!types) return false;
+        for (let i = 0; i < types.length; i++) {
+            if (types[i] === 'Files') return true;
+        }
+        return false;
+    };
+
+    let docDragCounter = 0;
+    document.addEventListener('dragenter', (e) => {
+        if (!isFileDrag(e)) return;
+        docDragCounter++;
+        document.body.classList.add('drag-active');
+    });
+    document.addEventListener('dragleave', (e) => {
+        if (!isFileDrag(e)) return;
+        docDragCounter--;
+        if (docDragCounter <= 0) {
+            docDragCounter = 0;
+            document.body.classList.remove('drag-active');
+        }
+    });
+    document.addEventListener('dragover', (e) => {
+        if (isFileDrag(e)) e.preventDefault();
+    });
+    document.addEventListener('drop', (e) => {
+        if (isFileDrag(e)) e.preventDefault();
+        docDragCounter = 0;
+        document.body.classList.remove('drag-active');
+    });
+
+    const container = document.getElementById('docs-container');
+
+    container.addEventListener('dragover', (e) => {
+        const slot = e.target.closest('.card-slot');
+        if (!slot) return;
+        if (!isFileDrag(e)) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+        slot.classList.add('dragover');
+    });
+
+    container.addEventListener('dragleave', (e) => {
+        const slot = e.target.closest('.card-slot');
+        if (!slot) return;
+        /* Se usciamo dallo slot (non da un figlio), rimuovi evidenziazione */
+        if (!slot.contains(e.relatedTarget)) {
+            slot.classList.remove('dragover');
+        }
+    });
+
+    container.addEventListener('drop', (e) => {
+        const slot = e.target.closest('.card-slot');
+        if (!slot) return;
+        if (!isFileDrag(e)) return;
+        e.preventDefault();
+        e.stopPropagation();
+        slot.classList.remove('dragover');
+
+        /* Estrai doc/side dall'id: "slot-<num>-<fronte|retro>" */
+        const m = slot.id.match(/^slot-(\d+)-(fronte|retro)$/);
+        if (!m) return;
+        const doc = parseInt(m[1], 10);
+        const side = m[2];
+
+        const files = Array.from(e.dataTransfer.files || []);
+        const imgFile = files.find(f => f.type && f.type.startsWith('image/'));
+        if (!imgFile) {
+            setStatus(doc, side, 'error', 'Il file trascinato non è un\'immagine valida.');
+            return;
+        }
+
+        processImageFromBlob(imgFile, doc, side);
+    });
+})();
+
+/* ============================================================
    RESET / STATUS
    ============================================================ */
 function resetSlot(doc, side) {
     const k = keyOf(doc, side);
     processedImages[k] = null;
+    detectionImages[k] = null;
 
     const input = document.getElementById(`input-${k}`);
     if (input) input.value = '';
@@ -989,6 +2049,11 @@ function resetSlot(doc, side) {
     const preview = document.getElementById(`preview-${k}`);
     preview.src = '';
     preview.style.display = 'none';
+
+    const detWrap = document.getElementById(`detection-wrap-${k}`);
+    if (detWrap) detWrap.classList.remove('visible');
+    const detImg = document.getElementById(`detection-${k}`);
+    if (detImg) detImg.src = '';
 
     document.getElementById(`slot-${k}`).className = 'card-slot';
 
@@ -1028,12 +2093,10 @@ function setStatus(doc, side, type, text) {
 function processImage(input, doc, side) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
-    input.value = '';   // reset immediato
+    input.value = '';
     processImageFromBlob(file, doc, side);
 }
 
-/* Nuova funzione che accetta un Blob/File da qualsiasi sorgente
-   (input file o webcam). */
 function processImageFromBlob(blob, doc, side) {
     if (!blob) return;
 
@@ -1045,6 +2108,10 @@ function processImageFromBlob(blob, doc, side) {
 
     setStatus(doc, side, 'info', 'Analisi immagine in corso…');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
+
+    /* Nasconde overlay bordi precedente */
+    const detWrapPrev = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
+    if (detWrapPrev) detWrapPrev.classList.remove('visible');
 
     const reader = new FileReader();
     reader.onerror = () => fail(doc, side, 'impossibile leggere il file', null);
@@ -1062,6 +2129,7 @@ function fail(doc, side, reason, input) {
         'Foto rifiutata: ' + reason + '. Riprova con più luce e buon contrasto di sfondo.');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
     processedImages[keyOf(doc, side)] = null;
+    detectionImages[keyOf(doc, side)] = null;
     updateProgress();
     checkExportStatus();
     saveState();
@@ -1072,6 +2140,7 @@ function fail(doc, side, reason, input) {
 function runScanner(img, doc, side, input) {
     let src = null;
     let warpedDataUrl = null;
+    let detectionDataUrl = null;
 
     try {
         src = readSourceMat(img);
@@ -1081,6 +2150,14 @@ function runScanner(img, doc, side, input) {
             src.delete();
             fail(doc, side, 'documento non riconosciuto (bordi non rilevati)', input);
             return;
+        }
+
+        /* Costruisce l'overlay con i bordi rilevati sull'originale */
+        try {
+            detectionDataUrl = buildDetectionOverlay(src, corners);
+        } catch (e) {
+            console.warn('Overlay bordi non generato:', e);
+            detectionDataUrl = null;
         }
 
         warpedDataUrl = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
@@ -1101,6 +2178,17 @@ function runScanner(img, doc, side, input) {
         prev.src = warpedDataUrl;
         prev.style.display = 'block';
 
+        /* Mostra overlay bordi rilevati */
+        if (detectionDataUrl) {
+            detectionImages[keyOf(doc, side)] = detectionDataUrl;
+            const detImg = document.getElementById(`detection-${keyOf(doc, side)}`);
+            const detWrap = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
+            if (detImg && detWrap) {
+                detImg.src = detectionDataUrl;
+                detWrap.classList.add('visible');
+            }
+        }
+
         setStatus(doc, side, 'success', 'Ritagliato e raddrizzato.');
         processedImages[keyOf(doc, side)] = warpedDataUrl;
         updateProgress();
@@ -1109,6 +2197,95 @@ function runScanner(img, doc, side, input) {
         refreshPreviewIfOpen();
         if (input) input.value = '';
     }).catch(() => fail(doc, side, 'errore durante la verifica', input));
+}
+
+/* ============================================================
+   OVERLAY BORDI RILEVATI
+   ============================================================ */
+function buildDetectionOverlay(srcMat, corners) {
+    const W = srcMat.cols;
+    const H = srcMat.rows;
+
+    /* Canvas a piena risoluzione (ridimensionato poi via CSS/HTML) */
+    const full = document.createElement('canvas');
+    full.width  = W;
+    full.height = H;
+    const fctx = full.getContext('2d');
+
+    /* srcMat è RGBA (CV_8UC4) — compatibile con ImageData */
+    try {
+        const imgData = new ImageData(
+            new Uint8ClampedArray(srcMat.data),
+            W, H
+        );
+        fctx.putImageData(imgData, 0, 0);
+    } catch (e) {
+        /* Fallback: prova via cv.imshow */
+        try { cv.imshow(full, srcMat); }
+        catch (err) { console.warn('Impossibile disegnare srcMat:', err); }
+    }
+
+    /* Scala a dimensione thumbnail per non appesantire */
+    const maxDim = 500;
+    const scale = Math.min(1, maxDim / Math.max(W, H));
+    const tw = Math.max(1, Math.round(W * scale));
+    const th = Math.max(1, Math.round(H * scale));
+
+    const thumb = document.createElement('canvas');
+    thumb.width = tw;
+    thumb.height = th;
+    const tctx = thumb.getContext('2d');
+
+    /* Sfondo bianco */
+    tctx.fillStyle = '#ffffff';
+    tctx.fillRect(0, 0, tw, th);
+    tctx.drawImage(full, 0, 0, tw, th);
+
+    /* Disegna il quadrilatero rilevato */
+    const pts = corners.map(p => ({ x: p.x * scale, y: p.y * scale }));
+
+    /* Ombra luminosa verde/ciano */
+    tctx.save();
+    tctx.shadowColor = 'rgba(0, 255, 176, 0.9)';
+    tctx.shadowBlur = 12;
+    tctx.strokeStyle = '#00ffb0';
+    tctx.lineWidth = Math.max(2, tw / 220);
+    tctx.lineJoin = 'round';
+    tctx.beginPath();
+    tctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) tctx.lineTo(pts[i].x, pts[i].y);
+    tctx.closePath();
+    tctx.stroke();
+    tctx.restore();
+
+    /* Punti agli angoli */
+    const dotR = Math.max(3, tw / 130);
+    tctx.fillStyle = '#00ffb0';
+    tctx.strokeStyle = '#003c2e';
+    tctx.lineWidth = Math.max(1, tw / 400);
+    for (const p of pts) {
+        tctx.beginPath();
+        tctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
+        tctx.fill();
+        tctx.stroke();
+    }
+
+    /* Etichette numeriche sugli angoli (TL, TR, BR, BL) */
+    tctx.fillStyle = '#00ffb0';
+    tctx.font = `bold ${Math.max(9, tw / 55)}px 'Inter', sans-serif`;
+    tctx.textBaseline = 'middle';
+    const labels = ['1', '2', '3', '4'];
+    for (let i = 0; i < 4; i++) {
+        const off = dotR * 2.2;
+        let tx = pts[i].x + off;
+        let ty = pts[i].y + off;
+        /* Evita che il numero esca dal canvas */
+        tx = Math.min(tx, tw - 4);
+        ty = Math.min(ty, th - 4);
+        tctx.fillText(labels[i], tx, ty);
+    }
+
+    return thumb.toDataURL('image/png');
 }
 
 /* ============================================================
@@ -1126,14 +2303,14 @@ async function openWebcamModal(doc, side) {
     }
 
     webcamTarget = { doc, side };
-    webcamFacingMode = 'environment';   // di default camera posteriore su mobile
+    webcamFacingMode = 'environment';
 
     document.getElementById('webcam-modal-overlay').classList.add('open');
     await startWebcam();
 }
 
 async function startWebcam() {
-    stopWebcamStream();   // chiudi eventuale stream precedente
+    stopWebcamStream();
 
     const video = document.getElementById('webcam-video');
     const constraints = {
@@ -1150,7 +2327,6 @@ async function startWebcam() {
         video.srcObject = webcamStream;
         await video.play().catch(() => {});
 
-        // Mostra il pulsante "cambia camera" solo se ci sono più videocamere
         try {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const cams = devices.filter(d => d.kind === 'videoinput');
@@ -1571,7 +2747,7 @@ async function generatePDF() {
 }
 
 /* ============================================================
-   ANTEPRIMA PDF — PDF.js (funziona anche su Android/iOS)
+   ANTEPRIMA PDF — PDF.js
    ============================================================ */
 function showPdfFallback(show) {
     const fb = document.getElementById('pdf-fallback');
@@ -1600,7 +2776,6 @@ function closePreviewModal() {
     document.getElementById('pdf-modal-overlay').classList.remove('open');
     document.body.style.overflow = '';
 
-    // Annulla eventuale rendering in corso
     renderToken++;
 
     if (currentBlobUrl) {
@@ -1609,14 +2784,11 @@ function closePreviewModal() {
     }
     currentBlob = null;
 
-    // Svuota il container delle pagine per liberare memoria
     const pages = document.getElementById('pdf-pages-container');
     if (pages) pages.innerHTML = '';
     showPdfFallback(false);
 }
 
-/* Rigenera il contenuto dell'anteprima usando PDF.js.
-   Ritorna una Promise. */
 async function refreshPreview() {
     if (!previewOpen) return;
 
@@ -1628,14 +2800,12 @@ async function refreshPreview() {
         return;
     }
 
-    // Rilascia blob precedente
     if (currentBlobUrl) {
         try { URL.revokeObjectURL(currentBlobUrl); } catch (_) {}
         currentBlobUrl = null;
     }
     currentBlob = null;
 
-    // Genera il nuovo blob (lo teniamo anche per riaprire in nuova scheda)
     try {
         currentBlob = doc.output('blob');
         currentBlobUrl = URL.createObjectURL(currentBlob);
@@ -1645,7 +2815,6 @@ async function refreshPreview() {
         return;
     }
 
-    // Aggiorna info nel footer
     const pages = doc.internal.getNumberOfPages();
     const tessere = currentDocs;
     const now = new Date();
@@ -1655,11 +2824,9 @@ async function refreshPreview() {
     document.getElementById('pdf-modal-info').textContent =
         `${tessere} tesser${tessere === 1 ? 'a' : 'e'} · ${pages} pagin${pages === 1 ? 'a' : 'e'} A4 · aggiornato alle ${hh}:${mm}:${ss}`;
 
-    // Rendering con PDF.js
     const container = document.getElementById('pdf-pages-container');
     if (!container) return;
 
-    // Se PDF.js non è disponibile, mostra il fallback
     if (!window.pdfjsLib) {
         showPdfFallback(true);
         return;
@@ -1671,7 +2838,6 @@ async function refreshPreview() {
     try {
         const arrayBuffer = await currentBlob.arrayBuffer();
 
-        // Interrotto nel frattempo?
         if (myToken !== renderToken) return;
 
         const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
@@ -1681,7 +2847,6 @@ async function refreshPreview() {
 
         container.innerHTML = '';
 
-        // Calcola la larghezza disponibile nel container
         const availableWidth = Math.max(200, container.clientWidth - 30);
 
         for (let i = 1; i <= pdf.numPages; i++) {
@@ -1689,13 +2854,11 @@ async function refreshPreview() {
 
             const page = await pdf.getPage(i);
             const unscaledViewport = page.getViewport({ scale: 1 });
-            // Scala per adattarsi alla larghezza disponibile
             const scale = availableWidth / unscaledViewport.width;
             const viewport = page.getViewport({ scale });
 
             const canvas = document.createElement('canvas');
             canvas.className = 'pdf-page-canvas';
-            // Usa devicePixelRatio per una resa più nitida su mobile/retina
             const dpr = window.devicePixelRatio || 1;
             canvas.width  = Math.floor(viewport.width  * dpr);
             canvas.height = Math.floor(viewport.height * dpr);
@@ -1727,7 +2890,6 @@ async function refreshPreview() {
     }
 }
 
-/* Apre il PDF in una nuova scheda del browser */
 function openPreviewInNewTab() {
     if (!currentBlob) {
         const doc = buildPDFDocument();
@@ -1742,7 +2904,6 @@ function openPreviewInNewTab() {
     setTimeout(() => { try { URL.revokeObjectURL(url); } catch (_) {} }, 60000);
 }
 
-/* Scarica il PDF direttamente dal modal */
 async function downloadFromPreview() {
     const doc = buildPDFDocument();
     if (!doc) return;
@@ -1758,7 +2919,6 @@ async function downloadFromPreview() {
     setTimeout(refreshPreview, 1200);
 }
 
-/* Se l'anteprima è aperta, la ricarica con i dati correnti. */
 function refreshPreviewIfOpen() {
     if (!previewOpen) return;
     const btn = document.getElementById('btn-preview');
