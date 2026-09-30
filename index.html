@@ -592,6 +592,86 @@
     }
 
     /* ============================================================
+       MULTI-SCAN PANEL
+       ============================================================ */
+    .multiscan-panel {
+        margin: 16px 0 6px;
+        padding: 16px 18px;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.10) 0%, rgba(236, 72, 153, 0.08) 100%);
+        border: 1px solid rgba(139, 92, 246, 0.35);
+        border-radius: var(--radius-lg);
+        text-align: left;
+        animation: detIn .45s cubic-bezier(.2,.9,.3,1.3);
+    }
+    .multiscan-panel.hidden { display: none; }
+    .multiscan-panel h3 {
+        margin: 0 0 8px;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 14.5px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .multiscan-panel h3::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--purple), var(--pink));
+        box-shadow: 0 0 10px rgba(236, 72, 153, 0.6);
+    }
+    .multiscan-panel p {
+        margin: 4px 0 12px;
+        font-size: 12.5px;
+        color: var(--text-secondary);
+        line-height: 1.55;
+    }
+    .multiscan-preview {
+        max-width: 100%;
+        max-height: 260px;
+        border-radius: 10px;
+        display: block;
+        margin: 0 auto 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
+        background: #fff;
+    }
+    .multiscan-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .btn-multiscan {
+        background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+        font-size: 13px;
+        padding: 11px 20px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(139, 92, 246, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+    .btn-multiscan:hover:not(:disabled) {
+        box-shadow:
+            0 10px 28px rgba(236, 72, 153, 0.55),
+            0 0 40px rgba(139, 92, 246, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    }
+    .btn-multiscan-cancel {
+        background: var(--surface);
+        color: var(--text-secondary);
+        font-size: 13px;
+        padding: 11px 20px;
+        border: 1px solid var(--border);
+        box-shadow: none;
+    }
+    .btn-multiscan-cancel:hover:not(:disabled) {
+        background: var(--surface-2);
+        color: var(--text-primary);
+    }
+
+    /* ============================================================
        PULSANTI
        ============================================================ */
     .btn {
@@ -1356,12 +1436,28 @@
        Ogni documento verrà riconosciuto, ritagliato e raddrizzato automaticamente.</p>
     <div id="cv-status">Caricamento motore di scansione…</div>
 
+    <!-- ============ MULTI-SCAN PANEL ============ -->
+    <div id="multiscan-panel" class="multiscan-panel hidden">
+        <h3>Tessere rilevate nella foto</h3>
+        <p id="multiscan-info">Rilevate 0 tessere. Verifica l'anteprima e conferma per aggiungerle automaticamente ai primi slot liberi.</p>
+        <img id="multiscan-preview" class="multiscan-preview" alt="Anteprima tessere rilevate">
+        <div class="multiscan-actions">
+            <button class="btn btn-multiscan" id="btn-multiscan-confirm" onclick="confirmMultiScan()">✓ Conferma e assegna</button>
+            <button class="btn btn-multiscan-cancel" onclick="cancelMultiScan()">✕ Annulla</button>
+        </div>
+    </div>
+
     <!-- ============ CONTENITORE DOCUMENTI DINAMICO ============ -->
     <div id="docs-container"></div>
 
     <button id="btn-add" class="btn btn-add" disabled onclick="addDocument()">
         + Aggiungi tessera
     </button>
+
+    <button id="btn-multiscan" class="btn btn-multiscan" disabled onclick="triggerMultiScan()" style="margin-top:12px;">
+        📸 Acquisisci più tessere da una foto
+    </button>
+    <input type="file" id="multiscan-input" accept="image/*" capture="environment" onchange="handleMultiScanInput(this)">
 
     <!-- ============ CONTATORE DI COMPLETAMENTO ============ -->
     <div class="progress-row" id="progress-row">0/1 tessere complete</div>
@@ -1393,6 +1489,8 @@
         <strong>Novità:</strong> puoi anche <strong>trascinare</strong> un'immagine direttamente
         sullo slot FRONTE o RETRO. Dopo ogni scansione, sotto l'anteprima compare
         un <strong>mini-anteprima dei bordi rilevati</strong>.<br>
+        <strong>Multi-Scan:</strong> con "📸 Acquisisci più tessere" puoi fotografare più tessere
+        insieme: verranno rilevate, ritagliate e assegnate in sequenza ai primi slot liberi.<br>
         Consigli di scatto: sfondo scuro e contrastato, un piccolo margine attorno alla tessera,
         luce uniforme, evita ombre nette e riflessi.
     </div>
@@ -1493,6 +1591,9 @@ let webcamFacingMode = 'environment';
 
 /* Stato install PWA */
 let deferredInstallPrompt = null;
+
+/* Stato multi-scan */
+let multiScanPending = null; // { cards: [{dataUrl, corners}], previewUrl }
 
 /* ============================================================
    TEMA CHIARO / SCURO
@@ -1658,6 +1759,8 @@ function markCvReady() {
     document.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
     document.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
     document.getElementById('btn-add').disabled = false;
+    const msBtn = document.getElementById('btn-multiscan');
+    if (msBtn) msBtn.disabled = false;
     cvReadyCallbacks.forEach(cb => { try { cb(); } catch (e) { console.error(e); } });
     cvReadyCallbacks = [];
 }
@@ -1888,6 +1991,7 @@ function clearAllData() {
 
     /* Chiudi eventuale anteprima aperta */
     if (previewOpen) closePreviewModal();
+    cancelMultiScan();
 
     /* Reset del nome file */
     document.getElementById('pdf-filename').value = 'documenti_tessera';
@@ -2289,6 +2393,465 @@ function buildDetectionOverlay(srcMat, corners) {
 }
 
 /* ============================================================
+   MULTI-SCAN — Rilevamento di più tessere in una singola foto
+   ============================================================ */
+
+/**
+ * Rileva TUTTI i quadrilateri candidati in una immagine,
+ * li ordina top-left → bottom-right e restituisce un array
+ * di corner sets (uno per tessera).
+ */
+function detectMultipleCards(src) {
+    const maxDim = 1200;
+    const scale  = Math.min(1, maxDim / Math.max(src.cols, src.rows));
+
+    const work = new cv.Mat();
+    if (scale < 1) {
+        cv.resize(src, work,
+            new cv.Size(Math.round(src.cols * scale), Math.round(src.rows * scale)),
+            0, 0, cv.INTER_AREA);
+    } else {
+        src.copyTo(work);
+    }
+
+    const gray    = new cv.Mat();
+    const blurred = new cv.Mat();
+    cv.cvtColor(work, gray, cv.COLOR_RGBA2GRAY);
+    cv.GaussianBlur(gray, blurred, new cv.Size(5, 5), 0);
+
+    const W = work.cols, H = work.rows;
+    const minArea = W * H * 0.02;   // accetta tessere anche piccole in foto multi
+    const targetAspect = CONFIG.cardWidthMM / CONFIG.cardHeightMM;
+
+    const cannyParams = [[25, 80], [40, 120], [60, 180]];
+    const epsilons    = [0.01, 0.02, 0.03, 0.04, 0.05];
+
+    let candidates = [];
+
+    for (const [lo, hi] of cannyParams) {
+        const edges   = new cv.Mat();
+        const kernel  = cv.Mat.ones(3, 3, cv.CV_8U);
+        const dilated = new cv.Mat();
+        cv.Canny(blurred, edges, lo, hi);
+        cv.dilate(edges, dilated, kernel);
+
+        const contours  = new cv.MatVector();
+        const hierarchy = new cv.Mat();
+        cv.findContours(dilated, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE);
+
+        for (let i = 0; i < contours.size(); i++) {
+            const cnt  = contours.get(i);
+            const area = cv.contourArea(cnt);
+            if (area < minArea) { cnt.delete(); continue; }
+
+            const peri = cv.arcLength(cnt, true);
+
+            for (const eps of epsilons) {
+                const approx = new cv.Mat();
+                cv.approxPolyDP(cnt, approx, eps * peri, true);
+
+                if (approx.rows === 4 && cv.isContourConvex(approx)) {
+                    const pts = [];
+                    for (let j = 0; j < 4; j++) {
+                        pts.push({
+                            x: approx.data32S[j * 2]     / scale,
+                            y: approx.data32S[j * 2 + 1] / scale
+                        });
+                    }
+                    const ordered = orderPoints(pts);
+                    const aspect  = computeAspect(ordered);
+
+                    if (aspect > 1.15 && aspect < 2.2) {
+                        const aspectScore = 1 - Math.min(1, Math.abs(aspect - targetAspect) / targetAspect);
+                        const areaScore   = area / (W * H);
+                        const score       = aspectScore * 0.55 + areaScore * 0.45;
+
+                        candidates.push({
+                            corners: ordered,
+                            area: area,
+                            score: score,
+                            aspect: aspect
+                        });
+                    }
+                }
+                approx.delete();
+            }
+            cnt.delete();
+        }
+
+        edges.delete(); kernel.delete(); dilated.delete();
+        contours.delete(); hierarchy.delete();
+    }
+
+    work.delete(); gray.delete(); blurred.delete();
+
+    /* Deduplica: elimina quadrilateri che si sovrappongono significativamente */
+    const deduped = deduplicateCards(candidates);
+
+    /* Ordina per posizione: prima per Y (dall'alto in basso), poi per X (sinistra → destra) */
+    deduped.sort((a, b) => {
+        const ya = (a.corners[0].y + a.corners[1].y + a.corners[2].y + a.corners[3].y) / 4;
+        const yb = (b.corners[0].y + b.corners[1].y + b.corners[2].y + b.corners[3].y) / 4;
+        const xa = (a.corners[0].x + a.corners[1].x + a.corners[2].x + a.corners[3].x) / 4;
+        const xb = (b.corners[0].x + b.corners[1].x + b.corners[2].x + b.corners[3].x) / 4;
+        // Raggruppa per fasce orizzontali approssimative (tolleranza)
+        const rowTol = H * 0.08;
+        if (Math.abs(ya - yb) > rowTol) return ya - yb;
+        return xa - xb;
+    });
+
+    return deduped.map(c => c.corners);
+}
+
+/**
+ * Rimuove rilevamenti duplicati confrontando i centroidi.
+ * Se due quadrilateri hanno centroidi molto vicini, tiene quello con score più alto.
+ */
+function deduplicateCards(candidates) {
+    const result = [];
+    const tol = 30; // px (a risoluzione originale, dopo lo scaling)
+
+    for (const cand of candidates) {
+        const cx = (cand.corners[0].x + cand.corners[1].x + cand.corners[2].x + cand.corners[3].x) / 4;
+        const cy = (cand.corners[0].y + cand.corners[1].y + cand.corners[2].y + cand.corners[3].y) / 4;
+
+        let merged = false;
+        for (const existing of result) {
+            const ex = (existing.corners[0].x + existing.corners[1].x + existing.corners[2].x + existing.corners[3].x) / 4;
+            const ey = (existing.corners[0].y + existing.corners[1].y + existing.corners[2].y + existing.corners[3].y) / 4;
+            if (Math.hypot(cx - ex, cy - ey) < tol) {
+                /* Tieni quello con score più alto */
+                if (cand.score > existing.score) {
+                    existing.corners = cand.corners;
+                    existing.score = cand.score;
+                }
+                merged = true;
+                break;
+            }
+        }
+        if (!merged) {
+            result.push({
+                corners: cand.corners,
+                score: cand.score
+            });
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Costruisce l'overlay multi-tessera con numeri progressivi.
+ */
+function buildMultiDetectionOverlay(srcMat, cards) {
+    const W = srcMat.cols;
+    const H = srcMat.rows;
+
+    const full = document.createElement('canvas');
+    full.width  = W;
+    full.height = H;
+    const fctx = full.getContext('2d');
+
+    try {
+        const imgData = new ImageData(
+            new Uint8ClampedArray(srcMat.data),
+            W, H
+        );
+        fctx.putImageData(imgData, 0, 0);
+    } catch (e) {
+        try { cv.imshow(full, srcMat); }
+        catch (err) { console.warn('Impossibile disegnare srcMat:', err); }
+    }
+
+    const maxDim = 900;
+    const scale = Math.min(1, maxDim / Math.max(W, H));
+    const tw = Math.max(1, Math.round(W * scale));
+    const th = Math.max(1, Math.round(H * scale));
+
+    const thumb = document.createElement('canvas');
+    thumb.width = tw;
+    thumb.height = th;
+    const tctx = thumb.getContext('2d');
+
+    tctx.fillStyle = '#ffffff';
+    tctx.fillRect(0, 0, tw, th);
+    tctx.drawImage(full, 0, 0, tw, th);
+
+    const palette = ['#00ffb0', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#10b981', '#ef4444'];
+
+    cards.forEach((corners, idx) => {
+        const color = palette[idx % palette.length];
+        const pts = corners.map(p => ({ x: p.x * scale, y: p.y * scale }));
+
+        tctx.save();
+        tctx.shadowColor = color;
+        tctx.shadowBlur = 12;
+        tctx.strokeStyle = color;
+        tctx.lineWidth = Math.max(2, tw / 220);
+        tctx.lineJoin = 'round';
+        tctx.beginPath();
+        tctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) tctx.lineTo(pts[i].x, pts[i].y);
+        tctx.closePath();
+        tctx.stroke();
+        tctx.restore();
+
+        /* Numero etichetta al centro */
+        const cx = (pts[0].x + pts[1].x + pts[2].x + pts[3].x) / 4;
+        const cy = (pts[0].y + pts[1].y + pts[2].y + pts[3].y) / 4;
+        const r = Math.max(10, tw / 60);
+
+        tctx.fillStyle = color;
+        tctx.beginPath();
+        tctx.arc(cx, cy, r, 0, Math.PI * 2);
+        tctx.fill();
+
+        tctx.fillStyle = '#0a0e27';
+        tctx.font = `bold ${Math.max(11, tw / 45)}px 'Inter', sans-serif`;
+        tctx.textAlign = 'center';
+        tctx.textBaseline = 'middle';
+        tctx.fillText(String(idx + 1), cx, cy + 1);
+    });
+
+    return thumb.toDataURL('image/png');
+}
+
+/* ============================================================
+   MULTI-SCAN — Trigger e conferma
+   ============================================================ */
+function triggerMultiScan() {
+    if (!cvReady) {
+        alert('Il motore di scansione non è ancora pronto. Attendi qualche secondo.');
+        return;
+    }
+    document.getElementById('multiscan-input').click();
+}
+
+function handleMultiScanInput(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    input.value = '';
+    processMultiScanBlob(file);
+}
+
+function processMultiScanBlob(blob) {
+    if (!blob) return;
+
+    const reader = new FileReader();
+    reader.onerror = () => alert('Impossibile leggere il file.');
+    reader.onload = e => {
+        const img = new Image();
+        img.onerror = () => alert('Formato immagine non supportato.');
+        img.onload = () => runMultiScan(img);
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(blob);
+}
+
+function runMultiScan(img) {
+    let src = null;
+    try {
+        src = readSourceMat(img);
+        const cardsCorners = detectMultipleCards(src);
+
+        if (!cardsCorners || cardsCorners.length === 0) {
+            src.delete();
+            alert('Nessuna tessera riconosciuta nella foto.\n\nSuggerimenti:\n• Usa uno sfondo scuro e contrastato\n• Lascia un piccolo margine attorno alle tessere\n• Evita sovrapposizioni e ombre nette\n• Scatta perpendicolarmente');
+            return;
+        }
+
+        /* Genera anteprima con i bordi evidenziati */
+        const previewDataUrl = buildMultiDetectionOverlay(src, cardsCorners);
+
+        /* Warpa ciascuna tessera */
+        const cards = [];
+        for (const corners of cardsCorners) {
+            try {
+                const warped = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
+                cards.push({ dataUrl: warped, corners });
+            } catch (e) {
+                console.warn('Errore warp tessera:', e);
+            }
+        }
+
+        src.delete();
+        src = null;
+
+        if (cards.length === 0) {
+            alert('Le tessere sono state rilevate ma non è stato possibile ritagliarle.');
+            return;
+        }
+
+        multiScanPending = {
+            cards: cards,
+            previewUrl: previewDataUrl
+        };
+
+        /* Mostra pannello di conferma */
+        document.getElementById('multiscan-preview').src = previewDataUrl;
+        document.getElementById('multiscan-info').textContent =
+            `Rilevate ${cards.length} tesser${cards.length === 1 ? 'a' : 'e'}. ` +
+            `Verranno assegnate in sequenza ai primi slot liberi (fronte/retro). ` +
+            `Se necessario verranno creati nuovi documenti.`;
+        document.getElementById('multiscan-panel').classList.remove('hidden');
+        document.getElementById('multiscan-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    } catch (err) {
+        console.error(err);
+        if (src) src.delete();
+        alert('Errore durante il multi-scan. Riprova.');
+    }
+}
+
+function cancelMultiScan() {
+    multiScanPending = null;
+    document.getElementById('multiscan-panel').classList.add('hidden');
+    document.getElementById('multiscan-preview').src = '';
+}
+
+async function confirmMultiScan() {
+    if (!multiScanPending || multiScanPending.cards.length === 0) {
+        cancelMultiScan();
+        return;
+    }
+
+    const cards = multiScanPending.cards.slice();
+
+    /* Trova tutti gli slot liberi (fronte/retro) in ordine documento, fronte→retro */
+    function findNextFreeSlot() {
+        for (let d = 1; d <= currentDocs; d++) {
+            for (const s of SIDES) {
+                if (!processedImages[keyOf(d, s)]) {
+                    return { doc: d, side: s };
+                }
+            }
+        }
+        return null;
+    }
+
+    let assigned = 0;
+
+    for (const card of cards) {
+        let slot = findNextFreeSlot();
+
+        if (!slot) {
+            if (currentDocs < CONFIG.maxDocs) {
+                addDocument(true); // aggiunge senza salvare ad ogni iterazione
+                slot = { doc: currentDocs, side: 'fronte' };
+            } else {
+                alert(`Limite massimo di ${CONFIG.maxDocs} tessere raggiunto. ` +
+                      `${cards.length - assigned} tessere non sono state assegnate.`);
+                break;
+            }
+        }
+
+        const { doc, side } = slot;
+
+        /* Assegna l'immagine */
+        processedImages[keyOf(doc, side)] = card.dataUrl;
+
+        /* Aggiorna anteprima */
+        const prev = document.getElementById(`preview-${keyOf(doc, side)}`);
+        if (prev) {
+            prev.src = card.dataUrl;
+            prev.style.display = 'block';
+        }
+
+        /* Overlay bordi individuale per questa tessera */
+        try {
+            const detOverlay = buildDetectionOverlayFromCorners(card.corners);
+            if (detOverlay) {
+                detectionImages[keyOf(doc, side)] = detOverlay;
+                const detImg = document.getElementById(`detection-${keyOf(doc, side)}`);
+                const detWrap = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
+                if (detImg && detWrap) {
+                    detImg.src = detOverlay;
+                    detWrap.classList.add('visible');
+                }
+            }
+        } catch (e) {
+            console.warn('Overlay individuale non generato:', e);
+        }
+
+        setStatus(doc, side, 'success', 'Estratto da multi-scan.');
+        assigned++;
+    }
+
+    /* Aggiorna UI globale */
+    updateProgress();
+    checkExportStatus();
+    updateAddButton();
+    updateRemoveButtons();
+    saveState();
+    refreshPreviewIfOpen();
+
+    const total = cards.length;
+    cancelMultiScan();
+
+    if (assigned === total) {
+        alert(`✓ ${assigned} tesser${assigned === 1 ? 'a' : 'e'} aggiunte correttamente.`);
+    } else {
+        alert(`✓ ${assigned}/${total} tessere aggiunte. Le restanti non sono state assegnate per limite massimo.`);
+    }
+}
+
+/**
+ * Genera un overlay dei bordi partendo dai corners (in coordinate originali)
+ * ma senza avere la srcMat: disegna solo il quadrilatero su sfondo trasparente.
+ * Usato per l'overlay individuale dopo il multi-scan.
+ */
+function buildDetectionOverlayFromCorners(corners) {
+    /* Calcola bounding box dei corners */
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const p of corners) {
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+    }
+    const pad = 10;
+    minX -= pad; minY -= pad; maxX += pad; maxY += pad;
+    const w = Math.max(1, maxX - minX);
+    const h = Math.max(1, maxY - minY);
+
+    const c = document.createElement('canvas');
+    c.width = Math.round(w);
+    c.height = Math.round(h);
+    const ctx = c.getContext('2d');
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, c.width, c.height);
+
+    const pts = corners.map(p => ({ x: p.x - minX, y: p.y - minY }));
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(0, 255, 176, 0.9)';
+    ctx.shadowBlur = 12;
+    ctx.strokeStyle = '#00ffb0';
+    ctx.lineWidth = Math.max(3, c.width / 150);
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+
+    const dotR = Math.max(4, c.width / 100);
+    ctx.fillStyle = '#00ffb0';
+    ctx.strokeStyle = '#003c2e';
+    ctx.lineWidth = Math.max(1, c.width / 400);
+    for (const p of pts) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    return c.toDataURL('image/png');
+}
+
+/* ============================================================
    WEBCAM
    ============================================================ */
 function isWebcamSupported() {
@@ -2406,7 +2969,7 @@ function readSourceMat(img) {
 }
 
 /* ============================================================
-   RICONOSCIMENTO TESSERA
+   RICONOSCIMENTO TESSERA (singola)
    ============================================================ */
 function detectCard(src) {
     const maxDim = 900;
@@ -2934,6 +3497,8 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         if (webcamStream) {
             closeWebcamModal();
+        } else if (multiScanPending) {
+            cancelMultiScan();
         } else if (previewOpen) {
             closePreviewModal();
         }
