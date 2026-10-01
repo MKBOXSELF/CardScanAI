@@ -527,6 +527,24 @@
     }
     input[type="file"] { display: none; }
 
+    .edit-corners-btn {
+        display: none;
+        margin-top: 6px;
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 55%, #ef4444 100%);
+        font-size: 11px;
+        padding: 6px 12px;
+        font-weight: 700;
+        box-shadow:
+            0 4px 12px rgba(249, 115, 22, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    }
+    .edit-corners-btn.visible { display: inline-flex; }
+    .edit-corners-btn:hover:not(:disabled) {
+        box-shadow:
+            0 8px 20px rgba(249, 115, 22, 0.55),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
     .detection-wrap {
         display: none;
         margin-top: 10px;
@@ -1297,6 +1315,136 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
 
+    /* ============================================================
+       EDITOR MANUALE BORDI
+       ============================================================ */
+    .corner-editor-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 8, 22, 0.92);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 10001;
+        justify-content: center;
+        align-items: center;
+        padding: 12px;
+        animation: overlayIn .25s ease;
+    }
+    .corner-editor-overlay.open { display: flex; }
+
+    .corner-editor-modal {
+        background: var(--modal-bg);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
+        width: 100%;
+        max-width: 960px;
+        max-height: 96vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.75),
+            0 0 0 1px rgba(255, 255, 255, 0.06),
+            0 0 60px rgba(245, 158, 11, 0.2);
+        overflow: hidden;
+        animation: modalIn .35s cubic-bezier(.2,.9,.3,1.2);
+    }
+    .corner-editor-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 16px;
+        background: var(--modal-header-bg);
+        border-bottom: 1px solid var(--border);
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .corner-editor-header h3 {
+        margin: 0;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 14.5px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .corner-editor-header h3::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--amber), var(--red));
+        box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
+    }
+    .corner-editor-body {
+        flex: 1;
+        overflow: hidden;
+        background: #1a1a2e;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 300px;
+        touch-action: none;
+        padding: 8px;
+    }
+    #corner-editor-canvas {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        cursor: crosshair;
+        border-radius: 4px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    .corner-editor-footer {
+        padding: 10px 16px;
+        background: var(--modal-header-bg);
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .corner-editor-hint {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-align: center;
+        padding: 6px 12px 2px;
+        line-height: 1.5;
+        background: var(--modal-header-bg);
+        border-top: 1px solid var(--border);
+    }
+    .btn-save-corners {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        font-size: 14px;
+        padding: 10px 24px;
+        font-weight: 700;
+        box-shadow:
+            0 6px 20px rgba(16, 185, 129, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    }
+    .btn-reset-corners {
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+        font-size: 13px;
+        padding: 10px 18px;
+        box-shadow:
+            0 4px 14px rgba(245, 158, 11, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-auto-corners {
+        background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+        font-size: 13px;
+        padding: 10px 18px;
+        box-shadow:
+            0 4px 14px rgba(59, 130, 246, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
     ::-webkit-scrollbar { width: 10px; height: 10px; }
     ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
     ::-webkit-scrollbar-thumb {
@@ -1316,6 +1464,7 @@
         .filename-row input[type="text"] { width: 100%; max-width: 320px; }
         .btn-pdf, .btn-preview, .btn-jpg { width: 100%; max-width: 340px; padding: 13px 20px; }
         .pdf-modal-actions .btn { font-size: 11.5px; padding: 8px 12px; }
+        .corner-editor-modal { max-height: 98vh; border-radius: var(--radius-md); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1469,12 +1618,15 @@
         <strong>Novità:</strong> puoi anche <strong>trascinare</strong> un'immagine direttamente
         sullo slot FRONTE o RETRO. Dopo ogni scansione, sotto l'anteprima compare
         un <strong>mini-anteprima dei bordi rilevati</strong>.<br>
+        <strong>Modifica Bordi:</strong> con il pulsante <strong>✎ Modifica bordi</strong> puoi
+        correggere manualmente i 4 angoli del ritaglio trascinandoli con precisione.<br>
         <strong>Multi-Scan:</strong> con "📸 Acquisisci più tessere" puoi fotografare più tessere
         insieme: verranno rilevate, ritagliate e assegnate in sequenza ai primi slot liberi.<br>
         <strong>Import PDF:</strong> con "📄 Importa da PDF" puoi caricare un PDF le cui pagine
         verranno analizzate automaticamente per estrarre le tessere.<br>
         <strong>Esporta JPG:</strong> con "🖼 Esporta JPG (A4)" puoi salvare il layout in formato
         JPG A4 (una immagine per ogni pagina).<br>
+        Puoi esportare anche con <strong>solo il fronte</strong> di ogni documento.<br>
         Consigli di scatto: sfondo scuro e contrastato, un piccolo margine attorno alla tessera,
         luce uniforme, evita ombre nette e riflessi.
     </div>
@@ -1527,6 +1679,29 @@
     </div>
 </div>
 
+<!-- EDITOR MANUALE BORDI -->
+<div id="corner-editor-overlay" class="corner-editor-overlay">
+    <div class="corner-editor-modal" role="dialog" aria-modal="true" aria-labelledby="corner-editor-title">
+        <div class="corner-editor-header">
+            <h3 id="corner-editor-title">✎ Modifica bordi manualmente</h3>
+            <button class="btn btn-close-webcam" onclick="closeCornerEditor()" title="Chiudi">✕</button>
+        </div>
+        <div class="corner-editor-body" id="corner-editor-body">
+            <canvas id="corner-editor-canvas"></canvas>
+        </div>
+        <div class="corner-editor-hint">
+            Trascina i cerchi numerati (1=in alto a sinistra, 2=in alto a destra, 3=in basso a destra, 4=in basso a sinistra)
+            per correggere il ritaglio. Usa la rotella del mouse o il pinch per lo zoom.
+        </div>
+        <div class="corner-editor-footer">
+            <button class="btn btn-auto-corners" onclick="autoDetectCornersInEditor()">🔍 Rileva automaticamente</button>
+            <button class="btn btn-reset-corners" onclick="resetCornersInEditor()">↺ Ripristina originali</button>
+            <button class="btn btn-save-corners" onclick="saveCornersFromEditor()">✓ Salva e ritaglia</button>
+            <button class="btn btn-reset" onclick="closeCornerEditor()">Annulla</button>
+        </div>
+    </div>
+</div>
+
 <script>
 /* ============================================================
    CONFIGURAZIONE
@@ -1553,6 +1728,8 @@ const STORAGE_KEY = 'scanner_tessere_state_v2';
 let currentDocs = 0;
 const processedImages = {};
 const detectionImages = {};
+const originalImages = {};
+const originalCorners = {};
 const keyOf = (doc, side) => `${doc}-${side}`;
 
 let previewOpen = false;
@@ -1567,6 +1744,29 @@ let webcamFacingMode = 'environment';
 let deferredInstallPrompt = null;
 
 let multiScanPending = null;
+
+/* Editor bordi */
+let cornerEditorState = {
+    open: false,
+    doc: null,
+    side: null,
+    srcCanvas: null,
+    srcWidth: 0,
+    srcHeight: 0,
+    corners: [],
+    originalCorners: [],
+    displayScale: 1,
+    offsetX: 0,
+    offsetY: 0,
+    displayW: 0,
+    displayH: 0,
+    dragging: -1,
+    zoom: 1,
+    panX: 0,
+    panY: 0,
+    viewW: 0,
+    viewH: 0
+};
 
 /* ============================================================
    TEMA
@@ -1776,6 +1976,8 @@ function buildDocSection(docNum) {
                 <input type="file" id="input-${docNum}-fronte" accept="image/*" capture="environment"
                        onchange="processImage(this, ${docNum}, 'fronte')">
                 <div><img id="preview-${docNum}-fronte" class="preview" alt="Anteprima ${docNum} Fronte"></div>
+                <button class="btn edit-corners-btn" id="edit-btn-${docNum}-fronte"
+                        onclick="openCornerEditor(${docNum}, 'fronte')">✎ Modifica bordi</button>
                 <div class="detection-wrap" id="detection-wrap-${docNum}-fronte">
                     <span class="detection-label">Bordi rilevati</span>
                     <img id="detection-${docNum}-fronte" class="detection-img" alt="Bordi rilevati ${docNum} Fronte">
@@ -1790,6 +1992,8 @@ function buildDocSection(docNum) {
                 <input type="file" id="input-${docNum}-retro" accept="image/*" capture="environment"
                        onchange="processImage(this, ${docNum}, 'retro')">
                 <div><img id="preview-${docNum}-retro" class="preview" alt="Anteprima ${docNum} Retro"></div>
+                <button class="btn edit-corners-btn" id="edit-btn-${docNum}-retro"
+                        onclick="openCornerEditor(${docNum}, 'retro')">✎ Modifica bordi</button>
                 <div class="detection-wrap" id="detection-wrap-${docNum}-retro">
                     <span class="detection-label">Bordi rilevati</span>
                     <img id="detection-${docNum}-retro" class="detection-img" alt="Bordi rilevati ${docNum} Retro">
@@ -1811,6 +2015,8 @@ function addDocument(skipSave) {
     for (const s of SIDES) {
         processedImages[keyOf(currentDocs, s)] = null;
         detectionImages[keyOf(currentDocs, s)] = null;
+        originalImages[keyOf(currentDocs, s)] = null;
+        originalCorners[keyOf(currentDocs, s)] = null;
     }
 
     if (cvReady) {
@@ -1857,13 +2063,19 @@ function reindexDocuments() {
             fronte: processedImages[keyOf(oldNum, 'fronte')] || null,
             retro:  processedImages[keyOf(oldNum, 'retro')]  || null,
             fronteDet: detectionImages[keyOf(oldNum, 'fronte')] || null,
-            retroDet:  detectionImages[keyOf(oldNum, 'retro')]  || null
+            retroDet:  detectionImages[keyOf(oldNum, 'retro')]  || null,
+            fronteOrig: originalImages[keyOf(oldNum, 'fronte')] || null,
+            retroOrig:  originalImages[keyOf(oldNum, 'retro')]  || null,
+            fronteCorners: originalCorners[keyOf(oldNum, 'fronte')] || null,
+            retroCorners:  originalCorners[keyOf(oldNum, 'retro')]  || null
         };
     });
 
     container.innerHTML = '';
     for (const k in processedImages) delete processedImages[k];
     for (const k in detectionImages) delete detectionImages[k];
+    for (const k in originalImages) delete originalImages[k];
+    for (const k in originalCorners) delete originalCorners[k];
 
     currentDocs = collected.length;
     collected.forEach((data, idx) => {
@@ -1885,6 +2097,8 @@ function reindexDocuments() {
                 prev.src = dataUrl;
                 prev.style.display = 'block';
                 setStatus(newNum, s, 'success', 'Ritagliato e raddrizzato.');
+                const editBtn = document.getElementById(`edit-btn-${newNum}-${s}`);
+                if (editBtn) editBtn.classList.add('visible');
             }
 
             const detUrl = s === 'fronte' ? data.fronteDet : data.retroDet;
@@ -1896,6 +2110,16 @@ function reindexDocuments() {
                     detImg.src = detUrl;
                     detWrap.classList.add('visible');
                 }
+            }
+
+            const origUrl = s === 'fronte' ? data.fronteOrig : data.retroOrig;
+            if (origUrl) {
+                originalImages[keyOf(newNum, s)] = origUrl;
+            }
+
+            const origCorners = s === 'fronte' ? data.fronteCorners : data.retroCorners;
+            if (origCorners) {
+                originalCorners[keyOf(newNum, s)] = origCorners;
             }
         }
     });
@@ -1957,10 +2181,13 @@ function clearAllData() {
     document.getElementById('docs-container').innerHTML = '';
     for (const k in processedImages) delete processedImages[k];
     for (const k in detectionImages) delete detectionImages[k];
+    for (const k in originalImages) delete originalImages[k];
+    for (const k in originalCorners) delete originalCorners[k];
     currentDocs = 0;
 
     if (previewOpen) closePreviewModal();
     cancelMultiScan();
+    if (cornerEditorState.open) closeCornerEditor();
 
     document.getElementById('pdf-filename').value = 'documenti_tessera';
 
@@ -2007,6 +2234,8 @@ function initializeApp() {
                     prev.src = dataUrl;
                     prev.style.display = 'block';
                     setStatus(newNum, s, 'success', 'Ripristinato dalla sessione.');
+                    const editBtn = document.getElementById(`edit-btn-${newNum}-${s}`);
+                    if (editBtn) editBtn.classList.add('visible');
                 }
             }
         }
@@ -2109,6 +2338,8 @@ function resetSlot(doc, side) {
     const k = keyOf(doc, side);
     processedImages[k] = null;
     detectionImages[k] = null;
+    originalImages[k] = null;
+    originalCorners[k] = null;
 
     const input = document.getElementById(`input-${k}`);
     if (input) input.value = '';
@@ -2116,6 +2347,9 @@ function resetSlot(doc, side) {
     const preview = document.getElementById(`preview-${k}`);
     preview.src = '';
     preview.style.display = 'none';
+
+    const editBtn = document.getElementById(`edit-btn-${k}`);
+    if (editBtn) editBtn.classList.remove('visible');
 
     const detWrap = document.getElementById(`detection-wrap-${k}`);
     if (detWrap) detWrap.classList.remove('visible');
@@ -2135,15 +2369,31 @@ function resetSlot(doc, side) {
 }
 
 function checkExportStatus() {
-    let allDone = currentDocs > 0;
-    for (let d = 1; d <= currentDocs && allDone; d++) {
-        for (const s of SIDES) {
-            if (!processedImages[keyOf(d, s)]) { allDone = false; break; }
-        }
+    if (currentDocs === 0) {
+        document.getElementById('btn-export').disabled = true;
+        document.getElementById('btn-preview').disabled = true;
+        document.getElementById('btn-export-jpg').disabled = true;
+        return;
     }
-    document.getElementById('btn-export').disabled = !allDone;
-    document.getElementById('btn-preview').disabled = !allDone;
-    document.getElementById('btn-export-jpg').disabled = !allDone;
+
+    let anyData = false;
+    let valid = true;
+
+    for (let d = 1; d <= currentDocs; d++) {
+        let docHasAtLeastOne = false;
+        for (const s of SIDES) {
+            if (processedImages[keyOf(d, s)]) {
+                anyData = true;
+                docHasAtLeastOne = true;
+            }
+        }
+        if (!docHasAtLeastOne) valid = false;
+    }
+
+    const enabled = anyData && valid;
+    document.getElementById('btn-export').disabled = !enabled;
+    document.getElementById('btn-preview').disabled = !enabled;
+    document.getElementById('btn-export-jpg').disabled = !enabled;
 }
 
 function setStatus(doc, side, type, text) {
@@ -2176,6 +2426,8 @@ function processImageFromBlob(blob, doc, side) {
 
     setStatus(doc, side, 'info', 'Analisi immagine in corso…');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
+    const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
+    if (editBtn) editBtn.classList.remove('visible');
 
     const detWrapPrev = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
     if (detWrapPrev) detWrapPrev.classList.remove('visible');
@@ -2195,8 +2447,12 @@ function fail(doc, side, reason, input) {
     setStatus(doc, side, 'error',
         'Foto rifiutata: ' + reason + '. Riprova con più luce e buon contrasto di sfondo.');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
+    const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
+    if (editBtn) editBtn.classList.remove('visible');
     processedImages[keyOf(doc, side)] = null;
     detectionImages[keyOf(doc, side)] = null;
+    originalImages[keyOf(doc, side)] = null;
+    originalCorners[keyOf(doc, side)] = null;
     updateProgress();
     checkExportStatus();
     saveState();
@@ -2208,10 +2464,11 @@ function runScanner(img, doc, side, input) {
     let src = null;
     let warpedDataUrl = null;
     let detectionDataUrl = null;
+    let corners = null;
 
     try {
         src = readSourceMat(img);
-        const corners = detectCard(src);
+        corners = detectCard(src);
 
         if (!corners) {
             src.delete();
@@ -2254,8 +2511,14 @@ function runScanner(img, doc, side, input) {
             }
         }
 
+        // Salva l'immagine originale e i corners per l'editor
+        originalImages[keyOf(doc, side)] = img.src;
+        originalCorners[keyOf(doc, side)] = corners.map(p => ({ x: p.x, y: p.y }));
+
         setStatus(doc, side, 'success', 'Ritagliato e raddrizzato.');
         processedImages[keyOf(doc, side)] = warpedDataUrl;
+        const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
+        if (editBtn) editBtn.classList.add('visible');
         updateProgress();
         checkExportStatus();
         saveState();
@@ -2596,7 +2859,7 @@ function runMultiScan(img) {
         for (const corners of cardsCorners) {
             try {
                 const warped = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
-                cards.push({ dataUrl: warped, corners });
+                cards.push({ dataUrl: warped, corners, sourceImg: img.src });
             } catch (e) {
                 console.warn('Errore warp tessera:', e);
             }
@@ -2644,17 +2907,6 @@ async function confirmMultiScan() {
 
     const cards = multiScanPending.cards.slice();
 
-    function findNextFreeSlot() {
-        for (let d = 1; d <= currentDocs; d++) {
-            for (const s of SIDES) {
-                if (!processedImages[keyOf(d, s)]) {
-                    return { doc: d, side: s };
-                }
-            }
-        }
-        return null;
-    }
-
     let assigned = 0;
 
     for (const card of cards) {
@@ -2681,6 +2933,12 @@ async function confirmMultiScan() {
             prev.style.display = 'block';
         }
 
+        // Salva originali e corners per editor
+        if (card.sourceImg) {
+            originalImages[keyOf(doc, side)] = card.sourceImg;
+        }
+        originalCorners[keyOf(doc, side)] = card.corners.map(p => ({ x: p.x, y: p.y }));
+
         try {
             const detOverlay = buildDetectionOverlayFromCorners(card.corners);
             if (detOverlay) {
@@ -2697,6 +2955,8 @@ async function confirmMultiScan() {
         }
 
         setStatus(doc, side, 'success', 'Estratto da multi-scan.');
+        const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
+        if (editBtn) editBtn.classList.add('visible');
         assigned++;
     }
 
@@ -3101,17 +3361,394 @@ function checkQuality(img) {
 }
 
 /* ============================================================
+   EDITOR MANUALE BORDI — CORNER EDITOR
+   ============================================================ */
+function openCornerEditor(doc, side) {
+    const k = keyOf(doc, side);
+    const origSrc = originalImages[k];
+    const corners = originalCorners[k];
+
+    if (!origSrc || !corners) {
+        alert('Impossibile aprire l\'editor: immagine originale non disponibile.\n' +
+              'Riprova a scansionare la tessera.');
+        return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        cornerEditorState.open = true;
+        cornerEditorState.doc = doc;
+        cornerEditorState.side = side;
+        cornerEditorState.srcCanvas = c;
+        cornerEditorState.srcWidth = c.width;
+        cornerEditorState.srcHeight = c.height;
+        cornerEditorState.corners = corners.map(p => ({ x: p.x, y: p.y }));
+        cornerEditorState.originalCorners = corners.map(p => ({ x: p.x, y: p.y }));
+        cornerEditorState.dragging = -1;
+        cornerEditorState.zoom = 1;
+        cornerEditorState.panX = 0;
+        cornerEditorState.panY = 0;
+
+        document.getElementById('corner-editor-overlay').classList.add('open');
+        document.body.style.overflow = 'hidden';
+
+        setTimeout(() => {
+            setupCornerEditorCanvas();
+        }, 60);
+    };
+    img.onerror = () => alert('Impossibile caricare l\'immagine originale.');
+    img.src = origSrc;
+}
+
+function setupCornerEditorCanvas() {
+    const canvas = document.getElementById('corner-editor-canvas');
+    const body = document.getElementById('corner-editor-body');
+
+    const availW = Math.max(200, body.clientWidth - 20);
+    const availH = Math.max(200, body.clientHeight - 20);
+
+    const srcW = cornerEditorState.srcWidth;
+    const srcH = cornerEditorState.srcHeight;
+
+    const baseScale = Math.min(availW / srcW, availH / srcH);
+    cornerEditorState.displayScale = baseScale;
+    cornerEditorState.displayW = srcW * baseScale;
+    cornerEditorState.displayH = srcH * baseScale;
+
+    canvas.width = Math.round(availW);
+    canvas.height = Math.round(availH);
+    canvas.style.width = availW + 'px';
+    canvas.style.height = availH + 'px';
+
+    cornerEditorState.viewW = availW;
+    cornerEditorState.viewH = availH;
+
+    drawCornerEditor();
+
+    canvas.onmousedown = onCornerEditorMouseDown;
+    canvas.onmousemove = onCornerEditorMouseMove;
+    canvas.onmouseup = onCornerEditorMouseUp;
+    canvas.onmouseleave = onCornerEditorMouseUp;
+
+    canvas.ontouchstart = onCornerEditorTouchStart;
+    canvas.ontouchmove = onCornerEditorTouchMove;
+    canvas.ontouchend = onCornerEditorTouchEnd;
+
+    canvas.onwheel = (e) => {
+        e.preventDefault();
+        const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+        cornerEditorState.zoom = Math.max(0.5, Math.min(4, cornerEditorState.zoom * factor));
+        drawCornerEditor();
+    };
+}
+
+function toCanvasCoords(srcX, srcY) {
+    const s = cornerEditorState;
+    const cx = s.viewW / 2 + s.panX;
+    const cy = s.viewH / 2 + s.panY;
+    const x = cx + (srcX - s.srcWidth / 2) * s.displayScale * s.zoom;
+    const y = cy + (srcY - s.srcHeight / 2) * s.displayScale * s.zoom;
+    return { x, y };
+}
+
+function fromCanvasCoords(canvasX, canvasY) {
+    const s = cornerEditorState;
+    const cx = s.viewW / 2 + s.panX;
+    const cy = s.viewH / 2 + s.panY;
+    const x = (canvasX - cx) / (s.displayScale * s.zoom) + s.srcWidth / 2;
+    const y = (canvasY - cy) / (s.displayScale * s.zoom) + s.srcHeight / 2;
+    return { x, y };
+}
+
+function drawCornerEditor() {
+    const canvas = document.getElementById('corner-editor-canvas');
+    const ctx = canvas.getContext('2d');
+    const s = cornerEditorState;
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.fillStyle = '#0a0e27';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const scale = s.displayScale * s.zoom;
+    const cx = s.viewW / 2 + s.panX;
+    const cy = s.viewH / 2 + s.panY;
+
+    const imgX = cx - (s.srcWidth / 2) * scale;
+    const imgY = cy - (s.srcHeight / 2) * scale;
+    const imgW = s.srcWidth * scale;
+    const imgH = s.srcHeight * scale;
+
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(s.srcCanvas, imgX, imgY, imgW, imgH);
+
+    const pts = s.corners.map(p => toCanvasCoords(p.x, p.y));
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < 4; i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.closePath();
+
+    ctx.fillStyle = 'rgba(0, 255, 176, 0.10)';
+    ctx.fill();
+
+    ctx.strokeStyle = '#00ffb0';
+    ctx.lineWidth = 2.5;
+    ctx.shadowColor = 'rgba(0, 255, 176, 0.9)';
+    ctx.shadowBlur = 12;
+    ctx.stroke();
+    ctx.restore();
+
+    const dotR = 10;
+    for (let i = 0; i < 4; i++) {
+        const p = pts[i];
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
+        ctx.fillStyle = i === s.dragging ? '#f59e0b' : '#00ffb0';
+        ctx.shadowColor = i === s.dragging ? 'rgba(245, 158, 11, 1)' : 'rgba(0, 255, 176, 1)';
+        ctx.shadowBlur = 16;
+        ctx.fill();
+        ctx.strokeStyle = '#003c2e';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.fillStyle = '#0a0e27';
+        ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(i + 1), p.x, p.y + 0.5);
+    }
+}
+
+function getEventPos(e) {
+    const canvas = document.getElementById('corner-editor-canvas');
+    const rect = canvas.getBoundingClientRect();
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+        clientX = e.changedTouches[0].clientX;
+        clientY = e.changedTouches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+    return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+    };
+}
+
+function findNearestCorner(pos) {
+    const s = cornerEditorState;
+    const pts = s.corners.map(p => toCanvasCoords(p.x, p.y));
+    let minDist = Infinity, idx = -1;
+    for (let i = 0; i < 4; i++) {
+        const d = Math.hypot(pts[i].x - pos.x, pts[i].y - pos.y);
+        if (d < minDist) { minDist = d; idx = i; }
+    }
+    return { idx, dist: minDist };
+}
+
+function onCornerEditorMouseDown(e) {
+    const pos = getEventPos(e);
+    const { idx, dist } = findNearestCorner(pos);
+    if (dist < 30) {
+        cornerEditorState.dragging = idx;
+        drawCornerEditor();
+    }
+}
+
+function onCornerEditorMouseMove(e) {
+    if (cornerEditorState.dragging < 0) {
+        const pos = getEventPos(e);
+        const { dist } = findNearestCorner(pos);
+        const canvas = document.getElementById('corner-editor-canvas');
+        canvas.style.cursor = dist < 30 ? 'grab' : 'crosshair';
+        return;
+    }
+    const pos = getEventPos(e);
+    const src = fromCanvasCoords(pos.x, pos.y);
+    src.x = Math.max(0, Math.min(cornerEditorState.srcWidth, src.x));
+    src.y = Math.max(0, Math.min(cornerEditorState.srcHeight, src.y));
+    cornerEditorState.corners[cornerEditorState.dragging] = src;
+    drawCornerEditor();
+}
+
+function onCornerEditorMouseUp() {
+    if (cornerEditorState.dragging >= 0) {
+        cornerEditorState.dragging = -1;
+        drawCornerEditor();
+    }
+}
+
+function onCornerEditorTouchStart(e) {
+    e.preventDefault();
+    if (e.touches.length === 1) {
+        const pos = getEventPos(e);
+        const { idx, dist } = findNearestCorner(pos);
+        if (dist < 40) {
+            cornerEditorState.dragging = idx;
+            drawCornerEditor();
+        }
+    }
+}
+
+function onCornerEditorTouchMove(e) {
+    e.preventDefault();
+    if (cornerEditorState.dragging >= 0 && e.touches.length === 1) {
+        const pos = getEventPos(e);
+        const src = fromCanvasCoords(pos.x, pos.y);
+        src.x = Math.max(0, Math.min(cornerEditorState.srcWidth, src.x));
+        src.y = Math.max(0, Math.min(cornerEditorState.srcHeight, src.y));
+        cornerEditorState.corners[cornerEditorState.dragging] = src;
+        drawCornerEditor();
+    }
+}
+
+function onCornerEditorTouchEnd(e) {
+    e.preventDefault();
+    if (cornerEditorState.dragging >= 0) {
+        cornerEditorState.dragging = -1;
+        drawCornerEditor();
+    }
+}
+
+function autoDetectCornersInEditor() {
+    const s = cornerEditorState;
+    if (!s.open) return;
+
+    try {
+        const src = cv.imread(s.srcCanvas);
+        const corners = detectCard(src);
+        src.delete();
+
+        if (corners) {
+            s.corners = corners.map(p => ({ x: p.x, y: p.y }));
+            s.zoom = 1;
+            s.panX = 0;
+            s.panY = 0;
+            drawCornerEditor();
+        } else {
+            alert('Rilevamento automatico non riuscito. Regola manualmente i 4 angoli.');
+        }
+    } catch (e) {
+        console.warn('Auto-detect fallito:', e);
+        alert('Errore nel rilevamento automatico.');
+    }
+}
+
+function resetCornersInEditor() {
+    const s = cornerEditorState;
+    if (!s.open) return;
+    s.corners = s.originalCorners.map(p => ({ x: p.x, y: p.y }));
+    s.zoom = 1;
+    s.panX = 0;
+    s.panY = 0;
+    drawCornerEditor();
+}
+
+function saveCornersFromEditor() {
+    const s = cornerEditorState;
+    if (!s.open || s.doc == null || s.side == null) return;
+
+    const doc = s.doc;
+    const side = s.side;
+    const k = keyOf(doc, side);
+    const newCorners = s.corners.map(p => ({ x: p.x, y: p.y }));
+
+    try {
+        const src = cv.imread(s.srcCanvas);
+        const warped = warpCard(src, newCorners, CONFIG.targetWidth, CONFIG.targetHeight);
+        const detOverlay = buildDetectionOverlayFromCorners(newCorners);
+        src.delete();
+
+        processedImages[k] = warped;
+        detectionImages[k] = detOverlay;
+        originalCorners[k] = newCorners.map(p => ({ x: p.x, y: p.y }));
+
+        const prev = document.getElementById(`preview-${k}`);
+        if (prev) {
+            prev.src = warped;
+            prev.style.display = 'block';
+        }
+
+        const detImg = document.getElementById(`detection-${k}`);
+        const detWrap = document.getElementById(`detection-wrap-${k}`);
+        if (detImg && detWrap) {
+            detImg.src = detOverlay;
+            detWrap.classList.add('visible');
+        }
+
+        const editBtn = document.getElementById(`edit-btn-${k}`);
+        if (editBtn) editBtn.classList.add('visible');
+
+        setStatus(doc, side, 'success', 'Bordi modificati manualmente.');
+
+        updateProgress();
+        checkExportStatus();
+        saveState();
+        refreshPreviewIfOpen();
+
+        closeCornerEditor();
+    } catch (e) {
+        console.error('Errore salvataggio bordi:', e);
+        alert('Errore durante il salvataggio dei bordi. Riprova.');
+    }
+}
+
+function closeCornerEditor() {
+    cornerEditorState.open = false;
+    cornerEditorState.dragging = -1;
+    document.getElementById('corner-editor-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+
+    const canvas = document.getElementById('corner-editor-canvas');
+    if (canvas) {
+        canvas.onmousedown = null;
+        canvas.onmousemove = null;
+        canvas.onmouseup = null;
+        canvas.onmouseleave = null;
+        canvas.ontouchstart = null;
+        canvas.ontouchmove = null;
+        canvas.ontouchend = null;
+        canvas.onwheel = null;
+    }
+}
+
+/* ============================================================
    COSTRUZIONE PDF — 8 TESSERE PER PAGINA A4
    ============================================================ */
 function buildPDFDocument() {
+    if (currentDocs === 0) {
+        alert('Aggiungi almeno una tessera.');
+        return null;
+    }
+
     for (let d = 1; d <= currentDocs; d++) {
+        let hasAtLeastOne = false;
         for (const s of SIDES) {
-            if (!processedImages[keyOf(d, s)]) {
-                alert('Completa tutte le tessere prima di esportare.');
-                return null;
+            if (processedImages[keyOf(d, s)]) {
+                hasAtLeastOne = true;
+                break;
             }
         }
+        if (!hasAtLeastOne) {
+            alert('Completa almeno un lato per ogni documento prima di esportare.');
+            return null;
+        }
     }
+
     if (!window.jspdf || !window.jspdf.jsPDF) {
         alert('Libreria PDF non disponibile.');
         return null;
@@ -3154,10 +3791,15 @@ function buildPDFDocument() {
 
             const y = startY + r * (rowH + actualGap);
 
-            doc.addImage(processedImages[keyOf(docNum, 'fronte')], 'PNG',
-                leftMargin, y, cW, cH);
-            doc.addImage(processedImages[keyOf(docNum, 'retro')], 'PNG',
-                leftMargin + cW + gap, y, cW, cH);
+            const front = processedImages[keyOf(docNum, 'fronte')];
+            const back  = processedImages[keyOf(docNum, 'retro')];
+
+            if (front) {
+                doc.addImage(front, 'PNG', leftMargin, y, cW, cH);
+            }
+            if (back) {
+                doc.addImage(back, 'PNG', leftMargin + cW + gap, y, cW, cH);
+            }
         }
     }
 
@@ -3510,7 +4152,8 @@ async function processImportPDFBlob(blob) {
             continue;
         }
 
-        const img = await loadImage(canvas.toDataURL('image/png'));
+        const pageDataUrl = canvas.toDataURL('image/png');
+        const img = await loadImage(pageDataUrl);
 
         let cardsCorners = [];
         try {
@@ -3552,6 +4195,7 @@ async function processImportPDFBlob(blob) {
                 }
             }
             const { doc, side } = slot;
+            const k = keyOf(doc, side);
 
             try {
                 const src = readSourceMat(img);
@@ -3559,18 +4203,20 @@ async function processImportPDFBlob(blob) {
                 const detOverlay = buildDetectionOverlayFromCorners(corners);
                 src.delete();
 
-                processedImages[keyOf(doc, side)] = warped;
+                processedImages[k] = warped;
+                detectionImages[k] = detOverlay;
+                originalImages[k] = pageDataUrl;
+                originalCorners[k] = corners.map(pt => ({ x: pt.x, y: pt.y }));
 
-                const prev = document.getElementById(`preview-${keyOf(doc, side)}`);
+                const prev = document.getElementById(`preview-${k}`);
                 if (prev) {
                     prev.src = warped;
                     prev.style.display = 'block';
                 }
 
                 if (detOverlay) {
-                    detectionImages[keyOf(doc, side)] = detOverlay;
-                    const detImg = document.getElementById(`detection-${keyOf(doc, side)}`);
-                    const detWrap = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
+                    const detImg = document.getElementById(`detection-${k}`);
+                    const detWrap = document.getElementById(`detection-wrap-${k}`);
                     if (detImg && detWrap) {
                         detImg.src = detOverlay;
                         detWrap.classList.add('visible');
@@ -3578,6 +4224,8 @@ async function processImportPDFBlob(blob) {
                 }
 
                 setStatus(doc, side, 'success', `Importata da PDF pag. ${p}.`);
+                const editBtn = document.getElementById(`edit-btn-${k}`);
+                if (editBtn) editBtn.classList.add('visible');
                 totalCardsFound++;
             } catch (e) {
                 console.warn('Errore estrazione da PDF:', e);
@@ -3614,13 +4262,22 @@ function findNextFreeSlot() {
    ESPORTAZIONE JPG A4
    ============================================================ */
 async function exportJPG_A4() {
-    // Verifica completezza
+    if (currentDocs === 0) {
+        alert('Aggiungi almeno una tessera.');
+        return;
+    }
+
     for (let d = 1; d <= currentDocs; d++) {
+        let hasAtLeastOne = false;
         for (const s of SIDES) {
-            if (!processedImages[keyOf(d, s)]) {
-                alert('Completa tutte le tessere prima di esportare.');
-                return;
+            if (processedImages[keyOf(d, s)]) {
+                hasAtLeastOne = true;
+                break;
             }
+        }
+        if (!hasAtLeastOne) {
+            alert('Completa almeno un lato per ogni documento prima di esportare.');
+            return;
         }
     }
 
@@ -3659,7 +4316,7 @@ async function exportJPG_A4() {
     for (let d = 1; d <= currentDocs; d++) {
         for (const s of SIDES) {
             const k = keyOf(d, s);
-            if (!images[k]) {
+            if (!images[k] && processedImages[k]) {
                 images[k] = await loadImage(processedImages[k]);
             }
         }
@@ -3697,7 +4354,6 @@ async function exportJPG_A4() {
                 const fw = cW * pxPerMM;
                 const fh = cH * pxPerMM;
 
-                // Arrotonda gli angoli anche in JPG
                 ctx.save();
                 roundRectPath(ctx, fx, fy, fw, fh, CONFIG.cornerRadiusMM * pxPerMM);
                 ctx.clip();
@@ -3731,7 +4387,6 @@ async function exportJPG_A4() {
         );
 
         if (!result.ok) {
-            // Utente ha annullato: interrompi
             return;
         }
     }
@@ -3746,7 +4401,9 @@ async function exportJPG_A4() {
    ============================================================ */
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-        if (webcamStream) {
+        if (cornerEditorState.open) {
+            closeCornerEditor();
+        } else if (webcamStream) {
             closeWebcamModal();
         } else if (multiScanPending) {
             cancelMultiScan();
@@ -3758,6 +4415,13 @@ document.addEventListener('keydown', e => {
 
 document.getElementById('pdf-filename').addEventListener('input', saveState);
 window.addEventListener('beforeunload', saveState);
+
+/* Resize handler per l'editor */
+window.addEventListener('resize', () => {
+    if (cornerEditorState.open) {
+        setupCornerEditorCanvas();
+    }
+});
 </script>
 
 </body>
