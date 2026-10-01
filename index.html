@@ -583,6 +583,76 @@
         background: #fff;
     }
 
+    /* ============================================================
+       PANNELLO FORZATURA (foto rifiutata) — NUOVO
+       ============================================================ */
+    .force-options {
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 10px 12px;
+        background: linear-gradient(180deg, rgba(239, 68, 68, 0.10) 0%, rgba(239, 68, 68, 0.04) 100%);
+        border: 1px solid rgba(239, 68, 68, 0.38);
+        border-radius: var(--radius-sm);
+        animation: detIn .45s cubic-bezier(.2,.9,.3,1.3);
+    }
+    .force-options.visible { display: flex; }
+    .force-options-title {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #f87171;
+        letter-spacing: 0.3px;
+        text-align: center;
+        line-height: 1.45;
+    }
+    .force-options-title .force-reason {
+        color: #fca5a5;
+        font-style: italic;
+        font-weight: 600;
+    }
+    [data-theme="light"] .force-options-title { color: #b91c1c; }
+    [data-theme="light"] .force-options-title .force-reason { color: #dc2626; }
+
+    .force-options-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn-force {
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 55%, #ef4444 100%);
+        font-size: 11.5px;
+        padding: 8px 14px;
+        font-weight: 700;
+        box-shadow:
+            0 4px 12px rgba(245, 158, 11, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    }
+    .btn-force:hover:not(:disabled) {
+        box-shadow:
+            0 8px 22px rgba(249, 115, 22, 0.6),
+            0 0 26px rgba(239, 68, 68, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    }
+
+    .btn-force-edit {
+        background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+        font-size: 11.5px;
+        padding: 8px 14px;
+        font-weight: 700;
+        box-shadow:
+            0 4px 12px rgba(139, 92, 246, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    }
+    .btn-force-edit:hover:not(:disabled) {
+        box-shadow:
+            0 8px 22px rgba(139, 92, 246, 0.6),
+            0 0 26px rgba(59, 130, 246, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    }
+
     .multiscan-panel {
         margin: 16px 0 6px;
         padding: 16px 18px;
@@ -1999,6 +2069,9 @@
         un <strong>mini-anteprima dei bordi rilevati</strong>.<br>
         <strong>Acquisizione:</strong> ogni slot ha <strong>📷 Fotocamera</strong> (apre l'app fotocamera)
         e <strong>📁 Carica file</strong> (apre il file manager del dispositivo).<br>
+        <strong>Foto rifiutata:</strong> se la foto non supera i controlli di qualità o la tessera non viene
+        rilevata, compariranno i pulsanti <strong>⚠ Forza acquisizione</strong> (accetta l'immagine così com'è)
+        e <strong>✎ Modifica bordi</strong> (apri l'editor manuale per correggere gli angoli).<br>
         <strong>Modifica manuale:</strong> clicca <strong>✎ Modifica bordi</strong> sotto l'anteprima
         per aprire un editor con zoom, trascinamento e <strong>lente di ingrandimento</strong>
         per correggere con precisione gli angoli del ritaglio.<br>
@@ -2180,6 +2253,9 @@ const CONFIG = {
     maxBrightness: 240,
     jpegQuality:  0.92,
     maxDocs:      12,
+    /* NOTA: docsPerPage indica il numero di IMMAGINI (tessere) per pagina A4,
+       cioè 8 slot = 4 righe × 2 colonne. Ogni riga contiene 1 DOCUMENTO
+       (fronte + retro). Per il conteggio delle PAGINE si usa rowsPerPage. */
     docsPerPage:  8
 };
 
@@ -2191,6 +2267,8 @@ let currentDocs = 0;
 const processedImages = {};
 const detectionImages = {};
 const sourceData = {};
+/* >>> NUOVO: stato delle acquisizioni fallite in attesa di scelta (forza/modifica bordi) */
+const pendingFailed = {};
 const keyOf = (doc, side) => `${doc}-${side}`;
 
 let previewOpen = false;
@@ -2487,6 +2565,7 @@ function buildInfoHtml() {
                 <li>Riconoscimento automatico dei bordi della tessera</li>
                 <li>Ritaglio e raddrizzamento prospettico</li>
                 <li>Editor manuale bordi con lente di ingrandimento</li>
+                <li>Forzatura acquisizione per foto non ottimali</li>
                 <li>Multi-scan (più tessere in un'unica foto)</li>
                 <li>Importazione da PDF esistente</li>
                 <li>Esportazione PDF e JPG in formato A4</li>
@@ -2977,6 +3056,15 @@ function buildDocSection(docNum) {
                     <span class="detection-label">Bordi rilevati</span>
                     <img id="detection-${docNum}-fronte" class="detection-img" alt="Bordi rilevati ${docNum} Fronte">
                 </div>
+                <div id="force-${docNum}-fronte" class="force-options" style="display:none;">
+                    <div class="force-options-title">
+                        ⚠ Foto rifiutata: <span class="force-reason" id="force-reason-${docNum}-fronte"></span>
+                    </div>
+                    <div class="force-options-buttons">
+                        <button class="btn btn-force" onclick="forceAcceptImage(${docNum}, 'fronte')">✓ Forza acquisizione</button>
+                        <button class="btn btn-force-edit" onclick="openEditorModal(${docNum}, 'fronte')">✎ Modifica bordi</button>
+                    </div>
+                </div>
                 <div id="msg-${docNum}-fronte" class="status-msg"></div>
             </div>
             <div class="card-slot" id="slot-${docNum}-retro">
@@ -2997,6 +3085,15 @@ function buildDocSection(docNum) {
                 <div class="detection-wrap" id="detection-wrap-${docNum}-retro">
                     <span class="detection-label">Bordi rilevati</span>
                     <img id="detection-${docNum}-retro" class="detection-img" alt="Bordi rilevati ${docNum} Retro">
+                </div>
+                <div id="force-${docNum}-retro" class="force-options" style="display:none;">
+                    <div class="force-options-title">
+                        ⚠ Foto rifiutata: <span class="force-reason" id="force-reason-${docNum}-retro"></span>
+                    </div>
+                    <div class="force-options-buttons">
+                        <button class="btn btn-force" onclick="forceAcceptImage(${docNum}, 'retro')">✓ Forza acquisizione</button>
+                        <button class="btn btn-force-edit" onclick="openEditorModal(${docNum}, 'retro')">✎ Modifica bordi</button>
+                    </div>
                 </div>
                 <div id="msg-${docNum}-retro" class="status-msg"></div>
             </div>
@@ -3057,13 +3154,17 @@ function reindexDocuments() {
 
     const collected = sections.map(sec => {
         const oldNum = parseInt(sec.dataset.docNum, 10);
+        const fk = keyOf(oldNum, 'fronte');
+        const rk = keyOf(oldNum, 'retro');
         return {
-            fronte: processedImages[keyOf(oldNum, 'fronte')] || null,
-            retro:  processedImages[keyOf(oldNum, 'retro')]  || null,
-            fronteDet: detectionImages[keyOf(oldNum, 'fronte')] || null,
-            retroDet:  detectionImages[keyOf(oldNum, 'retro')]  || null,
-            fronteSrc: sourceData[keyOf(oldNum, 'fronte')] || null,
-            retroSrc:  sourceData[keyOf(oldNum, 'retro')]  || null
+            fronte: processedImages[fk] || null,
+            retro:  processedImages[rk] || null,
+            fronteDet: detectionImages[fk] || null,
+            retroDet:  detectionImages[rk] || null,
+            fronteSrc: sourceData[fk] || null,
+            retroSrc:  sourceData[rk] || null,
+            frontePending: pendingFailed[fk] || null,
+            retroPending:  pendingFailed[rk] || null
         };
     });
 
@@ -3071,6 +3172,7 @@ function reindexDocuments() {
     for (const k in processedImages) delete processedImages[k];
     for (const k in detectionImages) delete detectionImages[k];
     for (const k in sourceData) delete sourceData[k];
+    for (const k in pendingFailed) delete pendingFailed[k];
 
     currentDocs = collected.length;
     collected.forEach((data, idx) => {
@@ -3088,9 +3190,13 @@ function reindexDocuments() {
 
             const detUrl = s === 'fronte' ? data.fronteDet : data.retroDet;
             const srcData = s === 'fronte' ? data.fronteSrc : data.retroSrc;
+            const pendingData = s === 'fronte' ? data.frontePending : data.retroPending;
 
             if (srcData) {
                 sourceData[keyOf(newNum, s)] = srcData;
+            }
+            if (pendingData) {
+                pendingFailed[keyOf(newNum, s)] = pendingData;
             }
 
             if (dataUrl) {
@@ -3098,9 +3204,6 @@ function reindexDocuments() {
                 prev.src = dataUrl;
                 prev.style.display = 'block';
                 setStatus(newNum, s, 'success', 'Ritagliato e raddrizzato.');
-
-                const editBtn = document.getElementById(`edit-btn-${newNum}-${s}`);
-                if (editBtn && srcData) editBtn.disabled = false;
             }
 
             if (detUrl) {
@@ -3111,6 +3214,22 @@ function reindexDocuments() {
                     detImg.src = detUrl;
                     detWrap.classList.add('visible');
                 }
+            }
+
+            const editBtn = document.getElementById(`edit-btn-${newNum}-${s}`);
+            if (editBtn && srcData) editBtn.disabled = false;
+
+            if (pendingData) {
+                showForcePanel(keyOf(newNum, s), pendingData.reason);
+                if (pendingData.warpedDataUrl) {
+                    const prev = document.getElementById(`preview-${newNum}-${s}`);
+                    if (prev) {
+                        prev.src = pendingData.warpedDataUrl;
+                        prev.style.display = 'block';
+                    }
+                }
+                setStatus(newNum, s, 'error',
+                    'Foto rifiutata: ' + pendingData.reason + '. Puoi forzare l\'acquisizione o correggere i bordi manualmente.');
             }
         }
     });
@@ -3173,6 +3292,7 @@ function clearAllData() {
     for (const k in processedImages) delete processedImages[k];
     for (const k in detectionImages) delete detectionImages[k];
     for (const k in sourceData) delete sourceData[k];
+    for (const k in pendingFailed) delete pendingFailed[k];
     currentDocs = 0;
 
     if (previewOpen) closePreviewModal();
@@ -3328,6 +3448,10 @@ function resetSlot(doc, side) {
     detectionImages[k] = null;
     sourceData[k] = null;
 
+    /* >>> pulizia stato forzatura */
+    if (pendingFailed[k]) delete pendingFailed[k];
+    hideForcePanel(k);
+
     const inputCam = document.getElementById(`input-cam-${k}`);
     if (inputCam) inputCam.value = '';
     const inputGal = document.getElementById(`input-gal-${k}`);
@@ -3379,6 +3503,86 @@ function setStatus(doc, side, type, text) {
 }
 
 /* ============================================================
+   PANNELLO FORZATURA (foto rifiutata)
+   ============================================================ */
+function showForcePanel(k, reason) {
+    const el = document.getElementById(`force-${k}`);
+    if (!el) return;
+    el.style.display = 'flex';
+    el.classList.add('visible');
+    const reasonEl = document.getElementById(`force-reason-${k}`);
+    if (reasonEl) reasonEl.textContent = reason || '';
+}
+
+function hideForcePanel(k) {
+    const el = document.getElementById(`force-${k}`);
+    if (!el) return;
+    el.style.display = 'none';
+    el.classList.remove('visible');
+}
+
+async function forceAcceptImage(doc, side) {
+    const k = keyOf(doc, side);
+    const pending = pendingFailed[k];
+    const src = sourceData[k];
+
+    if (!src || !src.srcUrl || !src.corners) {
+        alert('Impossibile forzare l\'acquisizione: sorgente non disponibile.');
+        return;
+    }
+
+    setStatus(doc, side, 'info', 'Forzatura acquisizione in corso…');
+
+    try {
+        let warped = pending && pending.warpedDataUrl;
+
+        if (!warped) {
+            const img = await loadImage(src.srcUrl);
+            const srcMat = readSourceMat(img);
+            warped = warpCard(srcMat, src.corners, CONFIG.targetWidth, CONFIG.targetHeight);
+            srcMat.delete();
+        }
+
+        processedImages[k] = warped;
+
+        const prev = document.getElementById(`preview-${k}`);
+        if (prev) {
+            prev.src = warped;
+            prev.style.display = 'block';
+        }
+
+        try {
+            const img = await loadImage(src.srcUrl);
+            const det = buildDetectionOverlayFromImage(img, src.corners);
+            if (det) {
+                detectionImages[k] = det;
+                const detImg = document.getElementById(`detection-${k}`);
+                const detWrap = document.getElementById(`detection-wrap-${k}`);
+                if (detImg && detWrap) {
+                    detImg.src = det;
+                    detWrap.classList.add('visible');
+                }
+            }
+        } catch (e) { /* ignore */ }
+
+        hideForcePanel(k);
+        delete pendingFailed[k];
+
+        const editBtn = document.getElementById(`edit-btn-${k}`);
+        if (editBtn) editBtn.disabled = false;
+
+        setStatus(doc, side, 'success', 'Acquisizione forzata effettuata (qualità non ottimale).');
+        updateProgress();
+        checkExportStatus();
+        saveState();
+        refreshPreviewIfOpen();
+    } catch (e) {
+        console.error(e);
+        setStatus(doc, side, 'error', 'Errore durante la forzatura.');
+    }
+}
+
+/* ============================================================
    PIPELINE
    ============================================================ */
 function processImage(input, doc, side) {
@@ -3397,6 +3601,11 @@ function processImageFromBlob(blob, doc, side) {
         return;
     }
 
+    /* >>> pulizia dello stato di forzatura precedente */
+    const k0 = keyOf(doc, side);
+    if (pendingFailed[k0]) delete pendingFailed[k0];
+    hideForcePanel(k0);
+
     setStatus(doc, side, 'info', 'Analisi immagine in corso…');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
 
@@ -3414,15 +3623,70 @@ function processImageFromBlob(blob, doc, side) {
     reader.readAsDataURL(blob);
 }
 
-function fail(doc, side, reason, input) {
-    setStatus(doc, side, 'error',
-        'Foto rifiutata: ' + reason + '. Riprova con più luce e buon contrasto di sfondo.');
-    document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
-    processedImages[keyOf(doc, side)] = null;
-    detectionImages[keyOf(doc, side)] = null;
-    sourceData[keyOf(doc, side)] = null;
-    const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
-    if (editBtn) editBtn.disabled = true;
+/**
+ * fail() — ora accetta un "extras" opzionale con { srcUrl, corners, warped, detection }
+ * Se presenti, mostra il pannello con "Forza acquisizione" e "Modifica bordi".
+ */
+function fail(doc, side, reason, input, extras) {
+    const k = keyOf(doc, side);
+
+    processedImages[k] = null;
+    detectionImages[k] = null;
+
+    if (extras && extras.srcUrl && extras.corners) {
+        /* Salviamo la sorgente per permettere forzatura/editor */
+        sourceData[k] = {
+            srcUrl: extras.srcUrl,
+            corners: extras.corners.map(c => ({ x: c.x, y: c.y }))
+        };
+
+        pendingFailed[k] = {
+            doc: doc,
+            side: side,
+            reason: reason,
+            warpedDataUrl: extras.warped || null
+        };
+
+        /* Mostriamo l'anteprima dell'immagine forzata (se disponibile) */
+        if (extras.warped) {
+            const prev = document.getElementById(`preview-${k}`);
+            if (prev) {
+                prev.src = extras.warped;
+                prev.style.display = 'block';
+            }
+        }
+
+        /* Mostriamo i bordi rilevati anche in caso di fallimento */
+        if (extras.detection) {
+            detectionImages[k] = extras.detection;
+            const detImg = document.getElementById(`detection-${k}`);
+            const detWrap = document.getElementById(`detection-wrap-${k}`);
+            if (detImg && detWrap) {
+                detImg.src = extras.detection;
+                detWrap.classList.add('visible');
+            }
+        }
+
+        /* Abilitiamo il pulsante di modifica manuale */
+        const editBtn = document.getElementById(`edit-btn-${k}`);
+        if (editBtn) editBtn.disabled = false;
+
+        /* Mostriamo il pannello di forzatura */
+        showForcePanel(k, reason);
+
+        setStatus(doc, side, 'error',
+            'Foto rifiutata: ' + reason + '. Puoi forzare l\'acquisizione o correggere i bordi manualmente.');
+    } else {
+        /* Nessuna sorgente disponibile: errore classico */
+        setStatus(doc, side, 'error',
+            'Foto rifiutata: ' + reason + '. Riprova con più luce e buon contrasto di sfondo.');
+        const prev = document.getElementById(`preview-${k}`);
+        if (prev) prev.style.display = 'none';
+        const editBtn = document.getElementById(`edit-btn-${k}`);
+        if (editBtn) editBtn.disabled = true;
+        hideForcePanel(k);
+    }
+
     updateProgress();
     checkExportStatus();
     saveState();
@@ -3439,11 +3703,47 @@ function runScanner(img, doc, side, input) {
 
     try {
         src = readSourceMat(img);
+
+        /* >>> recuperiamo subito l'URL sorgente (serve anche per il fallback) */
+        try { savedSrcUrl = getSourceDataUrl(img); } catch (e) { savedSrcUrl = img.src; }
+
         const corners = detectCard(src);
 
         if (!corners) {
+            /* Rilevazione fallita: proponiamo il rettangolo dell'intera immagine (con piccolo margine)
+               e mostriamo comunque i pulsanti "Forza" e "Modifica bordi". */
+            const W = img.naturalWidth;
+            const H = img.naturalHeight;
+            const m = 0.02; // 2% di margine
+            const defaultCorners = [
+                { x: W * m,         y: H * m },
+                { x: W * (1 - m),   y: H * m },
+                { x: W * (1 - m),   y: H * (1 - m) },
+                { x: W * m,         y: H * (1 - m) }
+            ];
+
+            try {
+                warpedDataUrl = warpCard(src, defaultCorners, CONFIG.targetWidth, CONFIG.targetHeight);
+            } catch (e) {
+                console.warn('Warp fallback non riuscito:', e);
+                warpedDataUrl = null;
+            }
+
+            try {
+                detectionDataUrl = buildDetectionOverlay(src, defaultCorners);
+            } catch (e) {
+                detectionDataUrl = null;
+            }
+
             src.delete();
-            fail(doc, side, 'documento non riconosciuto (bordi non rilevati)', input);
+            src = null;
+
+            fail(doc, side, 'documento non riconosciuto (bordi non rilevati)', input, {
+                srcUrl: savedSrcUrl,
+                corners: defaultCorners,
+                warped: warpedDataUrl,
+                detection: detectionDataUrl
+            });
             return;
         }
 
@@ -3458,18 +3758,25 @@ function runScanner(img, doc, side, input) {
         savedCorners = corners.map(c => ({ x: c.x, y: c.y }));
         src.delete();
         src = null;
-
-        try { savedSrcUrl = getSourceDataUrl(img); } catch (e) { savedSrcUrl = img.src; }
     } catch (err) {
         console.error(err);
         if (src) src.delete();
-        fail(doc, side, 'errore durante l\'elaborazione', input);
+        fail(doc, side, 'errore durante l\'elaborazione', input, null);
         return;
     }
 
     loadImage(warpedDataUrl).then(warpedImg => {
         const q = checkQuality(warpedImg);
-        if (!q.isValid) { fail(doc, side, q.reason, input); return; }
+        if (!q.isValid) {
+            /* Qualità insufficiente: proponiamo forzatura + editor bordi */
+            fail(doc, side, q.reason, input, {
+                srcUrl: savedSrcUrl,
+                corners: savedCorners,
+                warped: warpedDataUrl,
+                detection: detectionDataUrl
+            });
+            return;
+        }
 
         const k = keyOf(doc, side);
 
@@ -3493,6 +3800,10 @@ function runScanner(img, doc, side, input) {
             if (editBtn) editBtn.disabled = false;
         }
 
+        /* Se c'era un fallimento precedente, lo azzeriamo */
+        if (pendingFailed[k]) delete pendingFailed[k];
+        hideForcePanel(k);
+
         setStatus(doc, side, 'success', 'Ritagliato e raddrizzato.');
         processedImages[k] = warpedDataUrl;
         updateProgress();
@@ -3500,7 +3811,14 @@ function runScanner(img, doc, side, input) {
         saveState();
         refreshPreviewIfOpen();
         if (input) input.value = '';
-    }).catch(() => fail(doc, side, 'errore durante la verifica', input));
+    }).catch(() => {
+        fail(doc, side, 'errore durante la verifica', input, {
+            srcUrl: savedSrcUrl,
+            corners: savedCorners,
+            warped: warpedDataUrl,
+            detection: detectionDataUrl
+        });
+    });
 }
 
 /* ============================================================
@@ -3972,6 +4290,10 @@ async function confirmMultiScan() {
 
         processedImages[k] = card.dataUrl;
 
+        /* Pulizia eventuale stato forzatura sul medesimo slot */
+        if (pendingFailed[k]) delete pendingFailed[k];
+        hideForcePanel(k);
+
         if (card.srcUrl && card.corners) {
             sourceData[k] = {
                 srcUrl: card.srcUrl,
@@ -4324,7 +4646,7 @@ function checkQuality(img) {
 }
 
 /* ============================================================
-   COSTRUZIONE PDF — 8 TESSERE PER PAGINA A4
+   COSTRUZIONE PDF — 8 TESSERE (4 documenti) PER PAGINA A4
    ============================================================ */
 function buildPDFDocument() {
     for (let d = 1; d <= currentDocs; d++) {
@@ -4352,7 +4674,7 @@ function buildPDFDocument() {
     const leftMargin = (pageW - pairW) / 2;
 
     const rowH = cH;
-    const rowsPerPage = CONFIG.docsPerPage / 2;
+    const rowsPerPage = CONFIG.docsPerPage / 2; // 8 slot / 2 = 4 righe
     const blockH = rowH * rowsPerPage + gap * (rowsPerPage - 1);
     const maxBlockH = pageH - 20;
     let startY, actualGap = gap;
@@ -4363,14 +4685,16 @@ function buildPDFDocument() {
         startY = (pageH - blockH) / 2;
     }
 
-    const docsPerPage = CONFIG.docsPerPage;
+    /* FIX: ogni pagina contiene esattamente rowsPerPage DOCUMENTI (4), non CONFIG.docsPerPage (8).
+       Ogni documento occupa UNA riga (fronte + retro affiancati). */
+    const docsPerPage = rowsPerPage; // = 4 documenti per pagina
     const pages = Math.ceil(currentDocs / docsPerPage);
 
     for (let p = 0; p < pages; p++) {
         if (p > 0) doc.addPage();
 
         for (let r = 0; r < rowsPerPage; r++) {
-            const docIndex = p * docsPerPage + r;
+            const docIndex = p * docsPerPage + r; // FIX: usare docsPerPage corretto (4)
             const docNum   = docIndex + 1;
 
             if (docNum > currentDocs) break;
@@ -4843,6 +5167,10 @@ async function processImportPDFBlob(blob) {
 
                 processedImages[k] = warped;
 
+                /* pulizia stato forzatura sullo slot */
+                if (pendingFailed[k]) delete pendingFailed[k];
+                hideForcePanel(k);
+
                 if (pageSrcUrl) {
                     sourceData[k] = {
                         srcUrl: pageSrcUrl,
@@ -4930,7 +5258,7 @@ async function exportJPG_A4() {
     const leftMargin = (A4_W_MM - pairW) / 2;
 
     const rowH = cH;
-    const rowsPerPage = CONFIG.docsPerPage / 2;
+    const rowsPerPage = CONFIG.docsPerPage / 2; // 4 righe = 4 documenti per pagina
     const blockH = rowH * rowsPerPage + gap * (rowsPerPage - 1);
     const maxBlockH = A4_H_MM - 20;
     let startY, actualGap = gap;
@@ -4941,7 +5269,8 @@ async function exportJPG_A4() {
         startY = (A4_H_MM - blockH) / 2;
     }
 
-    const docsPerPage = CONFIG.docsPerPage;
+    /* FIX: 4 documenti per pagina (una riga ciascuno), non 8. */
+    const docsPerPage = rowsPerPage; // = 4 documenti per pagina
     const pages = Math.ceil(currentDocs / docsPerPage);
 
     const images = {};
@@ -4967,7 +5296,7 @@ async function exportJPG_A4() {
         ctx.fillRect(0, 0, A4_W_PX, A4_H_PX);
 
         for (let r = 0; r < rowsPerPage; r++) {
-            const docIndex = p * docsPerPage + r;
+            const docIndex = p * docsPerPage + r; // FIX: usare docsPerPage corretto (4)
             const docNum = docIndex + 1;
             if (docNum > currentDocs) break;
 
@@ -5173,6 +5502,10 @@ async function confirmEditorChanges() {
             srcUrl: srcUrl,
             corners: corners.map(c => ({ x: c.x, y: c.y }))
         };
+
+        /* Se c'era un fallimento, lo superiamo definitivamente */
+        if (pendingFailed[key]) delete pendingFailed[key];
+        hideForcePanel(key);
 
         const prev = document.getElementById(`preview-${key}`);
         if (prev) {
