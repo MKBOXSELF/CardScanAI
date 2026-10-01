@@ -2,9 +2,11 @@
 <html lang="it" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>CardScan AI - Scanner Documenti Formato Tessera</title>
 <meta name="theme-color" content="#0a0e27">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <!-- PWA meta -->
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,6 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="CardScan AI">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="application-name" content="CardScan AI">
+<meta name="app-version" content="1.0.0">
 
 <!-- Favicon SVG inline (CardScan AI) -->
 <link rel="icon" type="image/svg+xml"
@@ -272,33 +275,40 @@
         gap: 8px;
         z-index: 3;
     }
+
+    /* ============================================================
+       ICONE PULSANTI (menu + tema) — resa più marcata
+       ============================================================ */
     .btn-icon {
-        width: 38px;
-        height: 38px;
+        width: 42px;
+        height: 42px;
         padding: 0;
         border-radius: 50%;
         font-size: 16px;
         line-height: 1;
         background: var(--theme-btn-bg) !important;
         color: var(--topbtn-color) !important;
-        border: 1px solid var(--border) !important;
+        border: 1.5px solid var(--border-strong) !important;
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
     }
     .btn-icon:hover:not(:disabled) {
         background: var(--surface-2) !important;
-        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3) !important;
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+        transform: translateY(-1px) scale(1.05);
     }
     .btn-icon svg {
-        width: 18px;
-        height: 18px;
+        width: 22px;
+        height: 22px;
         display: block;
         margin: 0 auto;
+        stroke-width: 2.4 !important;
     }
     @media (max-width: 480px) {
         .top-actions { top: 10px; right: 10px; gap: 6px; }
-        .btn-icon { width: 34px; height: 34px; font-size: 14px; }
+        .btn-icon { width: 38px; height: 38px; }
+        .btn-icon svg { width: 20px; height: 20px; }
     }
 
     .container {
@@ -526,24 +536,6 @@
         background: #fff;
     }
     input[type="file"] { display: none; }
-
-    .edit-corners-btn {
-        display: none;
-        margin-top: 6px;
-        background: linear-gradient(135deg, #f59e0b 0%, #f97316 55%, #ef4444 100%);
-        font-size: 11px;
-        padding: 6px 12px;
-        font-weight: 700;
-        box-shadow:
-            0 4px 12px rgba(249, 115, 22, 0.38),
-            inset 0 1px 0 rgba(255, 255, 255, 0.24);
-    }
-    .edit-corners-btn.visible { display: inline-flex; }
-    .edit-corners-btn:hover:not(:disabled) {
-        box-shadow:
-            0 8px 20px rgba(249, 115, 22, 0.55),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
 
     .detection-wrap {
         display: none;
@@ -781,6 +773,23 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
+    .btn-edit {
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 55%, #ef4444 100%);
+        font-size: 11.5px;
+        padding: 8px 12px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        box-shadow:
+            0 4px 12px rgba(245, 158, 11, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    }
+    .btn-edit:hover:not(:disabled) {
+        box-shadow:
+            0 8px 22px rgba(249, 115, 22, 0.6),
+            0 0 30px rgba(239, 68, 68, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    }
+
     .btn-add {
         background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 55%, #8b5cf6 100%);
         font-size: 14px;
@@ -804,17 +813,38 @@
         50%      { background-position: 100% 50%; }
     }
 
-    .btn-webcam {
+    /* ============================================================
+       NUOVI PULSANTI: Fotocamera + Carica file
+       (sostituiscono il vecchio "Scatta / Carica" + "📷 Webcam")
+       ============================================================ */
+    .btn-camera {
         background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
         font-size: 11.5px;
-        padding: 8px 12px;
+        padding: 9px 14px;
+        font-weight: 700;
         box-shadow:
-            0 4px 12px rgba(139, 92, 246, 0.38),
+            0 4px 12px rgba(139, 92, 246, 0.42),
             inset 0 1px 0 rgba(255, 255, 255, 0.24);
     }
-    .btn-webcam:hover:not(:disabled) {
+    .btn-camera:hover:not(:disabled) {
         box-shadow:
-            0 8px 22px rgba(139, 92, 246, 0.55),
+            0 8px 22px rgba(139, 92, 246, 0.6),
+            0 0 28px rgba(236, 72, 153, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.32);
+    }
+    .btn-gallery {
+        background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+        font-size: 11.5px;
+        padding: 9px 14px;
+        font-weight: 700;
+        box-shadow:
+            0 4px 12px rgba(6, 182, 212, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+    }
+    .btn-gallery:hover:not(:disabled) {
+        box-shadow:
+            0 8px 22px rgba(6, 182, 212, 0.6),
+            0 0 28px rgba(59, 130, 246, 0.35),
             inset 0 1px 0 rgba(255, 255, 255, 0.32);
     }
 
@@ -1207,149 +1237,42 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.22);
     }
 
-    .webcam-modal-overlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(5, 8, 22, 0.9);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        z-index: 10000;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-        animation: overlayIn .25s ease;
-    }
-    .webcam-modal-overlay.open { display: flex; }
-
-    .webcam-modal {
-        background: var(--modal-bg);
-        border: 1px solid var(--border-strong);
-        border-radius: var(--radius-lg);
-        width: 100%;
-        max-width: 720px;
-        max-height: 90vh;
-        display: flex;
-        flex-direction: column;
-        box-shadow:
-            0 30px 80px rgba(0, 0, 0, 0.7),
-            0 0 0 1px rgba(255, 255, 255, 0.06),
-            0 0 60px rgba(139, 92, 246, 0.2);
-        overflow: hidden;
-        animation: modalIn .35s cubic-bezier(.2,.9,.3,1.2);
-    }
-    .webcam-modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 14px 18px;
-        background: var(--modal-header-bg);
-        border-bottom: 1px solid var(--border);
-    }
-    .webcam-modal-header h3 {
-        margin: 0;
-        font-family: 'Space Grotesk', 'Inter', sans-serif;
-        font-size: 15.5px;
-        color: var(--text-primary);
-        letter-spacing: 0.2px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .webcam-modal-header h3::before {
-        content: '';
-        display: inline-block;
-        width: 4px;
-        height: 18px;
-        border-radius: 2px;
-        background: linear-gradient(180deg, var(--purple), var(--pink));
-        box-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
-    }
-    .webcam-modal-body {
-        background: #000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        flex: 1;
-        min-height: 240px;
-        position: relative;
-    }
-    #webcam-video {
-        width: 100%;
-        height: auto;
-        max-height: 65vh;
-        display: block;
-        background: #000;
-        object-fit: contain;
-    }
-    .webcam-modal-footer {
-        padding: 14px 18px;
-        background: var(--modal-header-bg);
-        border-top: 1px solid var(--border);
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-    .btn-capture {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        font-size: 15px;
-        padding: 13px 32px;
-        font-weight: 700;
-        box-shadow:
-            0 6px 20px rgba(16, 185, 129, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.28);
-    }
-    .btn-close-webcam {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        box-shadow:
-            0 4px 14px rgba(239, 68, 68, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.22);
-    }
-    .btn-switch-cam {
-        background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-        box-shadow:
-            0 4px 14px rgba(6, 182, 212, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.22);
-    }
-
     /* ============================================================
        EDITOR MANUALE BORDI
        ============================================================ */
-    .corner-editor-overlay {
+    .editor-modal-overlay {
         display: none;
         position: fixed;
         inset: 0;
-        background: rgba(5, 8, 22, 0.92);
+        background: rgba(5, 8, 22, 0.94);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        z-index: 10001;
+        z-index: 10002;
         justify-content: center;
         align-items: center;
-        padding: 12px;
+        padding: 14px;
         animation: overlayIn .25s ease;
     }
-    .corner-editor-overlay.open { display: flex; }
+    .editor-modal-overlay.open { display: flex; }
 
-    .corner-editor-modal {
+    .editor-modal {
         background: var(--modal-bg);
         border: 1px solid var(--border-strong);
         border-radius: var(--radius-lg);
         width: 100%;
-        max-width: 960px;
-        max-height: 96vh;
+        max-width: 1100px;
+        height: 94vh;
         display: flex;
         flex-direction: column;
         box-shadow:
             0 30px 80px rgba(0, 0, 0, 0.75),
             0 0 0 1px rgba(255, 255, 255, 0.06),
-            0 0 60px rgba(245, 158, 11, 0.2);
+            0 0 70px rgba(245, 158, 11, 0.18);
         overflow: hidden;
         animation: modalIn .35s cubic-bezier(.2,.9,.3,1.2);
     }
-    .corner-editor-header {
+
+    .editor-modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -1357,18 +1280,19 @@
         background: var(--modal-header-bg);
         border-bottom: 1px solid var(--border);
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 10px;
     }
-    .corner-editor-header h3 {
+    .editor-modal-header h3 {
         margin: 0;
         font-family: 'Space Grotesk', 'Inter', sans-serif;
-        font-size: 14.5px;
+        font-size: 15px;
         color: var(--text-primary);
+        letter-spacing: 0.2px;
         display: flex;
         align-items: center;
         gap: 8px;
     }
-    .corner-editor-header h3::before {
+    .editor-modal-header h3::before {
         content: '';
         display: inline-block;
         width: 4px;
@@ -1377,72 +1301,512 @@
         background: linear-gradient(180deg, var(--amber), var(--red));
         box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
     }
-    .corner-editor-body {
+    .editor-modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .editor-modal-body {
         flex: 1;
-        overflow: hidden;
-        background: #1a1a2e;
         position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 300px;
+        background: #07090f;
+        overflow: hidden;
+        cursor: grab;
         touch-action: none;
-        padding: 8px;
-    }
-    #corner-editor-canvas {
-        display: block;
-        max-width: 100%;
-        max-height: 100%;
-        cursor: crosshair;
-        border-radius: 4px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        touch-action: none;
-        -webkit-user-select: none;
         user-select: none;
+        -webkit-user-select: none;
     }
-    .corner-editor-footer {
+    .editor-modal-body.grabbing { cursor: grabbing; }
+    .editor-modal-body.corner-hover { cursor: crosshair; }
+
+    #editor-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+    }
+
+    .editor-magnifier {
+        display: none;
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        border: 3px solid #00ffb0;
+        box-shadow:
+            0 0 30px rgba(0, 255, 176, 0.75),
+            0 0 0 4px rgba(0, 0, 0, 0.55),
+            inset 0 0 24px rgba(0, 0, 0, 0.6);
+        pointer-events: none;
+        z-index: 20;
+        background: #000;
+        overflow: hidden;
+        transform: translate(-50%, -50%);
+        transition: opacity .12s ease;
+    }
+    .editor-magnifier.visible { display: block; }
+    .editor-magnifier canvas {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    .editor-magnifier::before {
+        content: '';
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        border: 1px dashed rgba(0, 255, 176, 0.35);
+        pointer-events: none;
+    }
+
+    .editor-preview-box {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+        padding: 6px 6px 4px;
+        background: rgba(0, 0, 0, 0.75);
+        border: 1px solid rgba(0, 255, 176, 0.42);
+        border-radius: 10px;
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
+        z-index: 15;
+        pointer-events: none;
+        user-select: none;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    .editor-preview-label {
+        font-size: 9px;
+        color: #00ffb0;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        font-weight: 800;
+        margin-bottom: 4px;
+        text-align: center;
+        text-shadow: 0 0 8px rgba(0, 255, 176, 0.6);
+    }
+    .editor-preview-box canvas {
+        display: block;
+        border-radius: 5px;
+        background: #fff;
+        max-width: 200px;
+        height: auto;
+    }
+
+    .editor-modal-footer {
         padding: 10px 16px;
         background: var(--modal-header-bg);
         border-top: 1px solid var(--border);
         display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
+        justify-content: space-between;
         align-items: center;
-    }
-    .corner-editor-hint {
-        font-size: 11px;
+        font-size: 12px;
         color: var(--text-muted);
-        text-align: center;
-        padding: 6px 12px 2px;
-        line-height: 1.5;
-        background: var(--modal-header-bg);
-        border-top: 1px solid var(--border);
+        letter-spacing: 0.3px;
+        flex-wrap: wrap;
+        gap: 8px;
     }
-    .btn-save-corners {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        font-size: 14px;
-        padding: 10px 24px;
+    .editor-modal-footer .editor-hint-text {
+        flex: 1;
+        min-width: 200px;
+    }
+    #editor-zoom-label {
         font-weight: 700;
-        box-shadow:
-            0 6px 20px rgba(16, 185, 129, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        color: #fbbf24;
+        padding: 3px 10px;
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.35);
+        border-radius: 999px;
+        white-space: nowrap;
     }
-    .btn-reset-corners {
-        background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-        font-size: 13px;
-        padding: 10px 18px;
-        box-shadow:
-            0 4px 14px rgba(245, 158, 11, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    #editor-corner-info {
+        font-weight: 700;
+        color: #00ffb0;
+        padding: 3px 10px;
+        background: rgba(0, 255, 176, 0.10);
+        border: 1px solid rgba(0, 255, 176, 0.35);
+        border-radius: 999px;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
     }
-    .btn-auto-corners {
+
+    .btn-editor-reset {
         background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-        font-size: 13px;
-        padding: 10px 18px;
         box-shadow:
             0 4px 14px rgba(59, 130, 246, 0.4),
             inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-editor-confirm {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        box-shadow:
+            0 4px 14px rgba(16, 185, 129, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .btn-editor-cancel {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow:
+            0 4px 14px rgba(239, 68, 68, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    @media (max-width: 640px) {
+        .editor-modal { height: 96vh; border-radius: var(--radius-md); }
+        .editor-modal-header { padding: 10px 12px; }
+        .editor-modal-header h3 { font-size: 13px; }
+        .editor-modal-actions .btn { font-size: 11px; padding: 7px 10px; }
+        .editor-magnifier { width: 160px; height: 160px; }
+        .editor-preview-box canvas { max-width: 140px; }
+    }
+
+    /* ============================================================
+       APK-READY: APP MENU (drawer laterale)
+       ============================================================ */
+    .app-menu-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 8, 22, 0.78);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 10001;
+        animation: overlayIn .25s ease;
+    }
+    .app-menu-overlay.open { display: block; }
+    [data-theme="light"] .app-menu-overlay { background: rgba(15, 23, 42, 0.45); }
+
+    .app-menu {
+        position: absolute;
+        top: 0; right: 0;
+        width: 100%;
+        max-width: 360px;
+        height: 100%;
+        background: var(--modal-bg);
+        border-left: 1px solid var(--border-strong);
+        box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+        display: flex;
+        flex-direction: column;
+        animation: menuIn .3s cubic-bezier(.2,.9,.3,1.2);
+    }
+    @keyframes menuIn {
+        from { transform: translateX(100%); }
+        to   { transform: translateX(0); }
+    }
+
+    .app-menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--border);
+        background: var(--modal-header-bg);
+    }
+    .app-menu-header h3 {
+        margin: 0;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 16px;
+        color: var(--text-primary);
+        letter-spacing: 0.3px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .app-menu-header h3::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--cyan), var(--green));
+        box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+    }
+    .app-menu-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 13.5px;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+        transition: all .22s ease;
+        -webkit-tap-highlight-color: transparent;
+        width: 100%;
+    }
+    .menu-item:hover {
+        background: var(--surface-2);
+        border-color: rgba(59, 130, 246, 0.4);
+        transform: translateX(4px);
+        box-shadow: 0 6px 18px rgba(59, 130, 246, 0.15);
+    }
+    .menu-item:active { transform: translateX(2px) scale(0.99); }
+    .menu-item .menu-ico {
+        font-size: 18px;
+        width: 24px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+    .menu-item .menu-label { flex: 1; }
+    .menu-item.danger {
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+    .menu-item.danger:hover {
+        background: rgba(239, 68, 68, 0.12);
+        border-color: rgba(239, 68, 68, 0.6);
+    }
+    .app-menu-footer {
+        padding: 14px 18px;
+        border-top: 1px solid var(--border);
+        font-size: 11px;
+        color: var(--text-muted);
+        text-align: center;
+        letter-spacing: 0.3px;
+        line-height: 1.5;
+    }
+
+    /* ============================================================
+       APK-READY: LEGAL MODAL (Privacy / Cookie / Info / Permessi)
+       ============================================================ */
+    .legal-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 8, 22, 0.85);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        z-index: 10050;
+        justify-content: center;
+        align-items: center;
+        padding: 16px;
+        animation: overlayIn .25s ease;
+    }
+    .legal-modal-overlay.open { display: flex; }
+    [data-theme="light"] .legal-modal-overlay { background: rgba(15, 23, 42, 0.55); }
+
+    .legal-modal {
+        background: var(--modal-bg);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
+        width: 100%;
+        max-width: 720px;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+        animation: modalIn .3s cubic-bezier(.2,.9,.3,1.2);
+    }
+    .legal-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 18px;
+        background: var(--modal-header-bg);
+        border-bottom: 1px solid var(--border);
+        gap: 10px;
+    }
+    .legal-modal-header h3 {
+        margin: 0;
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 15.5px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .legal-modal-header h3::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 18px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--blue), var(--cyan));
+        box-shadow: 0 0 10px rgba(59, 130, 246, 0.6);
+    }
+    .legal-modal-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 22px 24px;
+        color: var(--text-secondary);
+        font-size: 13.5px;
+        line-height: 1.7;
+        text-align: left;
+        -webkit-overflow-scrolling: touch;
+    }
+    .legal-modal-body h4 {
+        color: var(--text-primary);
+        font-family: 'Space Grotesk', 'Inter', sans-serif;
+        font-size: 14px;
+        margin: 20px 0 8px;
+        letter-spacing: 0.2px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .legal-modal-body h4::before {
+        content: '';
+        width: 3px;
+        height: 14px;
+        border-radius: 2px;
+        background: linear-gradient(180deg, var(--blue), var(--cyan));
+        flex-shrink: 0;
+    }
+    .legal-modal-body h4:first-child { margin-top: 0; }
+    .legal-modal-body p { margin: 0 0 12px; }
+    .legal-modal-body ul { padding-left: 22px; margin: 8px 0 14px; }
+    .legal-modal-body li { margin-bottom: 6px; }
+    .legal-modal-body a {
+        color: #60a5fa;
+        text-decoration: none;
+        border-bottom: 1px dotted currentColor;
+        word-break: break-all;
+    }
+    .legal-modal-body a:hover { color: #93c5fd; }
+    [data-theme="light"] .legal-modal-body a { color: #1d4ed8; }
+    .legal-modal-body strong { color: var(--text-primary); font-weight: 700; }
+    .legal-modal-body code {
+        background: var(--surface);
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+        font-size: 12px;
+        color: #7dd3fc;
+        border: 1px solid var(--border);
+    }
+    .legal-note {
+        background: var(--hint-bg);
+        border: 1px solid var(--hint-border);
+        border-radius: var(--radius-md);
+        padding: 12px 14px;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        margin: 16px 0;
+        line-height: 1.6;
+    }
+    .legal-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        margin-right: 6px;
+    }
+    .legal-badge.ok {
+        background: rgba(16, 185, 129, 0.15);
+        color: #34d399;
+        border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    .legal-badge.warn {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+    .legal-badge.err {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+    .legal-modal-footer {
+        padding: 12px 18px;
+        background: var(--modal-header-bg);
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .perm-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        margin-bottom: 10px;
+        gap: 12px;
+    }
+    .perm-row-info { flex: 1; min-width: 0; }
+    .perm-row-info .perm-name {
+        font-weight: 700;
+        color: var(--text-primary);
+        font-size: 13px;
+        display: block;
+        margin-bottom: 2px;
+    }
+    .perm-row-info .perm-desc {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        line-height: 1.4;
+        display: block;
+    }
+    .perm-action { flex-shrink: 0; }
+
+    /* ============================================================
+       APK-READY: COOKIE BANNER
+       ============================================================ */
+    .cookie-banner {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        z-index: 10090;
+        background: var(--modal-bg);
+        border: 1px solid var(--border-strong);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.06);
+        padding: 14px 16px;
+        display: none;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+        animation: cookieIn .35s cubic-bezier(.2,.9,.3,1.2);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+    }
+    .cookie-banner.visible { display: flex; }
+    @keyframes cookieIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .cookie-banner .cookie-text {
+        flex: 1;
+        min-width: 220px;
+        font-size: 12.5px;
+        color: var(--text-secondary);
+        line-height: 1.55;
+    }
+    .cookie-banner .cookie-text strong { color: var(--text-primary); }
+    .cookie-banner .cookie-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    @media (min-width: 720px) {
+        .cookie-banner { left: auto; right: 20px; bottom: 20px; max-width: 560px; }
+    }
+
+    @media (max-width: 560px) {
+        .legal-modal-body { padding: 16px 16px; font-size: 13px; }
+        .legal-modal-header { padding: 12px 14px; }
+        .legal-modal-header h3 { font-size: 14px; }
+        .app-menu { max-width: 88vw; }
+        .perm-row { flex-direction: column; align-items: stretch; }
+        .perm-action { width: 100%; }
+        .perm-action .btn { width: 100%; }
     }
 
     ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -1464,7 +1828,6 @@
         .filename-row input[type="text"] { width: 100%; max-width: 320px; }
         .btn-pdf, .btn-preview, .btn-jpg { width: 100%; max-width: 340px; padding: 13px 20px; }
         .pdf-modal-actions .btn { font-size: 11.5px; padding: 8px 12px; }
-        .corner-editor-modal { max-height: 98vh; border-radius: var(--radius-md); }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1482,16 +1845,25 @@
     <div class="top-actions">
         <button id="btn-install" class="btn btn-icon" title="Installa app sul dispositivo"
                 style="display:none;" aria-label="Installa app">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
         </button>
+        <!-- ===== APK-READY: pulsante MENU (icona hamburger 3 linee) ===== -->
+        <button id="btn-menu" class="btn btn-icon" title="Menu" onclick="toggleAppMenu()" aria-label="Apri menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="6"  x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
         <button id="btn-theme-toggle" class="btn btn-icon" title="Cambia tema"
                 onclick="toggleTheme()" aria-label="Cambia tema">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
@@ -1618,15 +1990,19 @@
         <strong>Novità:</strong> puoi anche <strong>trascinare</strong> un'immagine direttamente
         sullo slot FRONTE o RETRO. Dopo ogni scansione, sotto l'anteprima compare
         un <strong>mini-anteprima dei bordi rilevati</strong>.<br>
-        <strong>Modifica Bordi:</strong> con il pulsante <strong>✎ Modifica bordi</strong> puoi
-        correggere manualmente i 4 angoli del ritaglio trascinandoli con precisione.<br>
+        <strong>Acquisizione:</strong> ogni slot ha <strong>📷 Fotocamera</strong> (apre l'app fotocamera)
+        e <strong>📁 Carica file</strong> (apre il file manager del dispositivo).<br>
+        <strong>Modifica manuale:</strong> clicca <strong>✎ Modifica bordi</strong> sotto l'anteprima
+        per aprire un editor con zoom, trascinamento e <strong>lente di ingrandimento</strong>
+        per correggere con precisione gli angoli del ritaglio.<br>
         <strong>Multi-Scan:</strong> con "📸 Acquisisci più tessere" puoi fotografare più tessere
         insieme: verranno rilevate, ritagliate e assegnate in sequenza ai primi slot liberi.<br>
         <strong>Import PDF:</strong> con "📄 Importa da PDF" puoi caricare un PDF le cui pagine
         verranno analizzate automaticamente per estrarre le tessere.<br>
         <strong>Esporta JPG:</strong> con "🖼 Esporta JPG (A4)" puoi salvare il layout in formato
         JPG A4 (una immagine per ogni pagina).<br>
-        Puoi esportare anche con <strong>solo il fronte</strong> di ogni documento.<br>
+        <strong>Fronte singolo:</strong> puoi esportare anche solo i fronti (o solo i retro):
+        è sufficiente che ogni tessera abbia almeno un lato caricato.<br>
         Consigli di scatto: sfondo scuro e contrastato, un piccolo margine attorno alla tessera,
         luce uniforme, evita ombre nette e riflessi.
     </div>
@@ -1662,43 +2038,121 @@
     </div>
 </div>
 
-<div id="webcam-modal-overlay" class="webcam-modal-overlay">
-    <div class="webcam-modal" role="dialog" aria-modal="true" aria-labelledby="webcam-modal-title">
-        <div class="webcam-modal-header">
-            <h3 id="webcam-modal-title">Scatta con Webcam</h3>
-            <button class="btn btn-close-webcam" onclick="closeWebcamModal()" title="Chiudi">✕</button>
+<!-- Editor manuale bordi -->
+<div id="editor-modal-overlay" class="editor-modal-overlay">
+    <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editor-modal-title">
+        <div class="editor-modal-header">
+            <h3 id="editor-modal-title">Modifica bordi</h3>
+            <div class="editor-modal-actions">
+                <button class="btn btn-editor-reset" onclick="resetEditorCorners()">↺ Reset</button>
+                <button class="btn btn-editor-confirm" onclick="confirmEditorChanges()">✓ Conferma</button>
+                <button class="btn btn-editor-cancel" onclick="closeEditorModal()">✕ Chiudi</button>
+            </div>
         </div>
-        <div class="webcam-modal-body">
-            <video id="webcam-video" autoplay playsinline muted></video>
+        <div class="editor-modal-body">
+            <canvas id="editor-canvas"></canvas>
+            <div id="editor-magnifier" class="editor-magnifier"><canvas></canvas></div>
+            <div class="editor-preview-box" id="editor-preview-box" aria-hidden="true">
+                <div class="editor-preview-label">Anteprima</div>
+                <canvas id="editor-preview-canvas" width="240" height="151"></canvas>
+            </div>
         </div>
-        <div class="webcam-modal-footer">
-            <button class="btn btn-switch-cam" id="btn-switch-cam" onclick="switchCamera()" style="display:none;">🔄 Cambia camera</button>
-            <button class="btn btn-capture" onclick="captureWebcam()">📸 Cattura</button>
-            <button class="btn btn-reset" onclick="closeWebcamModal()">Annulla</button>
+        <div class="editor-modal-footer">
+            <span class="editor-hint-text">Trascina gli angoli (1-2-3-4) · Rotella/pizzico = zoom · Trascina sfondo = sposta · Frecce = muovi angolo attivo (Shift = 10px)</span>
+            <span id="editor-corner-info">Angolo: —</span>
+            <span id="editor-zoom-label">Zoom: 1.00x</span>
         </div>
     </div>
 </div>
 
-<!-- EDITOR MANUALE BORDI -->
-<div id="corner-editor-overlay" class="corner-editor-overlay">
-    <div class="corner-editor-modal" role="dialog" aria-modal="true" aria-labelledby="corner-editor-title">
-        <div class="corner-editor-header">
-            <h3 id="corner-editor-title">✎ Modifica bordi manualmente</h3>
-            <button class="btn btn-close-webcam" onclick="closeCornerEditor()" title="Chiudi">✕</button>
+<!-- ============================================================
+     APK-READY: APP MENU (drawer laterale)
+     ============================================================ -->
+<div id="app-menu-overlay" class="app-menu-overlay" onclick="if(event.target===this) closeAppMenu()">
+    <aside class="app-menu" role="dialog" aria-modal="true" aria-labelledby="app-menu-title">
+        <div class="app-menu-header">
+            <h3 id="app-menu-title">Menu</h3>
+            <button class="btn btn-icon" onclick="closeAppMenu()" title="Chiudi menu" aria-label="Chiudi menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
         </div>
-        <div class="corner-editor-body" id="corner-editor-body">
-            <canvas id="corner-editor-canvas"></canvas>
+        <div class="app-menu-body">
+            <button class="menu-item" onclick="closeAppMenu(); openLegalModal('info')">
+                <span class="menu-ico">ℹ️</span>
+                <span class="menu-label">Informazioni app</span>
+            </button>
+            <button class="menu-item" onclick="closeAppMenu(); openLegalModal('privacy')">
+                <span class="menu-ico">🔒</span>
+                <span class="menu-label">Privacy Policy</span>
+            </button>
+            <button class="menu-item" onclick="closeAppMenu(); openLegalModal('cookie')">
+                <span class="menu-ico">🍪</span>
+                <span class="menu-label">Cookie Policy</span>
+            </button>
+            <button class="menu-item" onclick="closeAppMenu(); openLegalModal('terms')">
+                <span class="menu-ico">📜</span>
+                <span class="menu-label">Termini di utilizzo</span>
+            </button>
+            <button class="menu-item" onclick="closeAppMenu(); openLegalModal('permissions')">
+                <span class="menu-ico">📷</span>
+                <span class="menu-label">Autorizzazioni</span>
+            </button>
+            <button class="menu-item" onclick="closeAppMenu(); openLegalModal('contacts')">
+                <span class="menu-ico">✉️</span>
+                <span class="menu-label">Contatti</span>
+            </button>
+            <button class="menu-item danger" onclick="closeAppMenu(); clearAllData()">
+                <span class="menu-ico">🗑</span>
+                <span class="menu-label">Svuota dati locali</span>
+            </button>
         </div>
-        <div class="corner-editor-hint">
-            Trascina i cerchi numerati (1=in alto a sinistra, 2=in alto a destra, 3=in basso a destra, 4=in basso a sinistra)
-            per correggere il ritaglio. Usa la rotella del mouse o il pinch per lo zoom.
+        <div class="app-menu-footer">
+            CardScan AI · v1.0.0<br>
+            <span id="menu-env-info">Web App</span>
         </div>
-        <div class="corner-editor-footer">
-            <button class="btn btn-auto-corners" onclick="autoDetectCornersInEditor()">🔍 Rileva automaticamente</button>
-            <button class="btn btn-reset-corners" onclick="resetCornersInEditor()">↺ Ripristina originali</button>
-            <button class="btn btn-save-corners" onclick="saveCornersFromEditor()">✓ Salva e ritaglia</button>
-            <button class="btn btn-reset" onclick="closeCornerEditor()">Annulla</button>
+    </aside>
+</div>
+
+<!-- ============================================================
+     APK-READY: LEGAL MODAL
+     ============================================================ -->
+<div id="legal-modal-overlay" class="legal-modal-overlay"
+     onclick="if(event.target===this) closeLegalModal()">
+    <div class="legal-modal" role="dialog" aria-modal="true" aria-labelledby="legal-modal-title">
+        <div class="legal-modal-header">
+            <h3 id="legal-modal-title">Informazioni</h3>
+            <button class="btn btn-icon" onclick="closeLegalModal()" title="Chiudi" aria-label="Chiudi">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
         </div>
+        <div class="legal-modal-body" id="legal-modal-body"></div>
+        <div class="legal-modal-footer">
+            <button class="btn btn-reset" onclick="closeLegalModal()">Chiudi</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     APK-READY: COOKIE BANNER
+     ============================================================ -->
+<div id="cookie-banner" class="cookie-banner" role="region" aria-label="Informativa cookie">
+    <div class="cookie-text">
+        <strong>🍪 Cookie e dati locali.</strong><br>
+        Questa app usa solo <strong>storage locale</strong> (localStorage/sessionStorage) per funzionare.
+        Nessun tracciamento, nessuna pubblicità, nessun dato inviato a server remoti.
+        <a href="javascript:void(0)" onclick="openLegalModal('cookie')" style="color:#60a5fa;">Maggiori info</a>
+    </div>
+    <div class="cookie-actions">
+        <button class="btn btn-pdf" style="font-size:13px;padding:10px 18px;" onclick="acceptCookies()">✓ Accetta</button>
+        <button class="btn btn-reset" onclick="openLegalModal('cookie')">Dettagli</button>
     </div>
 </div>
 
@@ -1724,12 +2178,12 @@ const CONFIG = {
 
 const SIDES = ['fronte', 'retro'];
 const STORAGE_KEY = 'scanner_tessere_state_v2';
+const COOKIE_KEY  = 'cardsCanCookieAccepted_v1';
 
 let currentDocs = 0;
 const processedImages = {};
 const detectionImages = {};
-const originalImages = {};
-const originalCorners = {};
+const sourceData = {};
 const keyOf = (doc, side) => `${doc}-${side}`;
 
 let previewOpen = false;
@@ -1737,36 +2191,73 @@ let currentBlobUrl = null;
 let currentBlob = null;
 let renderToken = 0;
 
-let webcamStream = null;
-let webcamTarget = null;
-let webcamFacingMode = 'environment';
-
 let deferredInstallPrompt = null;
-
 let multiScanPending = null;
 
-/* Editor bordi */
-let cornerEditorState = {
-    open: false,
-    doc: null,
-    side: null,
-    srcCanvas: null,
-    srcWidth: 0,
-    srcHeight: 0,
-    corners: [],
-    originalCorners: [],
-    displayScale: 1,
-    offsetX: 0,
-    offsetY: 0,
-    displayW: 0,
-    displayH: 0,
-    dragging: -1,
-    zoom: 1,
-    panX: 0,
-    panY: 0,
-    viewW: 0,
-    viewH: 0
-};
+/* ============================================================
+   APK-READY: AMBIENT DETECTION
+   ============================================================ */
+const APP_ENV = (function () {
+    const ua = navigator.userAgent || '';
+    const isCapacitor = typeof window.Capacitor !== 'undefined' && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+    const isCordova   = typeof window.cordova !== 'undefined' && /Android|iPhone|iPad/i.test(ua);
+    const isAndroid   = /Android/i.test(ua);
+    const isIOS       = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isStandalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+    const isWebView   = isAndroid && /; wv\)/.test(ua) || (isAndroid && !/Chrome\/[.0-9]* Mobile/.test(ua) && !/Firefox/.test(ua));
+    let label = 'Web App';
+    if (isCapacitor) label = 'App Android (Capacitor)';
+    else if (isCordova) label = 'App nativa (Cordova)';
+    else if (isWebView) label = 'App (WebView)';
+    else if (isStandalone) label = 'PWA';
+    return { isCapacitor, isCordova, isAndroid, isIOS, isStandalone, isWebView, label };
+})();
+
+(function updateEnvLabel() {
+    const el = document.getElementById('menu-env-info');
+    if (el) el.textContent = APP_ENV.label;
+})();
+
+/* ============================================================
+   APK-READY: BACK BUTTON HANDLING
+   ============================================================ */
+function isAnyModalOpen() {
+    return !!(
+        document.getElementById('app-menu-overlay').classList.contains('open') ||
+        document.getElementById('legal-modal-overlay').classList.contains('open') ||
+        document.getElementById('pdf-modal-overlay').classList.contains('open') ||
+        document.getElementById('editor-modal-overlay').classList.contains('open')
+    );
+}
+
+function closeTopmostModal() {
+    if (document.getElementById('app-menu-overlay').classList.contains('open')) { closeAppMenu(); return true; }
+    if (document.getElementById('legal-modal-overlay').classList.contains('open')) { closeLegalModal(); return true; }
+    if (document.getElementById('editor-modal-overlay').classList.contains('open')) { closeEditorModal(); return true; }
+    if (document.getElementById('pdf-modal-overlay').classList.contains('open')) { closePreviewModal(); return true; }
+    return false;
+}
+
+(function initBackButton() {
+    try {
+        if (APP_ENV.isCapacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+            window.Capacitor.Plugins.App.addListener('backButton', () => {
+                if (!closeTopmostModal()) {
+                    window.Capacitor.Plugins.App.minimizeApp();
+                }
+            });
+        }
+    } catch (_) {}
+    try {
+        if (APP_ENV.isCordova && document.addEventListener) {
+            document.addEventListener('backbutton', (e) => {
+                if (closeTopmostModal()) {
+                    if (e && e.preventDefault) e.preventDefault();
+                }
+            }, false);
+        }
+    } catch (_) {}
+})();
 
 /* ============================================================
    TEMA
@@ -1778,8 +2269,8 @@ function applyTheme(theme) {
     const btn = document.getElementById('btn-theme-toggle');
     if (btn) {
         btn.innerHTML = theme === 'light'
-            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
-            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+            ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>'
+            : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
         btn.setAttribute('title', theme === 'light' ? 'Passa al tema scuro' : 'Passa al tema chiaro');
     }
     const meta = document.querySelector('meta[name="theme-color"]');
@@ -1873,6 +2364,499 @@ document.getElementById('btn-install').addEventListener('click', async () => {
 })();
 
 /* ============================================================
+   APK-READY: COOKIE BANNER
+   ============================================================ */
+function acceptCookies() {
+    try { localStorage.setItem(COOKIE_KEY, '1'); } catch (_) {}
+    const b = document.getElementById('cookie-banner');
+    if (b) b.classList.remove('visible');
+}
+
+(function initCookieBanner() {
+    let accepted = false;
+    try { accepted = localStorage.getItem(COOKIE_KEY) === '1'; } catch (_) {}
+    if (!accepted) {
+        setTimeout(() => {
+            const b = document.getElementById('cookie-banner');
+            if (b) b.classList.add('visible');
+        }, 900);
+    }
+})();
+
+/* ============================================================
+   APK-READY: APP MENU
+   ============================================================ */
+function toggleAppMenu() {
+    const overlay = document.getElementById('app-menu-overlay');
+    if (!overlay) return;
+    if (overlay.classList.contains('open')) closeAppMenu();
+    else openAppMenu();
+}
+function openAppMenu() {
+    const o = document.getElementById('app-menu-overlay');
+    if (!o) return;
+    o.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeAppMenu() {
+    const o = document.getElementById('app-menu-overlay');
+    if (!o) return;
+    o.classList.remove('open');
+    if (!isAnyModalOpen()) document.body.style.overflow = '';
+}
+
+/* ============================================================
+   APK-READY: LEGAL MODAL
+   ============================================================ */
+const LEGAL_DATA = {
+    owner:      '[Spina Michele]',
+    country:    '[Italy]',
+    email:      'michelespinabox@gmail.com',
+    website:    '[https://mkboxself.github.io/GOSELF/]',
+    appName:    'CardScan AI',
+    appVersion: '1.0.0',
+    pkgName:    '[Spina Michele.CardScanAI]',
+    lastUpdate: new Date().toLocaleDateString('it-IT'),
+    thirdParties: [
+        { name: 'OpenCV.js (docs.opencv.org)', purpose: 'Elaborazione immagini lato client (rilevamento bordi, warp prospettico).', privacy: 'https://opencv.org/privacy/' },
+        { name: 'jsPDF (cdnjs.cloudflare.com)', purpose: 'Generazione del PDF lato client.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
+        { name: 'PDF.js (cdnjs.cloudflare.com)', purpose: 'Anteprima PDF e importazione PDF.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
+        { name: 'Google Fonts (fonts.googleapis.com / fonts.gstatic.com)', purpose: 'Caricamento dei font tipografici.', privacy: 'https://policies.google.com/privacy' }
+    ]
+};
+
+function openLegalModal(type) {
+    const overlay = document.getElementById('legal-modal-overlay');
+    const titleEl = document.getElementById('legal-modal-title');
+    const bodyEl  = document.getElementById('legal-modal-body');
+    if (!overlay || !titleEl || !bodyEl) return;
+
+    const builds = {
+        info:       buildInfoHtml,
+        privacy:    buildPrivacyHtml,
+        cookie:     buildCookieHtml,
+        terms:      buildTermsHtml,
+        permissions:buildPermissionsHtml,
+        contacts:   buildContactsHtml
+    };
+
+    const builder = builds[type] || builds.info;
+    const built = builder();
+
+    titleEl.textContent = built.title;
+    bodyEl.innerHTML = built.html;
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    if (type === 'permissions') {
+        refreshPermissionStatus();
+    }
+}
+
+function closeLegalModal() {
+    const overlay = document.getElementById('legal-modal-overlay');
+    if (overlay) overlay.classList.remove('open');
+    if (!isAnyModalOpen()) document.body.style.overflow = '';
+}
+
+function buildInfoHtml() {
+    return {
+        title: 'Informazioni app',
+        html: `
+            <h4>CardScan AI</h4>
+            <p><strong>Versione:</strong> ${LEGAL_DATA.appVersion}</p>
+            <p><strong>Nome pacchetto:</strong> <code>${LEGAL_DATA.pkgName}</code></p>
+            <p><strong>Piattaforma rilevata:</strong> ${APP_ENV.label}</p>
+            <p><strong>Ultimo aggiornamento policy:</strong> ${LEGAL_DATA.lastUpdate}</p>
+
+            <h4>Descrizione</h4>
+            <p>CardScan AI è un'app di scansione documenti formato tessera (es. carta d'identità, patente, tessere sanitarie).
+               Rileva automaticamente i bordi, ritaglia, corregge la prospettiva e genera un PDF in formato A4 con
+               8 tessere per pagina (4 righe × 2 colonne: fronte + retro).</p>
+
+            <h4>Funzionalità principali</h4>
+            <ul>
+                <li>Riconoscimento automatico dei bordi della tessera</li>
+                <li>Ritaglio e raddrizzamento prospettico</li>
+                <li>Editor manuale bordi con lente di ingrandimento</li>
+                <li>Multi-scan (più tessere in un'unica foto)</li>
+                <li>Importazione da PDF esistente</li>
+                <li>Esportazione PDF e JPG in formato A4</li>
+                <li>Salvataggio locale delle sessioni (sessionStorage)</li>
+            </ul>
+
+            <h4>Tecnologie</h4>
+            <ul>
+                <li>OpenCV.js — visione artificiale lato client</li>
+                <li>jsPDF — generazione PDF</li>
+                <li>PDF.js — lettura/anteprima PDF</li>
+                <li>Web APIs (Camera, File, Canvas, Storage)</li>
+            </ul>
+
+            <div class="legal-note">
+                ℹ️ Questa app funziona <strong>interamente offline</strong> per quanto riguarda l'elaborazione delle immagini:
+                nessuna foto viene inviata a server remoti. Le uniche connessioni esterne sono il caricamento delle librerie
+                da CDN (OpenCV, jsPDF, PDF.js, Google Fonts) e il worker di PDF.js.
+            </div>
+        `
+    };
+}
+
+function buildPrivacyHtml() {
+    const thirdList = LEGAL_DATA.thirdParties.map(t =>
+        `<li><strong>${t.name}</strong> — ${t.purpose} <a href="${t.privacy}" target="_blank" rel="noopener noreferrer">Privacy Policy</a></li>`
+    ).join('');
+
+    return {
+        title: 'Privacy Policy',
+        html: `
+            <h4>1. Titolare del trattamento</h4>
+            <p><strong>${LEGAL_DATA.owner}</strong><br>
+            ${LEGAL_DATA.address}<br>
+            ${LEGAL_DATA.country}<br>
+            Email: <a href="mailto:${LEGAL_DATA.email}">${LEGAL_DATA.email}</a></p>
+
+            <h4>2. Tipologia di dati trattati</h4>
+            <p>CardScan AI è progettata secondo il principio della <strong>minimizzazione dei dati</strong>. L'app:</p>
+            <ul>
+                <li><strong>NON</strong> raccoglie dati personali dell'utente</li>
+                <li><strong>NON</strong> richiede registrazione o account</li>
+                <li><strong>NON</strong> invia immagini o documenti a server remoti</li>
+                <li><strong>NON</strong> utilizza analytics, profilazione o pubblicità</li>
+            </ul>
+            <p>Le immagini dei documenti che l'utente carica (foto dalla fotocamera o file dal dispositivo)
+               sono elaborate <strong>esclusivamente in locale</strong>, all'interno del browser/WebView del dispositivo,
+               e non vengono mai trasmesse all'esterno.</p>
+
+            <h4>3. Dati memorizzati localmente</h4>
+            <p>L'app utilizza le seguenti tecnologie di storage locale:</p>
+            <ul>
+                <li><code>localStorage</code> — per memorizzare le preferenze (es. tema chiaro/scuro, consenso cookie)</li>
+                <li><code>sessionStorage</code> — per memorizzare temporaneamente le immagini elaborate durante la sessione (cancellate automaticamente alla chiusura)</li>
+            </ul>
+            <p>Questi dati <strong>rimangono sul dispositivo dell'utente</strong> e non sono accessibili al Titolare.</p>
+
+            <h4>4. Autorizzazioni richieste</h4>
+            <ul>
+                <li><strong>Fotocamera</strong> — per scattare foto delle tessere. Utilizzata solo su azione dell'utente.</li>
+                <li><strong>Accesso file</strong> — per caricare immagini esistenti e salvare i PDF generati.</li>
+                <li><strong>Archiviazione</strong> — per salvare i file di output.</li>
+            </ul>
+
+            <h4>5. Servizi di terze parti</h4>
+            <p>L'app carica alcune librerie JavaScript da CDN esterne. Il semplice caricamento comporta la trasmissione
+               dell'indirizzo IP e dello User-Agent del dispositivo ai fornitori delle CDN:</p>
+            <ul>${thirdList}</ul>
+            <div class="legal-note">
+                
+            </div>
+
+            <h4>6. Base giuridica del trattamento</h4>
+            <p>Il trattamento dei dati tecnici necessari al funzionamento dell'app si basa sul
+               <strong>legittimo interesse</strong> (Art. 6.1.f GDPR) e sull'<strong>esecuzione del servizio</strong>
+               richiesto dall'utente (Art. 6.1.b GDPR).</p>
+
+            <h4>7. Diritti dell'interessato (GDPR Artt. 15-22)</h4>
+            <p>L'utente ha diritto di accesso, rettifica, cancellazione, limitazione, opposizione e portabilità dei dati.
+               Poiché l'app non raccoglie dati personali sul server, tali diritti si esplicano essenzialmente tramite
+               la cancellazione dei dati locali (tramite l'apposita funzione "Svuota dati locali" nel menu).</p>
+
+            <h4>8. Conservazione dei dati</h4>
+            <p>I dati locali (sessionStorage) vengono automaticamente cancellati alla chiusura della sessione.
+               Le preferenze in localStorage rimangono fino a cancellazione manuale da parte dell'utente.</p>
+
+            <h4>9. Minori</h4>
+            <p>L'app non è destinata a minori di 14 anni e non raccoglie consapevolmente dati da minori.</p>
+
+            <h4>10. Modifiche alla policy</h4>
+            <p>Eventuali modifiche saranno pubblicate a questa pagina con indicazione della data di aggiornamento.
+               Ultimo aggiornamento: ${LEGAL_DATA.lastUpdate}.</p>
+
+            <h4>11. Contatti</h4>
+            <p>Per esercitare i propri diritti o per qualsiasi domanda:
+               <a href="mailto:${LEGAL_DATA.email}">${LEGAL_DATA.email}</a></p>
+        `
+    };
+}
+
+function buildCookieHtml() {
+    return {
+        title: 'Cookie Policy',
+        html: `
+            <h4>1. Cosa sono i cookie</h4>
+            <p>I cookie sono piccoli file di testo che i siti web memorizzano sul dispositivo dell'utente.
+               Tecnologie analoghe (localStorage, sessionStorage) sono utilizzate dalle app per finalità simili.</p>
+
+            <h4>2. Cosa utilizza CardScan AI</h4>
+            <p>CardScan AI <strong>NON utilizza cookie di profilazione, pubblicitari o di tracciamento</strong>.
+               Utilizza esclusivamente storage locale tecnico, strettamente necessario al funzionamento dell'app:</p>
+
+            <div class="perm-row">
+                <div class="perm-row-info">
+                    <span class="perm-name">localStorage</span>
+                    <span class="perm-desc">Memorizza: tema chiaro/scuro, consenso cookie, ultime preferenze utente.<br>
+                    <em>Durata: fino a cancellazione manuale.</em></span>
+                </div>
+                <span class="legal-badge ok">Necessario</span>
+            </div>
+
+            <div class="perm-row">
+                <div class="perm-row-info">
+                    <span class="perm-name">sessionStorage</span>
+                    <span class="perm-desc">Memorizza temporaneamente le immagini elaborate durante la sessione di lavoro.<br>
+                    <em>Durata: fino a chiusura sessione/app.</em></span>
+                </div>
+                <span class="legal-badge ok">Necessario</span>
+            </div>
+
+            <h4>3. Cookie di terze parti</h4>
+            <p>L'app <strong>non installa cookie di terze parti</strong> propriamente detti. Tuttavia, il caricamento
+               di risorse da CDN esterne (OpenCV, jsPDF, PDF.js, Google Fonts) può comportare l'impostazione di
+               cookie tecnici da parte di tali fornitori, in base alle loro rispettive privacy policy.</p>
+            <p>Si rimanda alle informative dei rispettivi fornitori:
+               <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google</a>,
+               <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare</a>,
+               <a href="https://opencv.org/privacy/" target="_blank" rel="noopener noreferrer">OpenCV</a>.</p>
+
+            <h4>4. Gestione del consenso</h4>
+            <p>Al primo avvio viene mostrato un banner informativo. Cliccando <strong>"✓ Accetta"</strong> si conferma
+               la presa visione dell'uso dello storage locale. Il consenso è memorizzato in
+               <code>localStorage.cardsCanCookieAccepted_v1</code> e può essere revocato in qualsiasi momento tramite
+               <strong>Menu → Svuota dati locali</strong>.</p>
+
+            <h4>5. Come disabilitare lo storage locale</h4>
+            <p>L'utente può eliminare tutti i dati locali in qualsiasi momento tramite la funzione integrata nel menu dell'app,
+               oppure tramite le impostazioni del browser/WebView del dispositivo.</p>
+
+            <div class="legal-note">
+                💡 <strong>Nota:</strong> disabilitare lo storage locale non compromette le funzionalità di scansione
+                ed esportazione, ma potrebbe comportare la perdita dello stato di sessione.
+            </div>
+        `
+    };
+}
+
+function buildTermsHtml() {
+    return {
+        title: 'Termini di utilizzo',
+        html: `
+            <h4>1. Accettazione</h4>
+            <p>L'utilizzo di <strong>${LEGAL_DATA.appName}</strong> implica l'accettazione dei presenti termini.
+               Se non li accetti, ti invitiamo a non utilizzare l'app.</p>
+
+            <h4>2. Descrizione del servizio</h4>
+            <p>${LEGAL_DATA.appName} è uno strumento software per il riconoscimento, il ritaglio e l'esportazione
+               di documenti in formato tessera. L'elaborazione avviene <strong>interamente sul dispositivo</strong>.</p>
+
+            <h4>3. Uso consentito</h4>
+            <p>L'utente si impegna a utilizzare l'app esclusivamente per finalità lecite, in particolare:</p>
+            <ul>
+                <li>scansione di documenti propri o per i quali ha esplicita autorizzazione</li>
+                <li>digitalizzazione di documenti d'identità <strong>per uso personale o per adempimenti consentiti dalla legge</strong></li>
+            </ul>
+            <p>È severamente vietato utilizzare l'app per:</p>
+            <ul>
+                <li>contraffazione, alterazione o falsificazione di documenti</li>
+                <li>trattamento illecito di dati personali di terzi</li>
+                <li>qualsiasi attività illegale ai sensi delle leggi italiane ed europee</li>
+            </ul>
+
+            <h4>4. Esclusione di garanzia</h4>
+            <p>L'app è fornita <strong>"così com'è"</strong>, senza garanzie di alcun tipo, esplicite o implicite.
+               Il Titolare non garantisce che il riconoscimento automatico dei bordi funzioni correttamente
+               in qualsiasi condizione di luminosità, angolazione o qualità dell'immagine.</p>
+
+            <h4>5. Limitazione di responsabilità</h4>
+            <p>Il Titolare non è responsabile per:</p>
+            <ul>
+                <li>eventuali errori di scansione o esportazione</li>
+                <li>perdita di dati locali (chiusura app, cancellazione cache, disinstallazione)</li>
+                <li>utilizzi impropri dell'app da parte dell'utente</li>
+                <li>danni diretti o indiretti derivanti dall'uso dell'app</li>
+            </ul>
+
+            <h4>6. Proprietà intellettuale</h4>
+            <p>Il marchio, il logo e il codice sorgente di ${LEGAL_DATA.appName} sono di proprietà del Titolare.
+               Le librerie di terze parti (OpenCV, jsPDF, PDF.js) sono soggette alle rispettive licenze
+               (Apache 2.0, MIT, Apache 2.0).</p>
+
+            <h4>7. Modifiche ai termini</h4>
+            <p>Il Titolare si riserva il diritto di modificare i presenti termini in qualsiasi momento.
+               Le modifiche entreranno in vigore dalla data di pubblicazione.</p>
+
+            <h4>8. Legge applicabile e foro competente</h4>
+            <p>I presenti termini sono regolati dalla legge italiana e, ove applicabile, dal diritto europeo (GDPR).
+               Foro competente: tribunale del luogo di residenza del Titolare, salvo diversa disposizione di legge.</p>
+
+            <h4>9. Contatti</h4>
+            <p>Per qualsiasi comunicazione: <a href="mailto:${LEGAL_DATA.email}">${LEGAL_DATA.email}</a></p>
+
+            <div class="legal-note">
+                Ultimo aggiornamento: ${LEGAL_DATA.lastUpdate}
+            </div>
+        `
+    };
+}
+
+function buildPermissionsHtml() {
+    return {
+        title: 'Autorizzazioni',
+        html: `
+            <h4>Stato autorizzazioni</h4>
+            <p>Questa app richiede il minimo indispensabile di autorizzazioni per funzionare. Qui sotto puoi vedere
+               lo stato attuale e, se necessario, richiedere o testare ciascuna autorizzazione.</p>
+
+            <div class="perm-row" id="perm-row-camera">
+                <div class="perm-row-info">
+                    <span class="perm-name">📷 Fotocamera</span>
+                    <span class="perm-desc">Necessaria per scattare le foto delle tessere direttamente dall'app.<br>
+                    <em>Uso: solo quando premi "📷 Fotocamera".</em></span>
+                </div>
+                <div class="perm-action">
+                    <span class="legal-badge warn" id="perm-badge-camera">Verifica…</span>
+                    <button class="btn btn-camera" style="margin-left:6px;" onclick="testCameraPermission()">Testa</button>
+                </div>
+            </div>
+
+            <div class="perm-row" id="perm-row-storage">
+                <div class="perm-row-info">
+                    <span class="perm-name">💾 Archiviazione / File</span>
+                    <span class="perm-desc">Necessaria per salvare i PDF/JPG esportati e per leggere immagini dal dispositivo.<br>
+                    <em>Uso: solo quando esporti o carichi file.</em></span>
+                </div>
+                <div class="perm-action">
+                    <span class="legal-badge ok" id="perm-badge-storage">Attiva (browser)</span>
+                </div>
+            </div>
+
+            <div class="perm-row" id="perm-row-notifications">
+                <div class="perm-row-info">
+                    <span class="perm-name">🔔 Notifiche</span>
+                    <span class="perm-desc">Non utilizzata. L'app non invia notifiche push.</span>
+                </div>
+                <div class="perm-action">
+                    <span class="legal-badge err">Non richiesta</span>
+                </div>
+            </div>
+
+            <div class="perm-row" id="perm-row-location">
+                <div class="perm-row-info">
+                    <span class="perm-name">📍 Posizione</span>
+                    <span class="perm-desc">Non utilizzata. L'app non accede mai alla geolocalizzazione.</span>
+                </div>
+                <div class="perm-action">
+                    <span class="legal-badge err">Non richiesta</span>
+                </div>
+            </div>
+
+            <h4>Come gestire le autorizzazioni</h4>
+            <ul>
+                <li><strong>Android:</strong> Impostazioni → App → CardScan AI → Autorizzazioni</li>
+                <li><strong>iOS:</strong> Impostazioni → CardScan AI</li>
+                <li><strong>Browser:</strong> icona lucchetto nella barra indirizzi → Autorizzazioni sito</li>
+            </ul>
+
+            <div class="legal-note">
+                🔒 Le autorizzazioni richieste sono strettamente legate alle funzioni dell'app e
+                non vengono mai utilizzate per finalità diverse da quelle dichiarate.
+            </div>
+        `
+    };
+}
+
+async function refreshPermissionStatus() {
+    const badge = document.getElementById('perm-badge-camera');
+    if (!badge) return;
+    badge.className = 'legal-badge warn';
+    badge.textContent = 'Verifica…';
+
+    if (navigator.permissions && navigator.permissions.query) {
+        try {
+            const status = await navigator.permissions.query({ name: 'camera' });
+            updateCameraBadge(status.state);
+            status.onchange = () => updateCameraBadge(status.state);
+            return;
+        } catch (_) { /* non supportato */ }
+    }
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        badge.className = 'legal-badge warn';
+        badge.textContent = 'Da richiedere';
+    } else {
+        badge.className = 'legal-badge err';
+        badge.textContent = 'Non supportata';
+    }
+}
+
+function updateCameraBadge(state) {
+    const badge = document.getElementById('perm-badge-camera');
+    if (!badge) return;
+    if (state === 'granted') {
+        badge.className = 'legal-badge ok';
+        badge.textContent = 'Concessa';
+    } else if (state === 'denied') {
+        badge.className = 'legal-badge err';
+        badge.textContent = 'Negata';
+    } else {
+        badge.className = 'legal-badge warn';
+        badge.textContent = 'Da richiedere';
+    }
+}
+
+async function testCameraPermission() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        alert('Fotocamera non supportata su questo dispositivo.');
+        return;
+    }
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        stream.getTracks().forEach(t => t.stop());
+        const badge = document.getElementById('perm-badge-camera');
+        if (badge) {
+            badge.className = 'legal-badge ok';
+            badge.textContent = 'Concessa';
+        }
+        alert('✓ Autorizzazione fotocamera concessa.');
+    } catch (err) {
+        const badge = document.getElementById('perm-badge-camera');
+        if (badge) {
+            badge.className = 'legal-badge err';
+            badge.textContent = 'Negata';
+        }
+        let msg = 'Fotocamera non autorizzata.';
+        if (err && err.name === 'NotAllowedError') msg = 'Permesso negato dall\'utente. Vai nelle impostazioni del sistema per abilitarlo.';
+        else if (err && err.name === 'NotFoundError') msg = 'Nessuna fotocamera trovata.';
+        else if (err && err.name === 'NotReadableError') msg = 'Fotocamera occupata da un\'altra app.';
+        alert(msg);
+    }
+}
+
+function buildContactsHtml() {
+    return {
+        title: 'Contatti',
+        html: `
+            <h4>Informazioni di contatto</h4>
+            <p><strong>Titolare / Sviluppatore:</strong><br>${LEGAL_DATA.owner}</p>
+            <p><strong>Indirizzo:</strong><br>${LEGAL_DATA.address}<br>${LEGAL_DATA.country}</p>
+            <p><strong>Email:</strong> <a href="mailto:${LEGAL_DATA.email}">${LEGAL_DATA.email}</a></p>
+            <p><strong>Sito web:</strong> <a href="${LEGAL_DATA.website}" target="_blank" rel="noopener noreferrer">${LEGAL_DATA.website}</a></p>
+
+            <h4>Assistenza</h4>
+            <p>Per segnalazioni di bug, richieste di funzionalità o problemi relativi alla privacy,
+               scrivi all'indirizzo email sopra indicato. Risposta entro 30 giorni lavorativi.</p>
+
+            <h4>Segnalazione abusi</h4>
+            <p>Per segnalare utilizzi impropri dell'app o violazioni di copyright:
+               <a href="mailto:${LEGAL_DATA.email}">${LEGAL_DATA.email}</a></p>
+
+            <div class="legal-note">
+            </div>
+        `
+    };
+}
+
+/* ============================================================
    PERSISTENZA
    ============================================================ */
 function saveState() {
@@ -1926,7 +2910,6 @@ function markCvReady() {
     cvReady = true;
     document.getElementById('cv-status').textContent = 'Scanner pronto.';
     document.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
-    document.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
     document.getElementById('btn-add').disabled = false;
     const msBtn = document.getElementById('btn-multiscan');
     if (msBtn) msBtn.disabled = false;
@@ -1970,14 +2953,19 @@ function buildDocSection(docNum) {
         <div class="doc-slots">
             <div class="card-slot" id="slot-${docNum}-fronte">
                 <h3>FRONTE</h3>
-                <button class="btn scan-btn" disabled onclick="triggerInput('input-${docNum}-fronte')">Scatta / Carica</button>
-                <button class="btn btn-webcam webcam-btn" disabled onclick="openWebcamModal(${docNum}, 'fronte')">📷 Webcam</button>
+                <button class="btn btn-camera scan-btn" disabled onclick="triggerInput('input-cam-${docNum}-fronte')">📷 Fotocamera</button>
+                <button class="btn btn-gallery scan-btn" disabled onclick="triggerInput('input-gal-${docNum}-fronte')">📁 Carica file</button>
                 <button class="btn btn-reset" onclick="resetSlot(${docNum}, 'fronte')">Annulla</button>
-                <input type="file" id="input-${docNum}-fronte" accept="image/*" capture="environment"
+                <input type="file" id="input-cam-${docNum}-fronte" accept="image/*" capture="environment"
+                       onchange="processImage(this, ${docNum}, 'fronte')">
+                <input type="file" id="input-gal-${docNum}-fronte" accept="image/*"
                        onchange="processImage(this, ${docNum}, 'fronte')">
                 <div><img id="preview-${docNum}-fronte" class="preview" alt="Anteprima ${docNum} Fronte"></div>
-                <button class="btn edit-corners-btn" id="edit-btn-${docNum}-fronte"
-                        onclick="openCornerEditor(${docNum}, 'fronte')">✎ Modifica bordi</button>
+                <div>
+                    <button class="btn btn-edit edit-btn" id="edit-btn-${docNum}-fronte" disabled
+                            title="Modifica manualmente gli angoli del ritaglio"
+                            onclick="openEditorModal(${docNum}, 'fronte')">✎ Modifica bordi</button>
+                </div>
                 <div class="detection-wrap" id="detection-wrap-${docNum}-fronte">
                     <span class="detection-label">Bordi rilevati</span>
                     <img id="detection-${docNum}-fronte" class="detection-img" alt="Bordi rilevati ${docNum} Fronte">
@@ -1986,14 +2974,19 @@ function buildDocSection(docNum) {
             </div>
             <div class="card-slot" id="slot-${docNum}-retro">
                 <h3>RETRO</h3>
-                <button class="btn scan-btn" disabled onclick="triggerInput('input-${docNum}-retro')">Scatta / Carica</button>
-                <button class="btn btn-webcam webcam-btn" disabled onclick="openWebcamModal(${docNum}, 'retro')">📷 Webcam</button>
+                <button class="btn btn-camera scan-btn" disabled onclick="triggerInput('input-cam-${docNum}-retro')">📷 Fotocamera</button>
+                <button class="btn btn-gallery scan-btn" disabled onclick="triggerInput('input-gal-${docNum}-retro')">📁 Carica file</button>
                 <button class="btn btn-reset" onclick="resetSlot(${docNum}, 'retro')">Annulla</button>
-                <input type="file" id="input-${docNum}-retro" accept="image/*" capture="environment"
+                <input type="file" id="input-cam-${docNum}-retro" accept="image/*" capture="environment"
+                       onchange="processImage(this, ${docNum}, 'retro')">
+                <input type="file" id="input-gal-${docNum}-retro" accept="image/*"
                        onchange="processImage(this, ${docNum}, 'retro')">
                 <div><img id="preview-${docNum}-retro" class="preview" alt="Anteprima ${docNum} Retro"></div>
-                <button class="btn edit-corners-btn" id="edit-btn-${docNum}-retro"
-                        onclick="openCornerEditor(${docNum}, 'retro')">✎ Modifica bordi</button>
+                <div>
+                    <button class="btn btn-edit edit-btn" id="edit-btn-${docNum}-retro" disabled
+                            title="Modifica manualmente gli angoli del ritaglio"
+                            onclick="openEditorModal(${docNum}, 'retro')">✎ Modifica bordi</button>
+                </div>
                 <div class="detection-wrap" id="detection-wrap-${docNum}-retro">
                     <span class="detection-label">Bordi rilevati</span>
                     <img id="detection-${docNum}-retro" class="detection-img" alt="Bordi rilevati ${docNum} Retro">
@@ -2015,13 +3008,11 @@ function addDocument(skipSave) {
     for (const s of SIDES) {
         processedImages[keyOf(currentDocs, s)] = null;
         detectionImages[keyOf(currentDocs, s)] = null;
-        originalImages[keyOf(currentDocs, s)] = null;
-        originalCorners[keyOf(currentDocs, s)] = null;
+        sourceData[keyOf(currentDocs, s)] = null;
     }
 
     if (cvReady) {
         section.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
-        section.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
     }
 
     updateAddButton();
@@ -2064,18 +3055,15 @@ function reindexDocuments() {
             retro:  processedImages[keyOf(oldNum, 'retro')]  || null,
             fronteDet: detectionImages[keyOf(oldNum, 'fronte')] || null,
             retroDet:  detectionImages[keyOf(oldNum, 'retro')]  || null,
-            fronteOrig: originalImages[keyOf(oldNum, 'fronte')] || null,
-            retroOrig:  originalImages[keyOf(oldNum, 'retro')]  || null,
-            fronteCorners: originalCorners[keyOf(oldNum, 'fronte')] || null,
-            retroCorners:  originalCorners[keyOf(oldNum, 'retro')]  || null
+            fronteSrc: sourceData[keyOf(oldNum, 'fronte')] || null,
+            retroSrc:  sourceData[keyOf(oldNum, 'retro')]  || null
         };
     });
 
     container.innerHTML = '';
     for (const k in processedImages) delete processedImages[k];
     for (const k in detectionImages) delete detectionImages[k];
-    for (const k in originalImages) delete originalImages[k];
-    for (const k in originalCorners) delete originalCorners[k];
+    for (const k in sourceData) delete sourceData[k];
 
     currentDocs = collected.length;
     collected.forEach((data, idx) => {
@@ -2085,23 +3073,29 @@ function reindexDocuments() {
 
         if (cvReady) {
             section.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
-            section.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
         }
 
         for (const s of SIDES) {
             const dataUrl = data[s];
             processedImages[keyOf(newNum, s)] = dataUrl || null;
 
+            const detUrl = s === 'fronte' ? data.fronteDet : data.retroDet;
+            const srcData = s === 'fronte' ? data.fronteSrc : data.retroSrc;
+
+            if (srcData) {
+                sourceData[keyOf(newNum, s)] = srcData;
+            }
+
             if (dataUrl) {
                 const prev = document.getElementById(`preview-${newNum}-${s}`);
                 prev.src = dataUrl;
                 prev.style.display = 'block';
                 setStatus(newNum, s, 'success', 'Ritagliato e raddrizzato.');
+
                 const editBtn = document.getElementById(`edit-btn-${newNum}-${s}`);
-                if (editBtn) editBtn.classList.add('visible');
+                if (editBtn && srcData) editBtn.disabled = false;
             }
 
-            const detUrl = s === 'fronte' ? data.fronteDet : data.retroDet;
             if (detUrl) {
                 detectionImages[keyOf(newNum, s)] = detUrl;
                 const detImg = document.getElementById(`detection-${newNum}-${s}`);
@@ -2110,16 +3104,6 @@ function reindexDocuments() {
                     detImg.src = detUrl;
                     detWrap.classList.add('visible');
                 }
-            }
-
-            const origUrl = s === 'fronte' ? data.fronteOrig : data.retroOrig;
-            if (origUrl) {
-                originalImages[keyOf(newNum, s)] = origUrl;
-            }
-
-            const origCorners = s === 'fronte' ? data.fronteCorners : data.retroCorners;
-            if (origCorners) {
-                originalCorners[keyOf(newNum, s)] = origCorners;
             }
         }
     });
@@ -2181,13 +3165,12 @@ function clearAllData() {
     document.getElementById('docs-container').innerHTML = '';
     for (const k in processedImages) delete processedImages[k];
     for (const k in detectionImages) delete detectionImages[k];
-    for (const k in originalImages) delete originalImages[k];
-    for (const k in originalCorners) delete originalCorners[k];
+    for (const k in sourceData) delete sourceData[k];
     currentDocs = 0;
 
     if (previewOpen) closePreviewModal();
     cancelMultiScan();
-    if (cornerEditorState.open) closeCornerEditor();
+    closeEditorModal();
 
     document.getElementById('pdf-filename').value = 'documenti_tessera';
 
@@ -2224,18 +3207,16 @@ function initializeApp() {
             document.getElementById('docs-container').appendChild(section);
             if (cvReady) {
                 section.querySelectorAll('.scan-btn').forEach(b => b.disabled = false);
-                section.querySelectorAll('.webcam-btn').forEach(b => b.disabled = false);
             }
             for (const s of SIDES) {
                 const dataUrl = saved.images[keyOf(newNum, s)] || null;
                 processedImages[keyOf(newNum, s)] = dataUrl;
+                sourceData[keyOf(newNum, s)] = null;
                 if (dataUrl) {
                     const prev = document.getElementById(`preview-${newNum}-${s}`);
                     prev.src = dataUrl;
                     prev.style.display = 'block';
                     setStatus(newNum, s, 'success', 'Ripristinato dalla sessione.');
-                    const editBtn = document.getElementById(`edit-btn-${newNum}-${s}`);
-                    if (editBtn) editBtn.classList.add('visible');
                 }
             }
         }
@@ -2338,23 +3319,24 @@ function resetSlot(doc, side) {
     const k = keyOf(doc, side);
     processedImages[k] = null;
     detectionImages[k] = null;
-    originalImages[k] = null;
-    originalCorners[k] = null;
+    sourceData[k] = null;
 
-    const input = document.getElementById(`input-${k}`);
-    if (input) input.value = '';
+    const inputCam = document.getElementById(`input-cam-${k}`);
+    if (inputCam) inputCam.value = '';
+    const inputGal = document.getElementById(`input-gal-${k}`);
+    if (inputGal) inputGal.value = '';
 
     const preview = document.getElementById(`preview-${k}`);
     preview.src = '';
     preview.style.display = 'none';
 
-    const editBtn = document.getElementById(`edit-btn-${k}`);
-    if (editBtn) editBtn.classList.remove('visible');
-
     const detWrap = document.getElementById(`detection-wrap-${k}`);
     if (detWrap) detWrap.classList.remove('visible');
     const detImg = document.getElementById(`detection-${k}`);
     if (detImg) detImg.src = '';
+
+    const editBtn = document.getElementById(`edit-btn-${k}`);
+    if (editBtn) editBtn.disabled = true;
 
     document.getElementById(`slot-${k}`).className = 'card-slot';
 
@@ -2369,31 +3351,15 @@ function resetSlot(doc, side) {
 }
 
 function checkExportStatus() {
-    if (currentDocs === 0) {
-        document.getElementById('btn-export').disabled = true;
-        document.getElementById('btn-preview').disabled = true;
-        document.getElementById('btn-export-jpg').disabled = true;
-        return;
+    let allDone = currentDocs > 0;
+    for (let d = 1; d <= currentDocs && allDone; d++) {
+        const hasFronte = !!processedImages[keyOf(d, 'fronte')];
+        const hasRetro  = !!processedImages[keyOf(d, 'retro')];
+        if (!hasFronte && !hasRetro) { allDone = false; break; }
     }
-
-    let anyData = false;
-    let valid = true;
-
-    for (let d = 1; d <= currentDocs; d++) {
-        let docHasAtLeastOne = false;
-        for (const s of SIDES) {
-            if (processedImages[keyOf(d, s)]) {
-                anyData = true;
-                docHasAtLeastOne = true;
-            }
-        }
-        if (!docHasAtLeastOne) valid = false;
-    }
-
-    const enabled = anyData && valid;
-    document.getElementById('btn-export').disabled = !enabled;
-    document.getElementById('btn-preview').disabled = !enabled;
-    document.getElementById('btn-export-jpg').disabled = !enabled;
+    document.getElementById('btn-export').disabled = !allDone;
+    document.getElementById('btn-preview').disabled = !allDone;
+    document.getElementById('btn-export-jpg').disabled = !allDone;
 }
 
 function setStatus(doc, side, type, text) {
@@ -2426,8 +3392,6 @@ function processImageFromBlob(blob, doc, side) {
 
     setStatus(doc, side, 'info', 'Analisi immagine in corso…');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
-    const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
-    if (editBtn) editBtn.classList.remove('visible');
 
     const detWrapPrev = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
     if (detWrapPrev) detWrapPrev.classList.remove('visible');
@@ -2447,12 +3411,11 @@ function fail(doc, side, reason, input) {
     setStatus(doc, side, 'error',
         'Foto rifiutata: ' + reason + '. Riprova con più luce e buon contrasto di sfondo.');
     document.getElementById(`preview-${keyOf(doc, side)}`).style.display = 'none';
-    const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
-    if (editBtn) editBtn.classList.remove('visible');
     processedImages[keyOf(doc, side)] = null;
     detectionImages[keyOf(doc, side)] = null;
-    originalImages[keyOf(doc, side)] = null;
-    originalCorners[keyOf(doc, side)] = null;
+    sourceData[keyOf(doc, side)] = null;
+    const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
+    if (editBtn) editBtn.disabled = true;
     updateProgress();
     checkExportStatus();
     saveState();
@@ -2464,11 +3427,12 @@ function runScanner(img, doc, side, input) {
     let src = null;
     let warpedDataUrl = null;
     let detectionDataUrl = null;
-    let corners = null;
+    let savedCorners = null;
+    let savedSrcUrl = null;
 
     try {
         src = readSourceMat(img);
-        corners = detectCard(src);
+        const corners = detectCard(src);
 
         if (!corners) {
             src.delete();
@@ -2484,8 +3448,11 @@ function runScanner(img, doc, side, input) {
         }
 
         warpedDataUrl = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
+        savedCorners = corners.map(c => ({ x: c.x, y: c.y }));
         src.delete();
         src = null;
+
+        try { savedSrcUrl = getSourceDataUrl(img); } catch (e) { savedSrcUrl = img.src; }
     } catch (err) {
         console.error(err);
         if (src) src.delete();
@@ -2497,28 +3464,30 @@ function runScanner(img, doc, side, input) {
         const q = checkQuality(warpedImg);
         if (!q.isValid) { fail(doc, side, q.reason, input); return; }
 
-        const prev = document.getElementById(`preview-${keyOf(doc, side)}`);
+        const k = keyOf(doc, side);
+
+        const prev = document.getElementById(`preview-${k}`);
         prev.src = warpedDataUrl;
         prev.style.display = 'block';
 
         if (detectionDataUrl) {
-            detectionImages[keyOf(doc, side)] = detectionDataUrl;
-            const detImg = document.getElementById(`detection-${keyOf(doc, side)}`);
-            const detWrap = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
+            detectionImages[k] = detectionDataUrl;
+            const detImg = document.getElementById(`detection-${k}`);
+            const detWrap = document.getElementById(`detection-wrap-${k}`);
             if (detImg && detWrap) {
                 detImg.src = detectionDataUrl;
                 detWrap.classList.add('visible');
             }
         }
 
-        // Salva l'immagine originale e i corners per l'editor
-        originalImages[keyOf(doc, side)] = img.src;
-        originalCorners[keyOf(doc, side)] = corners.map(p => ({ x: p.x, y: p.y }));
+        if (savedSrcUrl && savedCorners) {
+            sourceData[k] = { srcUrl: savedSrcUrl, corners: savedCorners };
+            const editBtn = document.getElementById(`edit-btn-${k}`);
+            if (editBtn) editBtn.disabled = false;
+        }
 
         setStatus(doc, side, 'success', 'Ritagliato e raddrizzato.');
-        processedImages[keyOf(doc, side)] = warpedDataUrl;
-        const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
-        if (editBtn) editBtn.classList.add('visible');
+        processedImages[k] = warpedDataUrl;
         updateProgress();
         checkExportStatus();
         saveState();
@@ -2528,7 +3497,7 @@ function runScanner(img, doc, side, input) {
 }
 
 /* ============================================================
-   OVERLAY BORDI
+   OVERLAY BORDI (da cv.Mat)
    ============================================================ */
 function buildDetectionOverlay(srcMat, corners) {
     const W = srcMat.cols;
@@ -2601,6 +3570,56 @@ function buildDetectionOverlay(srcMat, corners) {
         tx = Math.min(tx, tw - 4);
         ty = Math.min(ty, th - 4);
         tctx.fillText(labels[i], tx, ty);
+    }
+
+    return thumb.toDataURL('image/png');
+}
+
+/* ============================================================
+   OVERLAY BORDI (da Image + corners) — per l'editor manuale
+   ============================================================ */
+function buildDetectionOverlayFromImage(img, corners) {
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+
+    const maxDim = 500;
+    const scale = Math.min(1, maxDim / Math.max(W, H));
+    const tw = Math.max(1, Math.round(W * scale));
+    const th = Math.max(1, Math.round(H * scale));
+
+    const thumb = document.createElement('canvas');
+    thumb.width = tw;
+    thumb.height = th;
+    const tctx = thumb.getContext('2d');
+
+    tctx.fillStyle = '#ffffff';
+    tctx.fillRect(0, 0, tw, th);
+    tctx.drawImage(img, 0, 0, tw, th);
+
+    const pts = corners.map(p => ({ x: p.x * scale, y: p.y * scale }));
+
+    tctx.save();
+    tctx.shadowColor = 'rgba(0, 255, 176, 0.9)';
+    tctx.shadowBlur = 12;
+    tctx.strokeStyle = '#00ffb0';
+    tctx.lineWidth = Math.max(2, tw / 220);
+    tctx.lineJoin = 'round';
+    tctx.beginPath();
+    tctx.moveTo(pts[0].x, pts[0].y);
+    for (let i = 1; i < pts.length; i++) tctx.lineTo(pts[i].x, pts[i].y);
+    tctx.closePath();
+    tctx.stroke();
+    tctx.restore();
+
+    const dotR = Math.max(3, tw / 130);
+    tctx.fillStyle = '#00ffb0';
+    tctx.strokeStyle = '#003c2e';
+    tctx.lineWidth = Math.max(1, tw / 400);
+    for (const p of pts) {
+        tctx.beginPath();
+        tctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
+        tctx.fill();
+        tctx.stroke();
     }
 
     return thumb.toDataURL('image/png');
@@ -2855,11 +3874,18 @@ function runMultiScan(img) {
 
         const previewDataUrl = buildMultiDetectionOverlay(src, cardsCorners);
 
+        let sharedSrcUrl = null;
+        try { sharedSrcUrl = getSourceDataUrl(img); } catch (e) { sharedSrcUrl = img.src; }
+
         const cards = [];
         for (const corners of cardsCorners) {
             try {
                 const warped = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
-                cards.push({ dataUrl: warped, corners, sourceImg: img.src });
+                cards.push({
+                    dataUrl: warped,
+                    corners: corners.map(c => ({ x: c.x, y: c.y })),
+                    srcUrl: sharedSrcUrl
+                });
             } catch (e) {
                 console.warn('Errore warp tessera:', e);
             }
@@ -2907,10 +3933,21 @@ async function confirmMultiScan() {
 
     const cards = multiScanPending.cards.slice();
 
+    function findNextFreeSlotLocal() {
+        for (let d = 1; d <= currentDocs; d++) {
+            for (const s of SIDES) {
+                if (!processedImages[keyOf(d, s)]) {
+                    return { doc: d, side: s };
+                }
+            }
+        }
+        return null;
+    }
+
     let assigned = 0;
 
     for (const card of cards) {
-        let slot = findNextFreeSlot();
+        let slot = findNextFreeSlotLocal();
 
         if (!slot) {
             if (currentDocs < CONFIG.maxDocs) {
@@ -2924,27 +3961,29 @@ async function confirmMultiScan() {
         }
 
         const { doc, side } = slot;
+        const k = keyOf(doc, side);
 
-        processedImages[keyOf(doc, side)] = card.dataUrl;
+        processedImages[k] = card.dataUrl;
 
-        const prev = document.getElementById(`preview-${keyOf(doc, side)}`);
+        if (card.srcUrl && card.corners) {
+            sourceData[k] = {
+                srcUrl: card.srcUrl,
+                corners: card.corners.map(c => ({ x: c.x, y: c.y }))
+            };
+        }
+
+        const prev = document.getElementById(`preview-${k}`);
         if (prev) {
             prev.src = card.dataUrl;
             prev.style.display = 'block';
         }
 
-        // Salva originali e corners per editor
-        if (card.sourceImg) {
-            originalImages[keyOf(doc, side)] = card.sourceImg;
-        }
-        originalCorners[keyOf(doc, side)] = card.corners.map(p => ({ x: p.x, y: p.y }));
-
         try {
             const detOverlay = buildDetectionOverlayFromCorners(card.corners);
             if (detOverlay) {
-                detectionImages[keyOf(doc, side)] = detOverlay;
-                const detImg = document.getElementById(`detection-${keyOf(doc, side)}`);
-                const detWrap = document.getElementById(`detection-wrap-${keyOf(doc, side)}`);
+                detectionImages[k] = detOverlay;
+                const detImg = document.getElementById(`detection-${k}`);
+                const detWrap = document.getElementById(`detection-wrap-${k}`);
                 if (detImg && detWrap) {
                     detImg.src = detOverlay;
                     detWrap.classList.add('visible');
@@ -2954,9 +3993,10 @@ async function confirmMultiScan() {
             console.warn('Overlay individuale non generato:', e);
         }
 
+        const editBtn = document.getElementById(`edit-btn-${k}`);
+        if (editBtn && card.srcUrl) editBtn.disabled = false;
+
         setStatus(doc, side, 'success', 'Estratto da multi-scan.');
-        const editBtn = document.getElementById(`edit-btn-${keyOf(doc, side)}`);
-        if (editBtn) editBtn.classList.add('visible');
         assigned++;
     }
 
@@ -3028,105 +4068,6 @@ function buildDetectionOverlayFromCorners(corners) {
 }
 
 /* ============================================================
-   WEBCAM
-   ============================================================ */
-function isWebcamSupported() {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
-}
-
-async function openWebcamModal(doc, side) {
-    if (!isWebcamSupported()) {
-        alert('La webcam non è disponibile su questo dispositivo/browser.\n' +
-              'Usa "Scatta / Carica" per selezionare un file.');
-        return;
-    }
-
-    webcamTarget = { doc, side };
-    webcamFacingMode = 'environment';
-
-    document.getElementById('webcam-modal-overlay').classList.add('open');
-    await startWebcam();
-}
-
-async function startWebcam() {
-    stopWebcamStream();
-
-    const video = document.getElementById('webcam-video');
-    const constraints = {
-        audio: false,
-        video: {
-            facingMode: { ideal: webcamFacingMode },
-            width:  { ideal: 1920 },
-            height: { ideal: 1080 }
-        }
-    };
-
-    try {
-        webcamStream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = webcamStream;
-        await video.play().catch(() => {});
-
-        try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const cams = devices.filter(d => d.kind === 'videoinput');
-            document.getElementById('btn-switch-cam').style.display = cams.length > 1 ? '' : 'none';
-        } catch (_) {
-            document.getElementById('btn-switch-cam').style.display = 'none';
-        }
-    } catch (err) {
-        console.error('Errore accesso webcam:', err);
-        let msg = 'Impossibile accedere alla webcam.';
-        if (err.name === 'NotAllowedError')      msg += '\nPermesso negato dall\'utente.';
-        else if (err.name === 'NotFoundError')   msg += '\nNessuna webcam trovata.';
-        else if (err.name === 'NotReadableError')msg += '\nWebcam occupata da un\'altra applicazione.';
-        alert(msg);
-        closeWebcamModal();
-    }
-}
-
-function stopWebcamStream() {
-    if (webcamStream) {
-        webcamStream.getTracks().forEach(t => { try { t.stop(); } catch (_) {} });
-        webcamStream = null;
-    }
-    const video = document.getElementById('webcam-video');
-    if (video) video.srcObject = null;
-}
-
-function switchCamera() {
-    webcamFacingMode = (webcamFacingMode === 'environment') ? 'user' : 'environment';
-    startWebcam();
-}
-
-function captureWebcam() {
-    if (!webcamTarget || !webcamStream) return;
-    const video = document.getElementById('webcam-video');
-
-    if (!video.videoWidth || !video.videoHeight) {
-        alert('La webcam non è ancora pronta. Attendi un momento e riprova.');
-        return;
-    }
-
-    const c = document.createElement('canvas');
-    c.width  = video.videoWidth;
-    c.height = video.videoHeight;
-    const ctx = c.getContext('2d');
-    ctx.drawImage(video, 0, 0, c.width, c.height);
-
-    const { doc, side } = webcamTarget;
-    c.toBlob(blob => {
-        closeWebcamModal();
-        if (blob) processImageFromBlob(blob, doc, side);
-    }, 'image/jpeg', CONFIG.jpegQuality);
-}
-
-function closeWebcamModal() {
-    document.getElementById('webcam-modal-overlay').classList.remove('open');
-    stopWebcamStream();
-    webcamTarget = null;
-}
-
-/* ============================================================
    LETTURA SORGENTE
    ============================================================ */
 function readSourceMat(img) {
@@ -3142,6 +4083,21 @@ function readSourceMat(img) {
     ctx.fillRect(0, 0, c.width, c.height);
     ctx.drawImage(img, 0, 0, c.width, c.height);
     return cv.imread(c);
+}
+
+function getSourceDataUrl(img) {
+    const maxDim = Math.max(img.naturalWidth, img.naturalHeight);
+    if (maxDim <= CONFIG.maxSrcDim) return img.src;
+
+    const scale = CONFIG.maxSrcDim / maxDim;
+    const c = document.createElement('canvas');
+    c.width  = Math.round(img.naturalWidth  * scale);
+    c.height = Math.round(img.naturalHeight * scale);
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.92);
 }
 
 /* ============================================================
@@ -3361,394 +4317,17 @@ function checkQuality(img) {
 }
 
 /* ============================================================
-   EDITOR MANUALE BORDI — CORNER EDITOR
-   ============================================================ */
-function openCornerEditor(doc, side) {
-    const k = keyOf(doc, side);
-    const origSrc = originalImages[k];
-    const corners = originalCorners[k];
-
-    if (!origSrc || !corners) {
-        alert('Impossibile aprire l\'editor: immagine originale non disponibile.\n' +
-              'Riprova a scansionare la tessera.');
-        return;
-    }
-
-    const img = new Image();
-    img.onload = () => {
-        const c = document.createElement('canvas');
-        c.width = img.naturalWidth;
-        c.height = img.naturalHeight;
-        const ctx = c.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-
-        cornerEditorState.open = true;
-        cornerEditorState.doc = doc;
-        cornerEditorState.side = side;
-        cornerEditorState.srcCanvas = c;
-        cornerEditorState.srcWidth = c.width;
-        cornerEditorState.srcHeight = c.height;
-        cornerEditorState.corners = corners.map(p => ({ x: p.x, y: p.y }));
-        cornerEditorState.originalCorners = corners.map(p => ({ x: p.x, y: p.y }));
-        cornerEditorState.dragging = -1;
-        cornerEditorState.zoom = 1;
-        cornerEditorState.panX = 0;
-        cornerEditorState.panY = 0;
-
-        document.getElementById('corner-editor-overlay').classList.add('open');
-        document.body.style.overflow = 'hidden';
-
-        setTimeout(() => {
-            setupCornerEditorCanvas();
-        }, 60);
-    };
-    img.onerror = () => alert('Impossibile caricare l\'immagine originale.');
-    img.src = origSrc;
-}
-
-function setupCornerEditorCanvas() {
-    const canvas = document.getElementById('corner-editor-canvas');
-    const body = document.getElementById('corner-editor-body');
-
-    const availW = Math.max(200, body.clientWidth - 20);
-    const availH = Math.max(200, body.clientHeight - 20);
-
-    const srcW = cornerEditorState.srcWidth;
-    const srcH = cornerEditorState.srcHeight;
-
-    const baseScale = Math.min(availW / srcW, availH / srcH);
-    cornerEditorState.displayScale = baseScale;
-    cornerEditorState.displayW = srcW * baseScale;
-    cornerEditorState.displayH = srcH * baseScale;
-
-    canvas.width = Math.round(availW);
-    canvas.height = Math.round(availH);
-    canvas.style.width = availW + 'px';
-    canvas.style.height = availH + 'px';
-
-    cornerEditorState.viewW = availW;
-    cornerEditorState.viewH = availH;
-
-    drawCornerEditor();
-
-    canvas.onmousedown = onCornerEditorMouseDown;
-    canvas.onmousemove = onCornerEditorMouseMove;
-    canvas.onmouseup = onCornerEditorMouseUp;
-    canvas.onmouseleave = onCornerEditorMouseUp;
-
-    canvas.ontouchstart = onCornerEditorTouchStart;
-    canvas.ontouchmove = onCornerEditorTouchMove;
-    canvas.ontouchend = onCornerEditorTouchEnd;
-
-    canvas.onwheel = (e) => {
-        e.preventDefault();
-        const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-        cornerEditorState.zoom = Math.max(0.5, Math.min(4, cornerEditorState.zoom * factor));
-        drawCornerEditor();
-    };
-}
-
-function toCanvasCoords(srcX, srcY) {
-    const s = cornerEditorState;
-    const cx = s.viewW / 2 + s.panX;
-    const cy = s.viewH / 2 + s.panY;
-    const x = cx + (srcX - s.srcWidth / 2) * s.displayScale * s.zoom;
-    const y = cy + (srcY - s.srcHeight / 2) * s.displayScale * s.zoom;
-    return { x, y };
-}
-
-function fromCanvasCoords(canvasX, canvasY) {
-    const s = cornerEditorState;
-    const cx = s.viewW / 2 + s.panX;
-    const cy = s.viewH / 2 + s.panY;
-    const x = (canvasX - cx) / (s.displayScale * s.zoom) + s.srcWidth / 2;
-    const y = (canvasY - cy) / (s.displayScale * s.zoom) + s.srcHeight / 2;
-    return { x, y };
-}
-
-function drawCornerEditor() {
-    const canvas = document.getElementById('corner-editor-canvas');
-    const ctx = canvas.getContext('2d');
-    const s = cornerEditorState;
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = '#0a0e27';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const scale = s.displayScale * s.zoom;
-    const cx = s.viewW / 2 + s.panX;
-    const cy = s.viewH / 2 + s.panY;
-
-    const imgX = cx - (s.srcWidth / 2) * scale;
-    const imgY = cy - (s.srcHeight / 2) * scale;
-    const imgW = s.srcWidth * scale;
-    const imgH = s.srcHeight * scale;
-
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(s.srcCanvas, imgX, imgY, imgW, imgH);
-
-    const pts = s.corners.map(p => toCanvasCoords(p.x, p.y));
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(pts[0].x, pts[0].y);
-    for (let i = 1; i < 4; i++) ctx.lineTo(pts[i].x, pts[i].y);
-    ctx.closePath();
-
-    ctx.fillStyle = 'rgba(0, 255, 176, 0.10)';
-    ctx.fill();
-
-    ctx.strokeStyle = '#00ffb0';
-    ctx.lineWidth = 2.5;
-    ctx.shadowColor = 'rgba(0, 255, 176, 0.9)';
-    ctx.shadowBlur = 12;
-    ctx.stroke();
-    ctx.restore();
-
-    const dotR = 10;
-    for (let i = 0; i < 4; i++) {
-        const p = pts[i];
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, dotR, 0, Math.PI * 2);
-        ctx.fillStyle = i === s.dragging ? '#f59e0b' : '#00ffb0';
-        ctx.shadowColor = i === s.dragging ? 'rgba(245, 158, 11, 1)' : 'rgba(0, 255, 176, 1)';
-        ctx.shadowBlur = 16;
-        ctx.fill();
-        ctx.strokeStyle = '#003c2e';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        ctx.restore();
-
-        ctx.fillStyle = '#0a0e27';
-        ctx.font = 'bold 11px Inter, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(String(i + 1), p.x, p.y + 0.5);
-    }
-}
-
-function getEventPos(e) {
-    const canvas = document.getElementById('corner-editor-canvas');
-    const rect = canvas.getBoundingClientRect();
-    let clientX, clientY;
-    if (e.touches && e.touches.length > 0) {
-        clientX = e.touches[0].clientX;
-        clientY = e.touches[0].clientY;
-    } else if (e.changedTouches && e.changedTouches.length > 0) {
-        clientX = e.changedTouches[0].clientX;
-        clientY = e.changedTouches[0].clientY;
-    } else {
-        clientX = e.clientX;
-        clientY = e.clientY;
-    }
-    return {
-        x: (clientX - rect.left) * (canvas.width / rect.width),
-        y: (clientY - rect.top) * (canvas.height / rect.height)
-    };
-}
-
-function findNearestCorner(pos) {
-    const s = cornerEditorState;
-    const pts = s.corners.map(p => toCanvasCoords(p.x, p.y));
-    let minDist = Infinity, idx = -1;
-    for (let i = 0; i < 4; i++) {
-        const d = Math.hypot(pts[i].x - pos.x, pts[i].y - pos.y);
-        if (d < minDist) { minDist = d; idx = i; }
-    }
-    return { idx, dist: minDist };
-}
-
-function onCornerEditorMouseDown(e) {
-    const pos = getEventPos(e);
-    const { idx, dist } = findNearestCorner(pos);
-    if (dist < 30) {
-        cornerEditorState.dragging = idx;
-        drawCornerEditor();
-    }
-}
-
-function onCornerEditorMouseMove(e) {
-    if (cornerEditorState.dragging < 0) {
-        const pos = getEventPos(e);
-        const { dist } = findNearestCorner(pos);
-        const canvas = document.getElementById('corner-editor-canvas');
-        canvas.style.cursor = dist < 30 ? 'grab' : 'crosshair';
-        return;
-    }
-    const pos = getEventPos(e);
-    const src = fromCanvasCoords(pos.x, pos.y);
-    src.x = Math.max(0, Math.min(cornerEditorState.srcWidth, src.x));
-    src.y = Math.max(0, Math.min(cornerEditorState.srcHeight, src.y));
-    cornerEditorState.corners[cornerEditorState.dragging] = src;
-    drawCornerEditor();
-}
-
-function onCornerEditorMouseUp() {
-    if (cornerEditorState.dragging >= 0) {
-        cornerEditorState.dragging = -1;
-        drawCornerEditor();
-    }
-}
-
-function onCornerEditorTouchStart(e) {
-    e.preventDefault();
-    if (e.touches.length === 1) {
-        const pos = getEventPos(e);
-        const { idx, dist } = findNearestCorner(pos);
-        if (dist < 40) {
-            cornerEditorState.dragging = idx;
-            drawCornerEditor();
-        }
-    }
-}
-
-function onCornerEditorTouchMove(e) {
-    e.preventDefault();
-    if (cornerEditorState.dragging >= 0 && e.touches.length === 1) {
-        const pos = getEventPos(e);
-        const src = fromCanvasCoords(pos.x, pos.y);
-        src.x = Math.max(0, Math.min(cornerEditorState.srcWidth, src.x));
-        src.y = Math.max(0, Math.min(cornerEditorState.srcHeight, src.y));
-        cornerEditorState.corners[cornerEditorState.dragging] = src;
-        drawCornerEditor();
-    }
-}
-
-function onCornerEditorTouchEnd(e) {
-    e.preventDefault();
-    if (cornerEditorState.dragging >= 0) {
-        cornerEditorState.dragging = -1;
-        drawCornerEditor();
-    }
-}
-
-function autoDetectCornersInEditor() {
-    const s = cornerEditorState;
-    if (!s.open) return;
-
-    try {
-        const src = cv.imread(s.srcCanvas);
-        const corners = detectCard(src);
-        src.delete();
-
-        if (corners) {
-            s.corners = corners.map(p => ({ x: p.x, y: p.y }));
-            s.zoom = 1;
-            s.panX = 0;
-            s.panY = 0;
-            drawCornerEditor();
-        } else {
-            alert('Rilevamento automatico non riuscito. Regola manualmente i 4 angoli.');
-        }
-    } catch (e) {
-        console.warn('Auto-detect fallito:', e);
-        alert('Errore nel rilevamento automatico.');
-    }
-}
-
-function resetCornersInEditor() {
-    const s = cornerEditorState;
-    if (!s.open) return;
-    s.corners = s.originalCorners.map(p => ({ x: p.x, y: p.y }));
-    s.zoom = 1;
-    s.panX = 0;
-    s.panY = 0;
-    drawCornerEditor();
-}
-
-function saveCornersFromEditor() {
-    const s = cornerEditorState;
-    if (!s.open || s.doc == null || s.side == null) return;
-
-    const doc = s.doc;
-    const side = s.side;
-    const k = keyOf(doc, side);
-    const newCorners = s.corners.map(p => ({ x: p.x, y: p.y }));
-
-    try {
-        const src = cv.imread(s.srcCanvas);
-        const warped = warpCard(src, newCorners, CONFIG.targetWidth, CONFIG.targetHeight);
-        const detOverlay = buildDetectionOverlayFromCorners(newCorners);
-        src.delete();
-
-        processedImages[k] = warped;
-        detectionImages[k] = detOverlay;
-        originalCorners[k] = newCorners.map(p => ({ x: p.x, y: p.y }));
-
-        const prev = document.getElementById(`preview-${k}`);
-        if (prev) {
-            prev.src = warped;
-            prev.style.display = 'block';
-        }
-
-        const detImg = document.getElementById(`detection-${k}`);
-        const detWrap = document.getElementById(`detection-wrap-${k}`);
-        if (detImg && detWrap) {
-            detImg.src = detOverlay;
-            detWrap.classList.add('visible');
-        }
-
-        const editBtn = document.getElementById(`edit-btn-${k}`);
-        if (editBtn) editBtn.classList.add('visible');
-
-        setStatus(doc, side, 'success', 'Bordi modificati manualmente.');
-
-        updateProgress();
-        checkExportStatus();
-        saveState();
-        refreshPreviewIfOpen();
-
-        closeCornerEditor();
-    } catch (e) {
-        console.error('Errore salvataggio bordi:', e);
-        alert('Errore durante il salvataggio dei bordi. Riprova.');
-    }
-}
-
-function closeCornerEditor() {
-    cornerEditorState.open = false;
-    cornerEditorState.dragging = -1;
-    document.getElementById('corner-editor-overlay').classList.remove('open');
-    document.body.style.overflow = '';
-
-    const canvas = document.getElementById('corner-editor-canvas');
-    if (canvas) {
-        canvas.onmousedown = null;
-        canvas.onmousemove = null;
-        canvas.onmouseup = null;
-        canvas.onmouseleave = null;
-        canvas.ontouchstart = null;
-        canvas.ontouchmove = null;
-        canvas.ontouchend = null;
-        canvas.onwheel = null;
-    }
-}
-
-/* ============================================================
    COSTRUZIONE PDF — 8 TESSERE PER PAGINA A4
    ============================================================ */
 function buildPDFDocument() {
-    if (currentDocs === 0) {
-        alert('Aggiungi almeno una tessera.');
-        return null;
-    }
-
     for (let d = 1; d <= currentDocs; d++) {
-        let hasAtLeastOne = false;
-        for (const s of SIDES) {
-            if (processedImages[keyOf(d, s)]) {
-                hasAtLeastOne = true;
-                break;
-            }
-        }
-        if (!hasAtLeastOne) {
-            alert('Completa almeno un lato per ogni documento prima di esportare.');
+        const hasFronte = !!processedImages[keyOf(d, 'fronte')];
+        const hasRetro  = !!processedImages[keyOf(d, 'retro')];
+        if (!hasFronte && !hasRetro) {
+            alert(`Il documento ${d} non ha nessun lato caricato.\nCarica almeno il fronte o il retro prima di esportare.`);
             return null;
         }
     }
-
     if (!window.jspdf || !window.jspdf.jsPDF) {
         alert('Libreria PDF non disponibile.');
         return null;
@@ -3791,14 +4370,14 @@ function buildPDFDocument() {
 
             const y = startY + r * (rowH + actualGap);
 
-            const front = processedImages[keyOf(docNum, 'fronte')];
-            const back  = processedImages[keyOf(docNum, 'retro')];
+            const fImg = processedImages[keyOf(docNum, 'fronte')];
+            const bImg = processedImages[keyOf(docNum, 'retro')];
 
-            if (front) {
-                doc.addImage(front, 'PNG', leftMargin, y, cW, cH);
+            if (fImg) {
+                doc.addImage(fImg, 'PNG', leftMargin, y, cW, cH);
             }
-            if (back) {
-                doc.addImage(back, 'PNG', leftMargin + cW + gap, y, cW, cH);
+            if (bImg) {
+                doc.addImage(bImg, 'PNG', leftMargin + cW + gap, y, cW, cH);
             }
         }
     }
@@ -3814,10 +4393,54 @@ function getCleanFilename() {
 }
 
 /* ============================================================
-   SALVATAGGIO CON SCELTA POSIZIONE
+   APK-READY: SALVATAGGIO FILE CON FALLBACK PROGRESSIVO
    ============================================================ */
+function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const res = reader.result || '';
+            const idx = res.indexOf(',');
+            resolve(idx >= 0 ? res.substring(idx + 1) : res);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
 async function saveFileWithPicker(data, defaultName, mimeType, extensions) {
-    if (window.showSaveFilePicker) {
+    /* --- 1) CAPACITOR (APK) --- */
+    if (APP_ENV.isCapacitor && window.Capacitor.Plugins) {
+        const FS = window.Capacitor.Plugins.Filesystem;
+        const Share = window.Capacitor.Plugins.Share;
+        if (FS && FS.writeFile) {
+            try {
+                const blob = data instanceof Blob ? data : new Blob([data], { type: mimeType });
+                const base64 = await blobToBase64(blob);
+                const res = await FS.writeFile({
+                    path: defaultName,
+                    data: base64,
+                    directory: 'DOCUMENTS',
+                    recursive: true
+                });
+                if (Share && Share.share) {
+                    try {
+                        await Share.share({
+                            title: defaultName,
+                            url: res.uri,
+                            dialogTitle: 'Salva o condividi'
+                        });
+                    } catch (_) { /* utente ha annullato condivisione */ }
+                }
+                return { ok: true, method: 'capacitor', uri: res.uri };
+            } catch (err) {
+                console.warn('Capacitor Filesystem fallito, provo File System Access API:', err);
+            }
+        }
+    }
+
+    /* --- 2) FILE SYSTEM ACCESS API --- */
+    if (window.showSaveFilePicker && !APP_ENV.isAndroid) {
         try {
             const handle = await window.showSaveFilePicker({
                 suggestedName: defaultName,
@@ -3838,18 +4461,24 @@ async function saveFileWithPicker(data, defaultName, mimeType, extensions) {
         }
     }
 
-    // Fallback: download classico
-    const blob = data instanceof Blob ? data : new Blob([data], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = defaultName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 4000);
-
-    return { ok: true, method: 'download' };
+    /* --- 3) DOWNLOAD CLASSICO --- */
+    try {
+        const blob = data instanceof Blob ? data : new Blob([data], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = defaultName;
+        a.rel = 'noopener';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => { try { URL.revokeObjectURL(url); } catch (_) {} }, 8000);
+        return { ok: true, method: 'download' };
+    } catch (err) {
+        console.error('Anche il download classico è fallito:', err);
+        return { ok: false, method: 'download', reason: 'errore' };
+    }
 }
 
 async function generatePDF() {
@@ -3877,11 +4506,13 @@ async function generatePDF() {
     if (!result.ok) return;
 
     setTimeout(() => {
-        const ok = confirm(
-            'PDF salvato correttamente.\n\n' +
-            'Vuoi ricaricare la pagina con le tessere ancora caricate?\n' +
-            '(Potrai aggiungerne altre o modificarle senza perdere il lavoro.)'
-        );
+        let msg = 'PDF salvato correttamente.';
+        if (result.method === 'capacitor' && result.uri) {
+            msg += `\n\nPercorso: ${result.uri}`;
+        }
+        msg += '\n\nVuoi ricaricare la pagina con le tessere ancora caricate?\n' +
+               '(Potrai aggiungerne altre o modificarle senza perdere il lavoro.)';
+        const ok = confirm(msg);
         if (ok) {
             window.location.reload();
         }
@@ -3916,7 +4547,7 @@ function openPreviewModal() {
 function closePreviewModal() {
     previewOpen = false;
     document.getElementById('pdf-modal-overlay').classList.remove('open');
-    document.body.style.overflow = '';
+    if (!isAnyModalOpen()) document.body.style.overflow = '';
 
     renderToken++;
 
@@ -4152,8 +4783,7 @@ async function processImportPDFBlob(blob) {
             continue;
         }
 
-        const pageDataUrl = canvas.toDataURL('image/png');
-        const img = await loadImage(pageDataUrl);
+        const img = await loadImage(canvas.toDataURL('image/png'));
 
         let cardsCorners = [];
         try {
@@ -4165,7 +4795,6 @@ async function processImportPDFBlob(blob) {
         }
 
         if (!cardsCorners || cardsCorners.length === 0) {
-            // Prova come singola tessera
             let singleCorners = null;
             try {
                 const src = readSourceMat(img);
@@ -4181,7 +4810,9 @@ async function processImportPDFBlob(blob) {
             continue;
         }
 
-        // Assegna le tessere rilevate agli slot liberi
+        let pageSrcUrl = null;
+        try { pageSrcUrl = getSourceDataUrl(img); } catch (e) { pageSrcUrl = img.src; }
+
         for (const corners of cardsCorners) {
             let slot = findNextFreeSlot();
             if (!slot) {
@@ -4204,9 +4835,13 @@ async function processImportPDFBlob(blob) {
                 src.delete();
 
                 processedImages[k] = warped;
-                detectionImages[k] = detOverlay;
-                originalImages[k] = pageDataUrl;
-                originalCorners[k] = corners.map(pt => ({ x: pt.x, y: pt.y }));
+
+                if (pageSrcUrl) {
+                    sourceData[k] = {
+                        srcUrl: pageSrcUrl,
+                        corners: corners.map(c => ({ x: c.x, y: c.y }))
+                    };
+                }
 
                 const prev = document.getElementById(`preview-${k}`);
                 if (prev) {
@@ -4215,6 +4850,7 @@ async function processImportPDFBlob(blob) {
                 }
 
                 if (detOverlay) {
+                    detectionImages[k] = detOverlay;
                     const detImg = document.getElementById(`detection-${k}`);
                     const detWrap = document.getElementById(`detection-wrap-${k}`);
                     if (detImg && detWrap) {
@@ -4223,9 +4859,10 @@ async function processImportPDFBlob(blob) {
                     }
                 }
 
-                setStatus(doc, side, 'success', `Importata da PDF pag. ${p}.`);
                 const editBtn = document.getElementById(`edit-btn-${k}`);
-                if (editBtn) editBtn.classList.add('visible');
+                if (editBtn && pageSrcUrl) editBtn.disabled = false;
+
+                setStatus(doc, side, 'success', `Importata da PDF pag. ${p}.`);
                 totalCardsFound++;
             } catch (e) {
                 console.warn('Errore estrazione da PDF:', e);
@@ -4262,26 +4899,15 @@ function findNextFreeSlot() {
    ESPORTAZIONE JPG A4
    ============================================================ */
 async function exportJPG_A4() {
-    if (currentDocs === 0) {
-        alert('Aggiungi almeno una tessera.');
-        return;
-    }
-
     for (let d = 1; d <= currentDocs; d++) {
-        let hasAtLeastOne = false;
-        for (const s of SIDES) {
-            if (processedImages[keyOf(d, s)]) {
-                hasAtLeastOne = true;
-                break;
-            }
-        }
-        if (!hasAtLeastOne) {
-            alert('Completa almeno un lato per ogni documento prima di esportare.');
+        const hasFronte = !!processedImages[keyOf(d, 'fronte')];
+        const hasRetro  = !!processedImages[keyOf(d, 'retro')];
+        if (!hasFronte && !hasRetro) {
+            alert(`Il documento ${d} non ha nessun lato caricato.\nCarica almeno il fronte o il retro prima di esportare.`);
             return;
         }
     }
 
-    // Dimensioni A4 a 300 DPI
     const DPI = 300;
     const A4_W_MM = 210;
     const A4_H_MM = 297;
@@ -4311,12 +4937,11 @@ async function exportJPG_A4() {
     const docsPerPage = CONFIG.docsPerPage;
     const pages = Math.ceil(currentDocs / docsPerPage);
 
-    // Precarica tutte le immagini coinvolte
     const images = {};
     for (let d = 1; d <= currentDocs; d++) {
         for (const s of SIDES) {
             const k = keyOf(d, s);
-            if (!images[k] && processedImages[k]) {
+            if (processedImages[k] && !images[k]) {
                 images[k] = await loadImage(processedImages[k]);
             }
         }
@@ -4331,7 +4956,6 @@ async function exportJPG_A4() {
         canvas.height = A4_H_PX;
         const ctx = canvas.getContext('2d');
 
-        // Sfondo bianco
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, A4_W_PX, A4_H_PX);
 
@@ -4397,16 +5021,906 @@ async function exportJPG_A4() {
 }
 
 /* ============================================================
+   EDITOR MANUALE BORDI — v2 (precision reticle)
+   ============================================================ */
+const EDITOR_CFG = {
+    MAG_MIN_CSS: 160,
+    MAG_MAX_CSS: 240,
+    MAG_ZOOM: 6,
+    MAG_GRID_SRC_STEP: 10,
+    HIT_RADIUS: 32,
+    HANDLE_R: 12,
+    HANDLE_R_ACTIVE: 16,
+    WARP_PREVIEW_W: 240,
+    WARP_PREVIEW_H: 151,
+    PREVIEW_THROTTLE_MS: 60
+};
+
+let editorState = null;
+let editorPreviewTimer = null;
+
+function openEditorModal(doc, side) {
+    const k = keyOf(doc, side);
+    const data = sourceData[k];
+
+    if (!data || !data.srcUrl || !data.corners) {
+        alert('Sorgente non disponibile per la modifica manuale.\n' +
+              'Ricarica l\'immagine per poter modificare i bordi.');
+        return;
+    }
+
+    editorState = {
+        key: k,
+        doc: doc,
+        side: side,
+        srcUrl: data.srcUrl,
+        corners: data.corners.map(c => ({ x: c.x, y: c.y })),
+        originalCorners: data.corners.map(c => ({ x: c.x, y: c.y })),
+        img: null,
+        scale: 1,
+        fitScale: 1,
+        minScale: 0.02,
+        maxScale: 80,
+        offsetX: 0,
+        offsetY: 0,
+        canvasW: 0,
+        canvasH: 0,
+        dpr: 1,
+        dragging: null,
+        dragStart: null,
+        activeCorner: -1,
+        hoverCorner: -1,
+        mouseScreenPos: null,
+        pinch: null
+    };
+
+    const titleEl = document.getElementById('editor-modal-title');
+    if (titleEl) {
+        titleEl.textContent = `Modifica bordi — Doc ${doc} (${side.toUpperCase()})`;
+    }
+
+    const overlay = document.getElementById('editor-modal-overlay');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    updateEditorCornerInfo(-1);
+
+    const img = new Image();
+    img.onload = () => {
+        if (!editorState) return;
+        editorState.img = img;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            if (!editorState) return;
+            try {
+                fitEditorCanvas();
+                drawEditor();
+                renderEditorPreview();
+            } catch (e) {
+                console.error('Errore setup editor:', e);
+            }
+        }));
+    };
+    img.onerror = () => {
+        alert('Impossibile caricare l\'immagine sorgente.');
+        closeEditorModal();
+    };
+    img.src = data.srcUrl;
+}
+
+function closeEditorModal() {
+    document.getElementById('editor-modal-overlay').classList.remove('open');
+    if (!isAnyModalOpen()) document.body.style.overflow = '';
+    editorState = null;
+    if (editorPreviewTimer) {
+        clearTimeout(editorPreviewTimer);
+        editorPreviewTimer = null;
+    }
+
+    const mag = document.getElementById('editor-magnifier');
+    if (mag) mag.classList.remove('visible');
+}
+
+function resetEditorCorners() {
+    if (!editorState) return;
+    editorState.corners = editorState.originalCorners.map(c => ({ x: c.x, y: c.y }));
+    editorState.activeCorner = -1;
+    editorState.hoverCorner = -1;
+    updateEditorCornerInfo(-1);
+    drawEditor();
+    scheduleEditorPreview();
+}
+
+async function confirmEditorChanges() {
+    if (!editorState) return;
+    const { key, doc, side, srcUrl, corners } = editorState;
+
+    if (!isValidQuad(corners)) {
+        alert('La selezione non è valida. Controlla che gli angoli formino un quadrilatero senza incroci.');
+        return;
+    }
+
+    try {
+        const img = await loadImage(srcUrl);
+
+        let warped = null;
+        let overlay = null;
+
+        try {
+            const src = readSourceMat(img);
+            warped = warpCard(src, corners, CONFIG.targetWidth, CONFIG.targetHeight);
+            src.delete();
+        } catch (e) {
+            console.error('Errore warp:', e);
+            alert('Errore durante il ritaglio. Riprova.');
+            return;
+        }
+
+        try {
+            overlay = buildDetectionOverlayFromImage(img, corners);
+        } catch (e) {
+            console.warn('Overlay non rigenerato:', e);
+        }
+
+        processedImages[key] = warped;
+        sourceData[key] = {
+            srcUrl: srcUrl,
+            corners: corners.map(c => ({ x: c.x, y: c.y }))
+        };
+
+        const prev = document.getElementById(`preview-${key}`);
+        if (prev) {
+            prev.src = warped;
+            prev.style.display = 'block';
+        }
+
+        if (overlay) {
+            detectionImages[key] = overlay;
+            const detImg = document.getElementById(`detection-${key}`);
+            const detWrap = document.getElementById(`detection-wrap-${key}`);
+            if (detImg && detWrap) {
+                detImg.src = overlay;
+                detWrap.classList.add('visible');
+            }
+        }
+
+        const editBtn = document.getElementById(`edit-btn-${key}`);
+        if (editBtn) editBtn.disabled = false;
+
+        setStatus(doc, side, 'success', 'Bordi modificati manualmente.');
+        updateProgress();
+        checkExportStatus();
+        saveState();
+        refreshPreviewIfOpen();
+        closeEditorModal();
+    } catch (e) {
+        console.error(e);
+        alert('Errore durante il ritaglio. Riprova.');
+    }
+}
+
+function isValidQuad(corners) {
+    if (!corners || corners.length !== 4) return false;
+    for (const p of corners) {
+        if (!isFinite(p.x) || !isFinite(p.y)) return false;
+    }
+    function segmentIntersect(p1, p2, p3, p4) {
+        const d1x = p2.x - p1.x, d1y = p2.y - p1.y;
+        const d2x = p4.x - p3.x, d2y = p4.y - p3.y;
+        const denom = d1x * d2y - d1y * d2x;
+        if (Math.abs(denom) < 1e-9) return false;
+        const t = ((p3.x - p1.x) * d2y - (p3.y - p1.y) * d2x) / denom;
+        const u = ((p3.x - p1.x) * d1y - (p3.y - p1.y) * d1x) / denom;
+        return t > 0.001 && t < 0.999 && u > 0.001 && u < 0.999;
+    }
+    if (segmentIntersect(corners[0], corners[1], corners[2], corners[3])) return false;
+    if (segmentIntersect(corners[1], corners[2], corners[3], corners[0])) return false;
+    let area = 0;
+    for (let i = 0; i < 4; i++) {
+        const j = (i + 1) % 4;
+        area += corners[i].x * corners[j].y;
+        area -= corners[j].x * corners[i].y;
+    }
+    return Math.abs(area) / 2 > 100;
+}
+
+function srcToScreen(pt) {
+    return {
+        x: editorState.offsetX + pt.x * editorState.scale,
+        y: editorState.offsetY + pt.y * editorState.scale
+    };
+}
+
+function screenToSrc(pt) {
+    return {
+        x: (pt.x - editorState.offsetX) / editorState.scale,
+        y: (pt.y - editorState.offsetY) / editorState.scale
+    };
+}
+
+function clampCornerToImage(p) {
+    if (!editorState || !editorState.img) return p;
+    const iw = editorState.img.naturalWidth;
+    const ih = editorState.img.naturalHeight;
+    return {
+        x: Math.max(0, Math.min(iw, p.x)),
+        y: Math.max(0, Math.min(ih, p.y))
+    };
+}
+
+function fitEditorCanvas() {
+    if (!editorState || !editorState.img) return;
+    const body = document.querySelector('.editor-modal-body');
+    if (!body) return;
+    const cw = Math.max(1, Math.floor(body.clientWidth));
+    const ch = Math.max(1, Math.floor(body.clientHeight));
+    const canvas = document.getElementById('editor-canvas');
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width  = Math.round(cw * dpr);
+    canvas.height = Math.round(ch * dpr);
+    canvas.style.width  = cw + 'px';
+    canvas.style.height = ch + 'px';
+
+    editorState.canvasW = cw;
+    editorState.canvasH = ch;
+    editorState.dpr = dpr;
+
+    const iw = editorState.img.naturalWidth;
+    const ih = editorState.img.naturalHeight;
+    const margin = 48;
+    const fitScale = Math.min((cw - margin) / iw, (ch - margin) / ih);
+    editorState.scale = fitScale;
+    editorState.fitScale = fitScale;
+    editorState.minScale = fitScale * 0.15;
+    editorState.maxScale = fitScale * 60;
+    editorState.offsetX = (cw - iw * fitScale) / 2;
+    editorState.offsetY = (ch - ih * fitScale) / 2;
+}
+
+function drawEditor() {
+    if (!editorState || !editorState.img) return;
+    const canvas = document.getElementById('editor-canvas');
+    const ctx = canvas.getContext('2d');
+    const dpr = editorState.dpr || 1;
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ctx.fillStyle = '#07090f';
+    ctx.fillRect(0, 0, editorState.canvasW, editorState.canvasH);
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.lineWidth = 1;
+    const gridStep = 40;
+    for (let x = 0; x < editorState.canvasW; x += gridStep) {
+        ctx.beginPath();
+        ctx.moveTo(x + 0.5, 0);
+        ctx.lineTo(x + 0.5, editorState.canvasH);
+        ctx.stroke();
+    }
+    for (let y = 0; y < editorState.canvasH; y += gridStep) {
+        ctx.beginPath();
+        ctx.moveTo(0, y + 0.5);
+        ctx.lineTo(editorState.canvasW, y + 0.5);
+        ctx.stroke();
+    }
+
+    ctx.imageSmoothingEnabled = editorState.scale < 4;
+    ctx.drawImage(
+        editorState.img,
+        editorState.offsetX,
+        editorState.offsetY,
+        editorState.img.naturalWidth * editorState.scale,
+        editorState.img.naturalHeight * editorState.scale
+    );
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(
+        editorState.offsetX + 0.5,
+        editorState.offsetY + 0.5,
+        editorState.img.naturalWidth * editorState.scale - 1,
+        editorState.img.naturalHeight * editorState.scale - 1
+    );
+
+    const screenCorners = editorState.corners.map(srcToScreen);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, editorState.canvasW, editorState.canvasH);
+    ctx.moveTo(screenCorners[0].x, screenCorners[0].y);
+    for (let i = 1; i < 4; i++) ctx.lineTo(screenCorners[i].x, screenCorners[i].y);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.42)';
+    ctx.fill('evenodd');
+    ctx.restore();
+
+    if (editorState.activeCorner >= 0 && editorState.activeCorner < 4) {
+        const ap = screenCorners[editorState.activeCorner];
+        ctx.save();
+        ctx.strokeStyle = 'rgba(0, 255, 176, 0.55)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 6]);
+        ctx.beginPath();
+        ctx.moveTo(ap.x, 0); ctx.lineTo(ap.x, editorState.canvasH);
+        ctx.moveTo(0, ap.y); ctx.lineTo(editorState.canvasW, ap.y);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(0, 255, 176, 0.95)';
+    ctx.shadowBlur = 14;
+    ctx.strokeStyle = '#00ffb0';
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    ctx.moveTo(screenCorners[0].x, screenCorners[0].y);
+    for (let i = 1; i < 4; i++) ctx.lineTo(screenCorners[i].x, screenCorners[i].y);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.setLineDash([5, 5]);
+    ctx.strokeStyle = 'rgba(0, 255, 176, 0.35)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 4; i++) {
+        const j = (i + 1) % 4;
+        ctx.beginPath();
+        ctx.moveTo(screenCorners[i].x, screenCorners[i].y);
+        ctx.lineTo(screenCorners[j].x, screenCorners[j].y);
+        ctx.stroke();
+    }
+    ctx.restore();
+
+    for (let i = 0; i < 4; i++) {
+        const p = screenCorners[i];
+        const isActive = i === editorState.activeCorner;
+        const isHover = i === editorState.hoverCorner;
+        const r = isActive ? EDITOR_CFG.HANDLE_R_ACTIVE : EDITOR_CFG.HANDLE_R;
+
+        const haloColor = isActive
+            ? 'rgba(0, 255, 176, 0.35)'
+            : (isHover ? 'rgba(0, 255, 176, 0.25)' : 'rgba(0, 255, 176, 0.14)');
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r + 6, 0, Math.PI * 2);
+        ctx.fillStyle = haloColor;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        const grad = ctx.createRadialGradient(p.x - r * 0.3, p.y - r * 0.3, 1, p.x, p.y, r);
+        grad.addColorStop(0, '#7dffd0');
+        grad.addColorStop(1, '#00ffb0');
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.strokeStyle = '#003c2e';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#0a0e27';
+        ctx.font = 'bold ' + (isActive ? 14 : 12) + 'px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(i + 1), p.x, p.y + 1);
+    }
+
+    const zoomEl = document.getElementById('editor-zoom-label');
+    if (zoomEl) {
+        const relZoom = editorState.scale / editorState.fitScale;
+        zoomEl.textContent = `Zoom: ${relZoom.toFixed(2)}x`;
+    }
+}
+
+function findEditorCornerAt(pos) {
+    if (!editorState) return -1;
+    const threshold = EDITOR_CFG.HIT_RADIUS;
+    let best = -1;
+    let bestD = threshold;
+    for (let i = 0; i < 4; i++) {
+        const p = srcToScreen(editorState.corners[i]);
+        const d = Math.hypot(p.x - pos.x, p.y - pos.y);
+        if (d < bestD) { bestD = d; best = i; }
+    }
+    return best;
+}
+
+function getEditorMousePos(e) {
+    const canvas = document.getElementById('editor-canvas');
+    const rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+
+function getEditorTouchPos(e) {
+    const canvas = document.getElementById('editor-canvas');
+    const rect = canvas.getBoundingClientRect();
+    const t = e.touches[0] || e.changedTouches[0];
+    if (!t) return null;
+    return { x: t.clientX - rect.left, y: t.clientY - rect.top };
+}
+
+function updateEditorCornerInfo(idx) {
+    const el = document.getElementById('editor-corner-info');
+    if (!el) return;
+    if (!editorState || idx < 0 || idx >= 4) {
+        el.textContent = 'Angolo: —';
+        return;
+    }
+    const c = editorState.corners[idx];
+    el.textContent = `Angolo ${idx + 1}: ${Math.round(c.x)}, ${Math.round(c.y)} px`;
+}
+
+function onEditorMouseDown(e) {
+    if (!editorState) return;
+    if (e.button !== 0 && e.button !== 1) return;
+    const pos = getEditorMousePos(e);
+    const idx = findEditorCornerAt(pos);
+
+    editorState.mouseScreenPos = pos;
+
+    if (idx >= 0) {
+        editorState.dragging = 'corner';
+        editorState.activeCorner = idx;
+        updateEditorCornerInfo(idx);
+    } else {
+        editorState.dragging = 'pan';
+        editorState.dragStart = {
+            x: pos.x, y: pos.y,
+            ox: editorState.offsetX, oy: editorState.offsetY
+        };
+        document.querySelector('.editor-modal-body').classList.add('grabbing');
+    }
+    drawEditor();
+    updateEditorMagnifier(pos);
+    e.preventDefault();
+}
+
+function onEditorMouseMove(e) {
+    if (!editorState) return;
+    const pos = getEditorMousePos(e);
+    editorState.mouseScreenPos = pos;
+    updateEditorMagnifier(pos);
+
+    if (editorState.dragging === 'corner') {
+        const src = clampCornerToImage(screenToSrc(pos));
+        editorState.corners[editorState.activeCorner] = src;
+        updateEditorCornerInfo(editorState.activeCorner);
+        drawEditor();
+        scheduleEditorPreview();
+    } else if (editorState.dragging === 'pan') {
+        editorState.offsetX = editorState.dragStart.ox + (pos.x - editorState.dragStart.x);
+        editorState.offsetY = editorState.dragStart.oy + (pos.y - editorState.dragStart.y);
+        drawEditor();
+    } else {
+        const idx = findEditorCornerAt(pos);
+        const body = document.querySelector('.editor-modal-body');
+        if (idx >= 0) {
+            if (editorState.hoverCorner !== idx) {
+                editorState.hoverCorner = idx;
+                drawEditor();
+            }
+            body.classList.add('corner-hover');
+        } else {
+            if (editorState.hoverCorner !== -1) {
+                editorState.hoverCorner = -1;
+                drawEditor();
+            }
+            body.classList.remove('corner-hover');
+        }
+    }
+}
+
+function onEditorMouseUp() {
+    if (!editorState) return;
+    editorState.dragging = null;
+    editorState.activeCorner = -1;
+    const body = document.querySelector('.editor-modal-body');
+    if (body) body.classList.remove('grabbing');
+    updateEditorCornerInfo(-1);
+    drawEditor();
+}
+
+function onEditorWheel(e) {
+    if (!editorState) return;
+    e.preventDefault();
+    const pos = getEditorMousePos(e);
+    const srcBefore = screenToSrc(pos);
+
+    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+    const newScale = Math.max(editorState.minScale,
+                       Math.min(editorState.maxScale, editorState.scale * factor));
+    editorState.scale = newScale;
+
+    editorState.offsetX = pos.x - srcBefore.x * newScale;
+    editorState.offsetY = pos.y - srcBefore.y * newScale;
+
+    drawEditor();
+}
+
+function onEditorTouchStart(e) {
+    if (!editorState) return;
+    if (e.touches.length === 2) {
+        const t1 = e.touches[0], t2 = e.touches[1];
+        const rect = document.getElementById('editor-canvas').getBoundingClientRect();
+        const cx = (t1.clientX + t2.clientX) / 2 - rect.left;
+        const cy = (t1.clientY + t2.clientY) / 2 - rect.top;
+        const d = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        editorState.pinch = {
+            startDist: d,
+            startScale: editorState.scale,
+            centerSrc: screenToSrc({ x: cx, y: cy }),
+            centerScreen: { x: cx, y: cy }
+        };
+        e.preventDefault();
+        return;
+    }
+
+    const pos = getEditorTouchPos(e);
+    if (!pos) return;
+    const idx = findEditorCornerAt(pos);
+
+    if (idx >= 0) {
+        editorState.dragging = 'corner';
+        editorState.activeCorner = idx;
+        updateEditorCornerInfo(idx);
+    } else {
+        editorState.dragging = 'pan';
+        editorState.dragStart = {
+            x: pos.x, y: pos.y,
+            ox: editorState.offsetX, oy: editorState.offsetY
+        };
+        document.querySelector('.editor-modal-body').classList.add('grabbing');
+    }
+    editorState.mouseScreenPos = pos;
+    drawEditor();
+    updateEditorMagnifier(pos);
+    e.preventDefault();
+}
+
+function onEditorTouchMove(e) {
+    if (!editorState) return;
+
+    if (e.touches.length === 2 && editorState.pinch) {
+        const t1 = e.touches[0], t2 = e.touches[1];
+        const d = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
+        const ratio = d / Math.max(1, editorState.pinch.startDist);
+        const newScale = Math.max(editorState.minScale,
+                          Math.min(editorState.maxScale, editorState.pinch.startScale * ratio));
+        editorState.scale = newScale;
+
+        editorState.offsetX = editorState.pinch.centerScreen.x - editorState.pinch.centerSrc.x * newScale;
+        editorState.offsetY = editorState.pinch.centerScreen.y - editorState.pinch.centerSrc.y * newScale;
+
+        drawEditor();
+        e.preventDefault();
+        return;
+    }
+
+    const pos = getEditorTouchPos(e);
+    if (!pos) return;
+
+    editorState.mouseScreenPos = pos;
+    updateEditorMagnifier(pos);
+
+    if (editorState.dragging === 'corner') {
+        const src = clampCornerToImage(screenToSrc(pos));
+        editorState.corners[editorState.activeCorner] = src;
+        updateEditorCornerInfo(editorState.activeCorner);
+        drawEditor();
+        scheduleEditorPreview();
+    } else if (editorState.dragging === 'pan') {
+        editorState.offsetX = editorState.dragStart.ox + (pos.x - editorState.dragStart.x);
+        editorState.offsetY = editorState.dragStart.oy + (pos.y - editorState.dragStart.y);
+        drawEditor();
+    }
+    e.preventDefault();
+}
+
+function onEditorTouchEnd() {
+    if (!editorState) return;
+    editorState.dragging = null;
+    editorState.activeCorner = -1;
+    editorState.pinch = null;
+    document.querySelector('.editor-modal-body').classList.remove('grabbing');
+    updateEditorCornerInfo(-1);
+    drawEditor();
+}
+
+function updateEditorMagnifier(pos) {
+    const mag = document.getElementById('editor-magnifier');
+    if (!mag) return;
+    if (!editorState || !editorState.img) {
+        mag.classList.remove('visible');
+        return;
+    }
+
+    let show = false;
+    let anchorIdx = -1;
+    if (editorState.dragging === 'corner' && editorState.activeCorner >= 0) {
+        show = true;
+        anchorIdx = editorState.activeCorner;
+    } else {
+        const idx = findEditorCornerAt(pos);
+        if (idx >= 0) { show = true; anchorIdx = idx; }
+    }
+
+    if (!show) {
+        mag.classList.remove('visible');
+        return;
+    }
+
+    mag.classList.add('visible');
+
+    const magCSS = Math.max(EDITOR_CFG.MAG_MIN_CSS,
+                     Math.min(EDITOR_CFG.MAG_MAX_CSS, mag.offsetWidth || 220));
+    const dpr = window.devicePixelRatio || 1;
+    const internal = Math.round(magCSS * dpr);
+
+    let mcanvas = mag.querySelector('canvas');
+    if (!mcanvas) {
+        mcanvas = document.createElement('canvas');
+        mag.appendChild(mcanvas);
+    }
+    if (mcanvas.width !== internal || mcanvas.height !== internal) {
+        mcanvas.width = internal;
+        mcanvas.height = internal;
+        mcanvas.style.width  = magCSS + 'px';
+        mcanvas.style.height = magCSS + 'px';
+    }
+
+    const mctx = mcanvas.getContext('2d');
+    mctx.setTransform(1, 0, 0, 1, 0, 0);
+    mctx.imageSmoothingEnabled = false;
+
+    mctx.fillStyle = '#000';
+    mctx.fillRect(0, 0, internal, internal);
+
+    const srcPt = screenToSrc(pos);
+
+    const magViewScale = editorState.scale * EDITOR_CFG.MAG_ZOOM;
+    const srcRange = magCSS / magViewScale;
+    const half = srcRange / 2;
+
+    mctx.drawImage(
+        editorState.img,
+        srcPt.x - half, srcPt.y - half,
+        srcRange, srcRange,
+        0, 0, internal, internal
+    );
+
+    const gridSrcStep = EDITOR_CFG.MAG_GRID_SRC_STEP;
+    const gridStepInternal = gridSrcStep / srcRange * internal;
+    if (gridStepInternal >= 6) {
+        mctx.strokeStyle = 'rgba(0, 255, 176, 0.20)';
+        mctx.lineWidth = 1;
+        const startSrcX = Math.ceil((srcPt.x - half) / gridSrcStep) * gridSrcStep;
+        for (let sx = startSrcX; sx <= srcPt.x + half; sx += gridSrcStep) {
+            const ix = (sx - (srcPt.x - half)) / srcRange * internal;
+            mctx.beginPath();
+            mctx.moveTo(ix + 0.5, 0);
+            mctx.lineTo(ix + 0.5, internal);
+            mctx.stroke();
+        }
+        const startSrcY = Math.ceil((srcPt.y - half) / gridSrcStep) * gridSrcStep;
+        for (let sy = startSrcY; sy <= srcPt.y + half; sy += gridSrcStep) {
+            const iy = (sy - (srcPt.y - half)) / srcRange * internal;
+            mctx.beginPath();
+            mctx.moveTo(0, iy + 0.5);
+            mctx.lineTo(internal, iy + 0.5);
+            mctx.stroke();
+        }
+    }
+
+    const subStepInternal = gridStepInternal / 5;
+    if (subStepInternal >= 6) {
+        mctx.strokeStyle = 'rgba(0, 255, 176, 0.08)';
+        mctx.lineWidth = 1;
+        const subSrcStep = gridSrcStep / 5;
+        const startSx = Math.ceil((srcPt.x - half) / subSrcStep) * subSrcStep;
+        for (let sx = startSx; sx <= srcPt.x + half; sx += subSrcStep) {
+            const ix = (sx - (srcPt.x - half)) / srcRange * internal;
+            mctx.beginPath();
+            mctx.moveTo(ix + 0.5, 0);
+            mctx.lineTo(ix + 0.5, internal);
+            mctx.stroke();
+        }
+        const startSy = Math.ceil((srcPt.y - half) / subSrcStep) * subSrcStep;
+        for (let sy = startSy; sy <= srcPt.y + half; sy += subSrcStep) {
+            const iy = (sy - (srcPt.y - half)) / srcRange * internal;
+            mctx.beginPath();
+            mctx.moveTo(0, iy + 0.5);
+            mctx.lineTo(internal, iy + 0.5);
+            mctx.stroke();
+        }
+    }
+
+    for (let i = 0; i < 4; i++) {
+        const cp = editorState.corners[i];
+        const dx = cp.x - srcPt.x;
+        const dy = cp.y - srcPt.y;
+        const mx = internal / 2 + dx / srcRange * internal;
+        const my = internal / 2 + dy / srcRange * internal;
+        if (mx >= -50 && mx <= internal + 50 && my >= -50 && my <= internal + 50) {
+            const isActive = i === editorState.activeCorner;
+            const isHover = i === editorState.hoverCorner;
+            mctx.strokeStyle = isActive ? '#ffd166' : (isHover ? '#7dffd0' : '#00ffb0');
+            mctx.lineWidth = 3 * dpr;
+            mctx.beginPath();
+            mctx.arc(mx, my, 12 * dpr, 0, Math.PI * 2);
+            mctx.stroke();
+
+            mctx.fillStyle = isActive ? '#ffd166' : (isHover ? '#7dffd0' : '#00ffb0');
+            mctx.font = 'bold ' + (14 * dpr) + 'px Inter, sans-serif';
+            mctx.textAlign = 'center';
+            mctx.textBaseline = 'middle';
+            mctx.fillText(String(i + 1), mx, my + 1);
+        }
+    }
+
+    const cx = internal / 2;
+    const cy = internal / 2;
+    mctx.strokeStyle = 'rgba(0, 255, 176, 0.85)';
+    mctx.lineWidth = 1;
+    mctx.beginPath();
+    mctx.moveTo(cx, 0);
+    mctx.lineTo(cx, cy - 16 * dpr);
+    mctx.moveTo(cx, cy + 16 * dpr);
+    mctx.lineTo(cx, internal);
+    mctx.moveTo(0, cy);
+    mctx.lineTo(cx - 16 * dpr, cy);
+    mctx.moveTo(cx + 16 * dpr, cy);
+    mctx.lineTo(internal, cy);
+    mctx.stroke();
+
+    mctx.strokeStyle = 'rgba(0, 255, 176, 0.75)';
+    mctx.lineWidth = 1.5 * dpr;
+    mctx.beginPath();
+    mctx.arc(cx, cy, 22 * dpr, 0, Math.PI * 2);
+    mctx.stroke();
+
+    mctx.fillStyle = '#00ffb0';
+    mctx.beginPath();
+    mctx.arc(cx, cy, 2.5 * dpr, 0, Math.PI * 2);
+    mctx.fill();
+
+    positionEditorMagnifier(pos, mag, magCSS);
+}
+
+function positionEditorMagnifier(cursorPos, mag, magCSS) {
+    const half = magCSS / 2;
+    const margin = 14;
+    const offset = 30;
+
+    let magX = cursorPos.x + offset + half;
+    let magY = cursorPos.y - offset - half;
+
+    if (magX + half > editorState.canvasW - margin) {
+        magX = cursorPos.x - offset - half;
+    }
+    if (magX - half < margin) magX = half + margin;
+    if (magY - half < margin) {
+        magY = cursorPos.y + offset + half;
+    }
+    if (magY + half > editorState.canvasH - margin) {
+        magY = editorState.canvasH - half - margin;
+    }
+
+    mag.style.left = magX + 'px';
+    mag.style.top  = magY + 'px';
+}
+
+function scheduleEditorPreview() {
+    if (!editorState) return;
+    if (editorPreviewTimer !== null) return;
+    editorPreviewTimer = setTimeout(() => {
+        editorPreviewTimer = null;
+        if (editorState) renderEditorPreview();
+    }, EDITOR_CFG.PREVIEW_THROTTLE_MS);
+}
+
+function renderEditorPreview() {
+    if (!editorState || !editorState.img) return;
+    if (!cvReady) return;
+
+    const canvas = document.getElementById('editor-preview-canvas');
+    if (!canvas) return;
+
+    const W = EDITOR_CFG.WARP_PREVIEW_W;
+    const H = EDITOR_CFG.WARP_PREVIEW_H;
+
+    try {
+        const src = readSourceMat(editorState.img);
+        const dataUrl = warpCard(src, editorState.corners, W, H);
+        src.delete();
+
+        const img = new Image();
+        img.onload = () => {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        };
+        img.src = dataUrl;
+    } catch (e) {
+        // Silenzioso
+    }
+}
+
+function onEditorArrowKey(e) {
+    if (!editorState) return;
+    if (editorState.activeCorner < 0 || editorState.activeCorner >= 4) return;
+
+    let dx = 0, dy = 0;
+    const step = e.shiftKey ? 10 : 1;
+    switch (e.key) {
+        case 'ArrowLeft':  dx = -step; break;
+        case 'ArrowRight': dx =  step; break;
+        case 'ArrowUp':    dy = -step; break;
+        case 'ArrowDown':  dy =  step; break;
+        default: return;
+    }
+    e.preventDefault();
+
+    const c = editorState.corners[editorState.activeCorner];
+    const newP = clampCornerToImage({ x: c.x + dx, y: c.y + dy });
+    editorState.corners[editorState.activeCorner] = newP;
+    updateEditorCornerInfo(editorState.activeCorner);
+    drawEditor();
+    scheduleEditorPreview();
+
+    if (editorState.mouseScreenPos) {
+        updateEditorMagnifier(editorState.mouseScreenPos);
+    }
+}
+
+(function bindEditorEvents() {
+    const canvas = document.getElementById('editor-canvas');
+    if (!canvas) return;
+    canvas.addEventListener('mousedown', onEditorMouseDown);
+    canvas.addEventListener('mousemove', onEditorMouseMove);
+    canvas.addEventListener('mouseup', onEditorMouseUp);
+    canvas.addEventListener('mouseleave', onEditorMouseUp);
+    canvas.addEventListener('wheel', onEditorWheel, { passive: false });
+    canvas.addEventListener('touchstart', onEditorTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', onEditorTouchMove, { passive: false });
+    canvas.addEventListener('touchend', onEditorTouchEnd);
+    canvas.addEventListener('touchcancel', onEditorTouchEnd);
+    canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+    document.addEventListener('keydown', (e) => {
+        if (!editorState) return;
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].indexOf(e.key) !== -1) {
+            onEditorArrowKey(e);
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (editorState && editorState.img &&
+            document.getElementById('editor-modal-overlay').classList.contains('open')) {
+            try {
+                fitEditorCanvas();
+                drawEditor();
+                renderEditorPreview();
+            } catch (e) { /* ignore */ }
+        }
+    });
+})();
+
+/* ============================================================
    TASTIERA
    ============================================================ */
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-        if (cornerEditorState.open) {
-            closeCornerEditor();
-        } else if (webcamStream) {
-            closeWebcamModal();
+        if (editorState) {
+            closeEditorModal();
         } else if (multiScanPending) {
             cancelMultiScan();
+        } else if (document.getElementById('legal-modal-overlay').classList.contains('open')) {
+            closeLegalModal();
+        } else if (document.getElementById('app-menu-overlay').classList.contains('open')) {
+            closeAppMenu();
         } else if (previewOpen) {
             closePreviewModal();
         }
@@ -4416,12 +5930,12 @@ document.addEventListener('keydown', e => {
 document.getElementById('pdf-filename').addEventListener('input', saveState);
 window.addEventListener('beforeunload', saveState);
 
-/* Resize handler per l'editor */
-window.addEventListener('resize', () => {
-    if (cornerEditorState.open) {
-        setupCornerEditorCanvas();
-    }
-});
+/* ============================================================
+   APK-READY: LOG DI TRASFERIMENTO
+   ============================================================ */
+console.log('%cCardScan AI', 'color:#22d3ee;font-weight:bold;font-size:16px;', 'Ambiente:', APP_ENV.label);
+console.log('%c:', 'color:#fbbf24;font-weight:bold;',
+    'variabile LEGAL_DATA → owner, address, country, website, pkgName');
 </script>
 
 </body>
