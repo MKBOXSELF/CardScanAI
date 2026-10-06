@@ -8,6 +8,7 @@
   <meta name="format-detection" content="telephone=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+  <!-- PWA meta -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CardScan AI">
@@ -15,15 +16,18 @@
   <meta name="application-name" content="CardScan AI">
   <meta name="app-version" content="1.0.0">
 
+  <!-- Favicon SVG inline -->
   <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%235BB0FF'/%3E%3Cstop%20offset='1'%20stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x='8'%20y='8'%20width='184'%20height='184'%20rx='44'%20fill='url(%23b)'/%3E%3Crect%20x='44'%20y='64'%20width='112'%20height='72'%20rx='8'%20fill='none'%20stroke='%23fff'%20stroke-width='4'/%3E%3Ccircle%20cx='69'%20cy='86'%20r='7'%20fill='none'%20stroke='%23fff'%20stroke-width='3'/%3E%3Cpath%20d='M%2056%20103%20Q%2069%2093%2082%20103'%20fill='none'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='82'%20x2='140'%20y2='82'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='90'%20x2='134'%20y2='90'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='98'%20x2='126'%20y2='98'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Crect%20x='60'%20y='112'%20width='24'%20height='17'%20rx='2.5'%20fill='none'%20stroke='%23fff'%20stroke-width='2.5'/%3E%3Cline%20x1='67'%20y1='112'%20x2='67'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='76'%20y1='112'%20x2='76'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='60'%20y1='120'%20x2='84'%20y2='120'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='30'%20y1='100'%20x2='170'%20y2='100'%20stroke='%2300FFB0'%20stroke-width='4'/%3E%3C/svg%3E">
   <link rel="apple-touch-icon"
         href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3ClinearGradient%20id='b'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%235BB0FF'/%3E%3Cstop%20offset='1'%20stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20x='8'%20y='8'%20width='184'%20height='184'%20rx='44'%20fill='url(%23b)'/%3E%3Crect%20x='44'%20y='64'%20width='112'%20height='72'%20rx='8'%20fill='none'%20stroke='%23fff'%20stroke-width='4'/%3E%3Ccircle%20cx='69'%20cy='86'%20r='7'%20fill='none'%20stroke='%23fff'%20stroke-width='3'/%3E%3Cpath%20d='M%2056%20103%20Q%2069%2093%2082%20103'%20fill='none'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='82'%20x2='140'%20y2='82'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='90'%20x2='134'%20y2='90'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Cline%20x1='92'%20y1='98'%20x2='126'%20y2='98'%20stroke='%23fff'%20stroke-width='3'%20stroke-linecap='round'/%3E%3Crect%20x='60'%20y='112'%20width='24'%20height='17'%20rx='2.5'%20fill='none'%20stroke='%23fff'%20stroke-width='2.5'/%3E%3Cline%20x1='67'%20y1='112'%20x2='67'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='76'%20y1='112'%20x2='76'%20y2='129'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='60'%20y1='120'%20x2='84'%20y2='120'%20stroke='%23fff'%20stroke-width='2'/%3E%3Cline%20x1='30'%20y1='100'%20x2='170'%20y2='100'%20stroke='%2300FFB0'%20stroke-width='4'/%3E%3C/svg%3E">
 
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
+  <!-- Theme init ASAP (evita flash) -->
   <script>
   (function () {
       var t = 'dark';
@@ -33,9 +37,13 @@
   })();
   </script>
 
+  <!-- OpenCV.js -->
   <script async src="https://docs.opencv.org/4.8.0/opencv.js"></script>
+  <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- QRCode.js (generazione QR Code PayPal lato client) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
@@ -1957,336 +1965,6 @@
           .qr-modal-body .qr-owner { font-size: 18px; }
           .paypal-btn { font-size: 14px; padding: 9px 16px; }
       }
-
-      /* ============================================================
-         EDITOR REGOLAZIONE IMMAGINE (NUOVO)
-         ============================================================ */
-      .btn-adjust-img {
-          background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-          font-size: 11.5px;
-          padding: 8px 12px;
-          font-weight: 700;
-          letter-spacing: 0.3px;
-          box-shadow:
-              0 4px 12px rgba(236, 72, 153, 0.42),
-              inset 0 1px 0 rgba(255, 255, 255, 0.24);
-          margin: 3px;
-      }
-      .btn-adjust-img:hover:not(:disabled) {
-          box-shadow:
-              0 8px 22px rgba(236, 72, 153, 0.6),
-              0 0 26px rgba(139, 92, 246, 0.35),
-              inset 0 1px 0 rgba(255, 255, 255, 0.32);
-      }
-
-      .img-adjust-overlay {
-          display: none;
-          position: fixed;
-          inset: 0;
-          background: rgba(5, 8, 22, 0.94);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          z-index: 10003;
-          justify-content: center;
-          align-items: center;
-          padding: 14px;
-          animation: overlayIn .25s ease;
-      }
-      .img-adjust-overlay.open { display: flex; }
-
-      .img-adjust-modal {
-          background: var(--modal-bg);
-          border: 1px solid var(--border-strong);
-          border-radius: var(--radius-lg);
-          width: 100%;
-          max-width: 1150px;
-          height: 94vh;
-          display: flex;
-          flex-direction: column;
-          box-shadow:
-              0 30px 80px rgba(0, 0, 0, 0.75),
-              0 0 0 1px rgba(255, 255, 255, 0.06),
-              0 0 70px rgba(236, 72, 153, 0.20);
-          overflow: hidden;
-          animation: modalIn .35s cubic-bezier(.2,.9,.3,1.2);
-      }
-      .img-adjust-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 16px;
-          background: var(--modal-header-bg);
-          border-bottom: 1px solid var(--border);
-          flex-wrap: wrap;
-          gap: 10px;
-      }
-      .img-adjust-header h3 {
-          margin: 0;
-          font-family: 'Space Grotesk', 'Inter', sans-serif;
-          font-size: 15px;
-          color: var(--text-primary);
-          letter-spacing: 0.2px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-      }
-      .img-adjust-header h3::before {
-          content: '';
-          display: inline-block;
-          width: 4px; height: 18px;
-          border-radius: 2px;
-          background: linear-gradient(180deg, #ec4899, #8b5cf6);
-          box-shadow: 0 0 10px rgba(236, 72, 153, 0.7);
-      }
-      .img-adjust-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-      .img-adjust-body {
-          flex: 1;
-          display: flex;
-          flex-direction: row;
-          overflow: hidden;
-          background: #07090f;
-      }
-      @media (max-width: 820px) {
-          .img-adjust-body { flex-direction: column; }
-      }
-
-      .img-adjust-preview-wrap {
-          flex: 1;
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background:
-              linear-gradient(45deg, #0d1220 25%, transparent 25%),
-              linear-gradient(-45deg, #0d1220 25%, transparent 25%),
-              linear-gradient(45deg, transparent 75%, #0d1220 75%),
-              linear-gradient(-45deg, transparent 75%, #0d1220 75%);
-          background-size: 20px 20px;
-          background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-          background-color: #0a0e1a;
-          overflow: auto;
-          padding: 18px;
-      }
-      .img-adjust-preview-inner {
-          position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transform-origin: center center;
-          transition: transform .2s ease;
-      }
-      #img-adjust-canvas {
-          display: block;
-          max-width: 100%;
-          max-height: 100%;
-          background: #fff;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
-          border-radius: 4px;
-          image-rendering: auto;
-      }
-
-      .img-adjust-controls {
-          width: 360px;
-          flex-shrink: 0;
-          background: var(--modal-bg);
-          border-left: 1px solid var(--border);
-          overflow-y: auto;
-          padding: 14px 16px 22px;
-          -webkit-overflow-scrolling: touch;
-      }
-      @media (max-width: 820px) {
-          .img-adjust-controls {
-              width: 100%;
-              max-height: 50vh;
-              border-left: none;
-              border-top: 1px solid var(--border);
-          }
-      }
-
-      .adj-group {
-          margin-bottom: 14px;
-          padding: 10px 12px;
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-md);
-      }
-      .adj-group-title {
-          font-family: 'Space Grotesk', 'Inter', sans-serif;
-          font-size: 12px;
-          font-weight: 700;
-          color: var(--text-primary);
-          letter-spacing: 0.5px;
-          text-transform: uppercase;
-          margin: 0 0 8px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 6px;
-      }
-      .adj-group-title .adj-reset-mini {
-          background: transparent;
-          border: 1px solid var(--border);
-          color: var(--text-muted);
-          font-size: 10px;
-          padding: 2px 7px;
-          border-radius: 6px;
-          cursor: pointer;
-          font-family: inherit;
-          transition: all .2s;
-      }
-      .adj-group-title .adj-reset-mini:hover {
-          background: var(--surface-2);
-          color: var(--text-primary);
-          border-color: var(--border-strong);
-      }
-
-      .adj-row {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin-bottom: 8px;
-      }
-      .adj-row:last-child { margin-bottom: 0; }
-      .adj-row label {
-          font-size: 11.5px;
-          color: var(--text-secondary);
-          min-width: 88px;
-          font-weight: 600;
-          letter-spacing: 0.2px;
-      }
-      .adj-row input[type="range"] {
-          flex: 1;
-          -webkit-appearance: none;
-          appearance: none;
-          height: 6px;
-          border-radius: 999px;
-          background: linear-gradient(90deg, rgba(59,130,246,0.5), rgba(139,92,246,0.5));
-          outline: none;
-          cursor: pointer;
-      }
-      .adj-row input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #60a5fa, #8b5cf6);
-          border: 2px solid #fff;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-          cursor: pointer;
-      }
-      .adj-row input[type="range"]::-moz-range-thumb {
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #60a5fa, #8b5cf6);
-          border: 2px solid #fff;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-          cursor: pointer;
-      }
-      .adj-row input[type="range"].r-channel {
-          background: linear-gradient(90deg, rgba(239,68,68,0.3), rgba(239,68,68,0.7));
-      }
-      .adj-row input[type="range"].g-channel {
-          background: linear-gradient(90deg, rgba(16,185,129,0.3), rgba(16,185,129,0.7));
-      }
-      .adj-row input[type="range"].b-channel {
-          background: linear-gradient(90deg, rgba(59,130,246,0.3), rgba(59,130,246,0.7));
-      }
-
-      .adj-value {
-          font-size: 11px;
-          font-weight: 700;
-          color: #93c5fd;
-          min-width: 44px;
-          text-align: right;
-          font-variant-numeric: tabular-nums;
-          background: var(--surface);
-          padding: 2px 6px;
-          border-radius: 6px;
-          border: 1px solid var(--border);
-      }
-
-      .adj-buttons-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 8px;
-          margin-bottom: 8px;
-      }
-      .adj-buttons-grid .btn {
-          font-size: 11.5px;
-          padding: 9px 10px;
-          margin: 0;
-      }
-
-      .adj-btn-auto {
-          background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.24);
-          width: 100%;
-          font-size: 12.5px !important;
-          padding: 11px 12px !important;
-      }
-      .adj-btn-auto:hover:not(:disabled) {
-          box-shadow: 0 8px 22px rgba(6, 182, 212, 0.6), 0 0 28px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32);
-      }
-      .adj-btn-rotate {
-          background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
-          box-shadow: 0 4px 12px rgba(139, 92, 246, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.24);
-      }
-      .adj-btn-rotate:hover:not(:disabled) {
-          box-shadow: 0 8px 22px rgba(139, 92, 246, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.32);
-      }
-      .adj-btn-reset {
-          background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-          box-shadow: 0 4px 12px rgba(245, 158, 11, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.24);
-          width: 100%;
-          font-size: 12.5px !important;
-          padding: 11px 12px !important;
-          margin-top: 4px;
-      }
-      .adj-btn-reset:hover:not(:disabled) {
-          box-shadow: 0 8px 22px rgba(239, 68, 68, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.32);
-      }
-
-      .img-adjust-footer {
-          padding: 10px 16px;
-          background: var(--modal-header-bg);
-          border-top: 1px solid var(--border);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-size: 12px;
-          color: var(--text-muted);
-          letter-spacing: 0.3px;
-          flex-wrap: wrap;
-          gap: 8px;
-      }
-      .img-adjust-footer .adj-hint {
-          flex: 1;
-          min-width: 200px;
-          line-height: 1.4;
-      }
-      .img-adjust-footer .adj-zoom-label {
-          font-weight: 700;
-          color: #fbbf24;
-          padding: 3px 10px;
-          background: rgba(245, 158, 11, 0.12);
-          border: 1px solid rgba(245, 158, 11, 0.35);
-          border-radius: 999px;
-          white-space: nowrap;
-          cursor: pointer;
-          user-select: none;
-      }
-
-      @media (max-width: 640px) {
-          .img-adjust-modal { height: 96vh; border-radius: var(--radius-md); }
-          .img-adjust-header { padding: 10px 12px; }
-          .img-adjust-header h3 { font-size: 13px; }
-          .img-adjust-actions .btn { font-size: 11px; padding: 7px 10px; }
-          .adj-row label { min-width: 72px; font-size: 11px; }
-          .adj-value { min-width: 40px; font-size: 10.5px; }
-      }
   </style>
 </head>
 <body>
@@ -2437,6 +2115,9 @@
         </button>
     </div>
 
+    <!-- ============================================================
+         SUPPORTO PAYPAL + QR CODE
+         ============================================================ -->
     <div class="paypal-support">
         <a href="https://www.paypal.com/qrcodes/p2pqrc/XGG2DHDAHXMMQ" target="_blank" rel="noopener noreferrer" class="paypal-btn">
             Ti è stato utile? Se vuoi sostenere il mio lavoro, offrimi un caffè! ☕
@@ -2464,9 +2145,6 @@
         <strong>Modifica manuale:</strong> clicca <strong>✎ Modifica bordi</strong> sotto l'anteprima
         per aprire un editor con zoom, trascinamento e <strong>lente di ingrandimento</strong>
         per correggere con precisione gli angoli del ritaglio.<br>
-        <strong>Regola immagine:</strong> clicca <strong>🎨 Regola immagine</strong> per aprire l'editor
-        di luminosità, contrasto, saturazione, nitidezza, rotazione, livelli canali RGB e
-        miglioramento automatico.<br>
         <strong>Multi-Scan:</strong> con "📸 Acquisisci più tessere" puoi fotografare più tessere
         insieme: verranno rilevate, ritagliate e assegnate in sequenza ai primi slot liberi.<br>
         <strong>Import PDF:</strong> con "📄 Importa da PDF" puoi caricare un PDF le cui pagine
@@ -2537,108 +2215,8 @@
 </div>
 
 <!-- ============================================================
-     MODALE REGOLAZIONE IMMAGINE (NUOVO)
+     QR CODE MODAL (PayPal)
      ============================================================ -->
-<div id="img-adjust-overlay" class="img-adjust-overlay" onclick="if(event.target===this) closeImgAdjustModal()">
-    <div class="img-adjust-modal" role="dialog" aria-modal="true" aria-labelledby="img-adjust-title">
-        <div class="img-adjust-header">
-            <h3 id="img-adjust-title">Regola immagine</h3>
-            <div class="img-adjust-actions">
-                <button class="btn adj-btn-reset" style="width:auto;margin:0;padding:8px 14px !important;" onclick="resetImgAdjust()">↺ Reset regolazioni</button>
-                <button class="btn btn-editor-confirm" onclick="confirmImgAdjust()">✓ Applica</button>
-                <button class="btn btn-editor-cancel" onclick="closeImgAdjustModal()">✕ Annulla</button>
-            </div>
-        </div>
-        <div class="img-adjust-body">
-            <div class="img-adjust-preview-wrap" id="img-adjust-preview-wrap">
-                <div class="img-adjust-preview-inner" id="img-adjust-preview-inner">
-                    <canvas id="img-adjust-canvas"></canvas>
-                </div>
-            </div>
-            <div class="img-adjust-controls" id="img-adjust-controls">
-
-                <div class="adj-group">
-                    <h4 class="adj-group-title">Rotazione <button class="adj-reset-mini" onclick="resetImgAdjustGroup('rotation')">reset</button></h4>
-                    <div class="adj-buttons-grid">
-                        <button class="btn adj-btn-rotate" onclick="rotateImgAdjust(-90)">↺ 90° sinistra</button>
-                        <button class="btn adj-btn-rotate" onclick="rotateImgAdjust(90)">↻ 90° destra</button>
-                    </div>
-                    <div class="adj-row">
-                        <label for="adj-rot-fine">Angolo fine</label>
-                        <input type="range" id="adj-rot-fine" min="-45" max="45" step="0.5" value="0">
-                        <span class="adj-value" id="adj-rot-fine-val">0°</span>
-                    </div>
-                </div>
-
-                <div class="adj-group">
-                    <h4 class="adj-group-title">Luminosità / Contrasto / Saturazione <button class="adj-reset-mini" onclick="resetImgAdjustGroup('basic')">reset</button></h4>
-                    <div class="adj-row">
-                        <label for="adj-brightness">Luminosità</label>
-                        <input type="range" id="adj-brightness" min="-100" max="100" step="1" value="0">
-                        <span class="adj-value" id="adj-brightness-val">0</span>
-                    </div>
-                    <div class="adj-row">
-                        <label for="adj-contrast">Contrasto</label>
-                        <input type="range" id="adj-contrast" min="-100" max="100" step="1" value="0">
-                        <span class="adj-value" id="adj-contrast-val">0</span>
-                    </div>
-                    <div class="adj-row">
-                        <label for="adj-saturation">Saturazione</label>
-                        <input type="range" id="adj-saturation" min="-100" max="100" step="1" value="0">
-                        <span class="adj-value" id="adj-saturation-val">0</span>
-                    </div>
-                </div>
-
-                <div class="adj-group">
-                    <h4 class="adj-group-title">Nitidezza <button class="adj-reset-mini" onclick="resetImgAdjustGroup('sharpen')">reset</button></h4>
-                    <div class="adj-row">
-                        <label for="adj-sharpen">Nitidezza</label>
-                        <input type="range" id="adj-sharpen" min="0" max="200" step="1" value="0">
-                        <span class="adj-value" id="adj-sharpen-val">0%</span>
-                    </div>
-                    <div class="adj-row">
-                        <label for="adj-sharpen-radius">Raggio</label>
-                        <input type="range" id="adj-sharpen-radius" min="1" max="4" step="1" value="1">
-                        <span class="adj-value" id="adj-sharpen-radius-val">1px</span>
-                    </div>
-                </div>
-
-                <div class="adj-group">
-                    <h4 class="adj-group-title">Livelli canali colore (R / G / B) <button class="adj-reset-mini" onclick="resetImgAdjustGroup('channels')">reset</button></h4>
-                    <div class="adj-row">
-                        <label for="adj-r">Rosso (R)</label>
-                        <input type="range" id="adj-r" class="r-channel" min="-100" max="100" step="1" value="0">
-                        <span class="adj-value" id="adj-r-val">0</span>
-                    </div>
-                    <div class="adj-row">
-                        <label for="adj-g">Verde (G)</label>
-                        <input type="range" id="adj-g" class="g-channel" min="-100" max="100" step="1" value="0">
-                        <span class="adj-value" id="adj-g-val">0</span>
-                    </div>
-                    <div class="adj-row">
-                        <label for="adj-b">Blu (B)</label>
-                        <input type="range" id="adj-b" class="b-channel" min="-100" max="100" step="1" value="0">
-                        <span class="adj-value" id="adj-b-val">0</span>
-                    </div>
-                </div>
-
-                <div class="adj-group">
-                    <h4 class="adj-group-title">Miglioramento automatico</h4>
-                    <button class="btn adj-btn-auto" onclick="autoEnhanceImgAdjust()">✨ Migliora automaticamente</button>
-                    <div style="font-size:10.5px;color:var(--text-muted);margin-top:6px;line-height:1.45;text-align:center;">
-                        Analizza l'immagine e applica contrasto, luminosità e bilanciamento colore ottimali.
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <div class="img-adjust-footer">
-            <span class="adj-hint">Trascina gli slider per regolare · Le modifiche sono visibili in anteprima in tempo reale · Clicca "Applica" per salvare</span>
-            <span class="adj-zoom-label" id="adj-zoom-label" onclick="toggleAdjZoom()">Zoom: Fit</span>
-        </div>
-    </div>
-</div>
-
 <div id="qr-modal-overlay" class="qr-modal-overlay" onclick="if(event.target===this) closeQrModal()">
     <div class="qr-modal" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
         <div class="qr-modal-header">
@@ -2748,6 +2326,7 @@
         <button class="btn btn-reset" onclick="openLegalModal('cookie')">Dettagli</button>
     </div>
 </div>
+
 <script>
 /* ============================================================
    CONFIGURAZIONE
@@ -2765,7 +2344,7 @@ const CONFIG = {
     maxBrightness: 240,
     jpegQuality:  0.92,
     maxDocs:      12,
-    docsPerPage:  8
+    docsPerPage:  8 // slot (immagini) per pagina A4 → 4 righe × 2 colonne
 };
 
 const SIDES = ['fronte', 'retro'];
@@ -2826,15 +2405,13 @@ function isAnyModalOpen() {
         document.getElementById('legal-modal-overlay').classList.contains('open') ||
         document.getElementById('pdf-modal-overlay').classList.contains('open') ||
         document.getElementById('editor-modal-overlay').classList.contains('open') ||
-        document.getElementById('qr-modal-overlay').classList.contains('open') ||
-        document.getElementById('img-adjust-overlay').classList.contains('open')
+        document.getElementById('qr-modal-overlay').classList.contains('open')
     );
 }
 
 function closeTopmostModal() {
     if (document.getElementById('app-menu-overlay').classList.contains('open')) { closeAppMenu(); return true; }
     if (document.getElementById('legal-modal-overlay').classList.contains('open')) { closeLegalModal(); return true; }
-    if (document.getElementById('img-adjust-overlay').classList.contains('open')) { closeImgAdjustModal(); return true; }
     if (document.getElementById('editor-modal-overlay').classList.contains('open')) { closeEditorModal(); return true; }
     if (document.getElementById('qr-modal-overlay').classList.contains('open')) { closeQrModal(); return true; }
     if (document.getElementById('pdf-modal-overlay').classList.contains('open')) { closePreviewModal(); return true; }
@@ -2967,7 +2544,7 @@ document.getElementById('btn-install').addEventListener('click', async () => {
 })();
 
 /* ============================================================
-   COOKIE BANNER
+   APK-READY: COOKIE BANNER
    ============================================================ */
 function acceptCookies() {
     try { localStorage.setItem(COOKIE_KEY, '1'); } catch (_) {}
@@ -2987,7 +2564,7 @@ function acceptCookies() {
 })();
 
 /* ============================================================
-   APP MENU
+   APK-READY: APP MENU
    ============================================================ */
 function toggleAppMenu() {
     const overlay = document.getElementById('app-menu-overlay');
@@ -3009,7 +2586,7 @@ function closeAppMenu() {
 }
 
 /* ============================================================
-   QR CODE PAYPAL
+   QR CODE PAYPAL — APRI / CHIUDI / RENDER
    ============================================================ */
 function openQrModal() {
     const overlay = document.getElementById('qr-modal-overlay');
@@ -3030,6 +2607,7 @@ function renderPayPalQr() {
     const loading = document.getElementById('qr-modal-loading');
     if (!wrapper) return;
 
+    // Percorso 1: libreria qrcodejs (offline, nessuna richiesta esterna)
     if (typeof QRCode !== 'undefined') {
         try {
             wrapper.innerHTML = '';
@@ -3048,6 +2626,7 @@ function renderPayPalQr() {
         }
     }
 
+    // Percorso 2: fallback su API esterna di generazione QR
     try {
         if (loading) loading.textContent = 'Generazione QR (fallback)…';
         const img = document.createElement('img');
@@ -3076,11 +2655,11 @@ function renderPayPalQr() {
 }
 
 /* ============================================================
-   LEGAL MODAL
+   APK-READY: LEGAL MODAL
    ============================================================ */
 const LEGAL_DATA = {
     owner:      'Spina Michele',
-    address:    '',
+    address:    '',                 // <-- FIX: campo mancante (era undefined → "undefined" a schermo)
     country:    'Italy',
     email:      'michelespinabox@gmail.com',
     website:    'https://mkboxself.github.io/GOSELF/',
@@ -3152,8 +2731,6 @@ function buildInfoHtml() {
                 <li>Riconoscimento automatico dei bordi della tessera</li>
                 <li>Ritaglio e raddrizzamento prospettico</li>
                 <li>Editor manuale bordi con lente di ingrandimento</li>
-                <li>Editor regolazione immagine (luminosità, contrasto, colore, nitidezza, rotazione)</li>
-                <li>Miglioramento automatico dell'immagine</li>
                 <li>Forzatura acquisizione per foto non ottimali</li>
                 <li>Multi-scan (più tessere in un'unica foto)</li>
                 <li>Importazione da PDF esistente</li>
@@ -3453,7 +3030,7 @@ async function refreshPermissionStatus() {
             updateCameraBadge(status.state);
             status.onchange = () => updateCameraBadge(status.state);
             return;
-        } catch (_) { }
+        } catch (_) { /* non supportato */ }
     }
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -3534,7 +3111,7 @@ function buildContactsHtml() {
 }
 
 /* ============================================================
-   PERSISTENZA
+   PERSISTENZA — con debounce per performance
    ============================================================ */
 let saveStateTimer = null;
 function saveState() {
@@ -3563,6 +3140,7 @@ function _saveStateNow() {
     }
 }
 
+/* flush immediato per beforeunload */
 function saveStateNow() {
     if (saveStateTimer) {
         clearTimeout(saveStateTimer);
@@ -3659,9 +3237,6 @@ function buildDocSection(docNum) {
                     <button class="btn btn-edit edit-btn" id="edit-btn-${docNum}-fronte" disabled
                             title="Modifica manualmente gli angoli del ritaglio"
                             onclick="openEditorModal(${docNum}, 'fronte')">✎ Modifica bordi</button>
-                    <button class="btn btn-adjust-img" id="adjust-btn-${docNum}-fronte" disabled
-                            title="Regola luminosità, contrasto, colore, rotazione"
-                            onclick="openImgAdjustModal(${docNum}, 'fronte')">🎨 Regola immagine</button>
                 </div>
                 <div class="detection-wrap" id="detection-wrap-${docNum}-fronte">
                     <span class="detection-label">Bordi rilevati</span>
@@ -3692,9 +3267,6 @@ function buildDocSection(docNum) {
                     <button class="btn btn-edit edit-btn" id="edit-btn-${docNum}-retro" disabled
                             title="Modifica manualmente gli angoli del ritaglio"
                             onclick="openEditorModal(${docNum}, 'retro')">✎ Modifica bordi</button>
-                    <button class="btn btn-adjust-img" id="adjust-btn-${docNum}-retro" disabled
-                            title="Regola luminosità, contrasto, colore, rotazione"
-                            onclick="openImgAdjustModal(${docNum}, 'retro')">🎨 Regola immagine</button>
                 </div>
                 <div class="detection-wrap" id="detection-wrap-${docNum}-retro">
                     <span class="detection-label">Bordi rilevati</span>
@@ -3737,8 +3309,6 @@ function addDocument(skipSave) {
     updateRemoveButtons();
     updateProgress();
     checkExportStatus();
-    updateAdjustButtonState(currentDocs, 'fronte');
-    updateAdjustButtonState(currentDocs, 'retro');
     if (!skipSave) saveState();
 }
 
@@ -3847,8 +3417,6 @@ function reindexDocuments() {
                 setStatus(newNum, s, 'error',
                     'Foto rifiutata: ' + pendingData.reason + '. Puoi forzare l\'acquisizione o correggere i bordi manualmente.');
             }
-
-            updateAdjustButtonState(newNum, s);
         }
     });
 
@@ -3916,7 +3484,6 @@ function clearAllData() {
     if (previewOpen) closePreviewModal();
     cancelMultiScan();
     closeEditorModal();
-    closeImgAdjustModal();
 
     document.getElementById('pdf-filename').value = 'documenti_tessera';
 
@@ -3964,7 +3531,6 @@ function initializeApp() {
                     prev.style.display = 'block';
                     setStatus(newNum, s, 'success', 'Ripristinato dalla sessione.');
                 }
-                updateAdjustButtonState(newNum, s);
             }
         }
 
@@ -4094,7 +3660,6 @@ function resetSlot(doc, side) {
     msg.className = 'status-msg';
     msg.innerText = '';
 
-    updateAdjustButtonState(doc, side);
     updateProgress();
     checkExportStatus();
     saveState();
@@ -4120,7 +3685,6 @@ function setStatus(doc, side, type, text) {
     const m = document.getElementById(`msg-${k}`);
     m.className = 'status-msg ' + (type || '');
     m.innerText = text || '';
-    updateAdjustButtonState(doc, side);
 }
 
 /* ============================================================
@@ -4184,7 +3748,7 @@ async function forceAcceptImage(doc, side) {
                     detWrap.classList.add('visible');
                 }
             }
-        } catch (e) { }
+        } catch (e) { /* ignore */ }
 
         hideForcePanel(k);
         delete pendingFailed[k];
@@ -4193,7 +3757,6 @@ async function forceAcceptImage(doc, side) {
         if (editBtn) editBtn.disabled = false;
 
         setStatus(doc, side, 'success', 'Acquisizione forzata effettuata (qualità non ottimale).');
-        updateAdjustButtonState(doc, side);
         updateProgress();
         checkExportStatus();
         saveState();
@@ -4298,7 +3861,6 @@ function fail(doc, side, reason, input, extras) {
         hideForcePanel(k);
     }
 
-    updateAdjustButtonState(doc, side);
     updateProgress();
     checkExportStatus();
     saveState();
@@ -4413,7 +3975,6 @@ function runScanner(img, doc, side, input) {
 
         setStatus(doc, side, 'success', 'Ritagliato e raddrizzato.');
         processedImages[k] = warpedDataUrl;
-        updateAdjustButtonState(doc, side);
         updateProgress();
         checkExportStatus();
         saveState();
@@ -4430,12 +3991,14 @@ function runScanner(img, doc, side, input) {
 }
 
 /* ============================================================
-   OVERLAY BORDI
+   OVERLAY BORDI (da cv.Mat) — versione robusta
    ============================================================ */
 function buildDetectionOverlay(srcMat, corners) {
     const W = srcMat.cols;
     const H = srcMat.rows;
 
+    // FIX: usa cv.imshow su un canvas temporaneo (robusto su tutti i browser),
+    // evita il percorso "raw ImageData" che può fallire se srcMat.data è disallineato.
     const full = document.createElement('canvas');
     full.width  = W;
     full.height = H;
@@ -4504,6 +4067,9 @@ function buildDetectionOverlay(srcMat, corners) {
     return thumb.toDataURL('image/png');
 }
 
+/* ============================================================
+   OVERLAY BORDI (da Image + corners)
+   ============================================================ */
 function buildDetectionOverlayFromImage(img, corners) {
     const W = img.naturalWidth;
     const H = img.naturalHeight;
@@ -4550,6 +4116,7 @@ function buildDetectionOverlayFromImage(img, corners) {
 
     return thumb.toDataURL('image/png');
 }
+
 /* ============================================================
    MULTI-SCAN
    ============================================================ */
@@ -4769,6 +4336,7 @@ function handleMultiScanInput(input) {
 function processMultiScanBlob(blob) {
     if (!blob) return;
 
+    // FIX: attendi cvReady anche qui (prima non era controllato → errore se chiamato subito dopo l'avvio)
     if (!cvReady) {
         setStatus(1, 'fronte', 'info', 'Attendo il motore di scansione…');
         whenCvReady(() => processMultiScanBlob(blob));
@@ -4825,6 +4393,8 @@ function runMultiScan(img) {
             return;
         }
 
+        // FIX: memorizza anche il riferimento all'immagine sorgente già caricata,
+        // così in confirmMultiScan non serve ricaricarla ad ogni tessera (perf).
         multiScanPending = {
             cards: cards,
             previewUrl: previewDataUrl,
@@ -4909,6 +4479,7 @@ async function confirmMultiScan() {
             prev.style.display = 'block';
         }
 
+        // FIX: usa l'immagine sorgente reale per l'overlay bordi (prima mostrava sfondo bianco).
         try {
             let detOverlay = null;
             if (srcImg) {
@@ -4933,7 +4504,6 @@ async function confirmMultiScan() {
         if (editBtn && card.srcUrl) editBtn.disabled = false;
 
         setStatus(doc, side, 'success', 'Estratto da multi-scan.');
-        updateAdjustButtonState(doc, side);
         assigned++;
     }
 
@@ -5254,7 +4824,7 @@ function checkQuality(img) {
 }
 
 /* ============================================================
-   COSTRUZIONE PDF
+   COSTRUZIONE PDF — 4 documenti (8 tessere) per pagina A4
    ============================================================ */
 function buildPDFDocument() {
     for (let d = 1; d <= currentDocs; d++) {
@@ -5282,7 +4852,7 @@ function buildPDFDocument() {
     const leftMargin = (pageW - pairW) / 2;
 
     const rowH = cH;
-    const rowsPerPage = CONFIG.docsPerPage / 2;
+    const rowsPerPage = CONFIG.docsPerPage / 2; // 8 slot / 2 = 4 righe
     const blockH = rowH * rowsPerPage + gap * (rowsPerPage - 1);
     const maxBlockH = pageH - 20;
     let startY, actualGap = gap;
@@ -5293,7 +4863,7 @@ function buildPDFDocument() {
         startY = (pageH - blockH) / 2;
     }
 
-    const docsPerPage = rowsPerPage;
+    const docsPerPage = rowsPerPage; // 4 documenti per pagina
     const pages = Math.ceil(currentDocs / docsPerPage);
 
     for (let p = 0; p < pages; p++) {
@@ -5330,7 +4900,7 @@ function getCleanFilename() {
 }
 
 /* ============================================================
-   SALVATAGGIO FILE
+   SALVATAGGIO FILE CON FALLBACK PROGRESSIVO
    ============================================================ */
 function blobToBase64(blob) {
     return new Promise((resolve, reject) => {
@@ -5366,7 +4936,7 @@ async function saveFileWithPicker(data, defaultName, mimeType, extensions) {
                             url: res.uri,
                             dialogTitle: 'Salva o condividi'
                         });
-                    } catch (_) { }
+                    } catch (_) { /* utente ha annullato */ }
                 }
                 return { ok: true, method: 'capacitor', uri: res.uri };
             } catch (err) {
@@ -5634,6 +5204,7 @@ async function downloadFromPreview() {
 
     if (!result.ok) return;
 
+    // FIX: non ricarichiamo più l'anteprima (era inutile e rilanciava buildPDFDocument).
     const info = document.getElementById('pdf-modal-info');
     if (info) info.textContent = '✓ PDF salvato.';
 }
@@ -5646,6 +5217,7 @@ function refreshPreviewIfOpen() {
         closePreviewModal();
         return;
     }
+    // FIX: throttling – evita di ricalcolare il PDF ad ogni singola scansione.
     if (previewRefreshTimer) return;
     previewRefreshTimer = setTimeout(() => {
         previewRefreshTimer = null;
@@ -5738,7 +5310,7 @@ async function processImportPDFBlob(blob) {
                 const src = readSourceMat(img);
                 singleCorners = detectCard(src);
                 src.delete();
-            } catch (e) { }
+            } catch (e) { /* ignore */ }
 
             if (singleCorners) cardsCorners = [singleCorners];
         }
@@ -5804,7 +5376,6 @@ async function processImportPDFBlob(blob) {
                 if (editBtn && pageSrcUrl) editBtn.disabled = false;
 
                 setStatus(doc, side, 'success', `Importata da PDF pag. ${p}.`);
-                updateAdjustButtonState(doc, side);
                 totalCardsFound++;
             } catch (e) {
                 console.warn('Errore estrazione da PDF:', e);
@@ -6132,7 +5703,6 @@ async function confirmEditorChanges() {
         if (editBtn) editBtn.disabled = false;
 
         setStatus(doc, side, 'success', 'Bordi modificati manualmente.');
-        updateAdjustButtonState(doc, side);
         updateProgress();
         checkExportStatus();
         saveState();
@@ -6789,7 +6359,9 @@ function renderEditorPreview() {
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         };
         img.src = dataUrl;
-    } catch (e) { }
+    } catch (e) {
+        // Silenzioso
+    }
 }
 
 function onEditorArrowKey(e) {
@@ -6847,526 +6419,7 @@ function onEditorArrowKey(e) {
                 fitEditorCanvas();
                 drawEditor();
                 renderEditorPreview();
-            } catch (e) { }
-        }
-    });
-})();
-
-/* ============================================================
-   EDITOR REGOLAZIONE IMMAGINE (NUOVO)
-   ============================================================ */
-const IMG_ADJ_CFG = {
-    MAX_PREVIEW_DIM: 1400,
-    THROTTLE_MS: 50
-};
-
-let imgAdjustState = null;
-let imgAdjustRenderTimer = null;
-let imgAdjustZoomMode = 'fit';
-
-function openImgAdjustModal(doc, side) {
-    const k = keyOf(doc, side);
-    const dataUrl = processedImages[k];
-
-    if (!dataUrl) {
-        alert('Nessuna immagine elaborata da regolare.\nPrima scansiona o forza l\'acquisizione del lato.');
-        return;
-    }
-
-    imgAdjustState = {
-        key: k,
-        doc: doc,
-        side: side,
-        originalDataUrl: dataUrl,
-        rotation: 0,
-        rotationFine: 0,
-        brightness: 0,
-        contrast: 0,
-        saturation: 0,
-        sharpen: 0,
-        sharpenRadius: 1,
-        rLevel: 0,
-        gLevel: 0,
-        bLevel: 0,
-        sourceImg: null,
-        sourceCanvas: null,
-        previewCanvas: null,
-        previewCtx: null
-    };
-
-    const overlay = document.getElementById('img-adjust-overlay');
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-
-    const titleEl = document.getElementById('img-adjust-title');
-    if (titleEl) {
-        titleEl.textContent = `Regola immagine — Doc ${doc} (${side.toUpperCase()})`;
-    }
-
-    resetImgAdjustUI();
-
-    const img = new Image();
-    img.onload = () => {
-        if (!imgAdjustState) return;
-        imgAdjustState.sourceImg = img;
-
-        const srcCanvas = document.createElement('canvas');
-        const maxDim = Math.max(img.naturalWidth, img.naturalHeight);
-        const scale = maxDim > IMG_ADJ_CFG.MAX_PREVIEW_DIM
-            ? IMG_ADJ_CFG.MAX_PREVIEW_DIM / maxDim
-            : 1;
-        srcCanvas.width  = Math.max(1, Math.round(img.naturalWidth  * scale));
-        srcCanvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
-        const sctx = srcCanvas.getContext('2d', { willReadFrequently: true });
-        sctx.fillStyle = '#fff';
-        sctx.fillRect(0, 0, srcCanvas.width, srcCanvas.height);
-        sctx.drawImage(img, 0, 0, srcCanvas.width, srcCanvas.height);
-
-        imgAdjustState.sourceCanvas = srcCanvas;
-
-        const canvas = document.getElementById('img-adjust-canvas');
-        imgAdjustState.previewCanvas = canvas;
-        imgAdjustState.previewCtx = canvas.getContext('2d', { willReadFrequently: true });
-
-        applyImgAdjustZoom();
-        scheduleImgAdjustRender(true);
-    };
-    img.onerror = () => {
-        alert('Impossibile caricare l\'immagine da regolare.');
-        closeImgAdjustModal();
-    };
-    img.src = dataUrl;
-}
-
-function closeImgAdjustModal() {
-    const overlay = document.getElementById('img-adjust-overlay');
-    if (overlay) overlay.classList.remove('open');
-    if (!isAnyModalOpen()) document.body.style.overflow = '';
-    imgAdjustState = null;
-    if (imgAdjustRenderTimer) {
-        clearTimeout(imgAdjustRenderTimer);
-        imgAdjustRenderTimer = null;
-    }
-}
-
-function toggleAdjZoom() {
-    imgAdjustZoomMode = imgAdjustZoomMode === 'fit' ? '100' : 'fit';
-    applyImgAdjustZoom();
-}
-
-function applyImgAdjustZoom() {
-    if (!imgAdjustState || !imgAdjustState.previewCanvas) return;
-    const inner = document.getElementById('img-adjust-preview-inner');
-    const lbl = document.getElementById('adj-zoom-label');
-    const wrap = document.getElementById('img-adjust-preview-wrap');
-
-    const canvas = imgAdjustState.previewCanvas;
-    if (imgAdjustZoomMode === 'fit') {
-        const maxW = wrap.clientWidth - 36;
-        const maxH = wrap.clientHeight - 36;
-        const scale = Math.min(maxW / canvas.width, maxH / canvas.height, 1);
-        inner.style.transform = 'scale(' + scale + ')';
-        if (lbl) lbl.textContent = 'Zoom: Fit (' + Math.round(scale * 100) + '%)';
-    } else {
-        inner.style.transform = 'scale(1)';
-        if (lbl) lbl.textContent = 'Zoom: 100%';
-    }
-}
-
-function resetImgAdjustUI() {
-    const ids = [
-        ['adj-rot-fine', 0, '°'],
-        ['adj-brightness', 0, ''],
-        ['adj-contrast', 0, ''],
-        ['adj-saturation', 0, ''],
-        ['adj-sharpen', 0, '%'],
-        ['adj-sharpen-radius', 1, 'px'],
-        ['adj-r', 0, ''],
-        ['adj-g', 0, ''],
-        ['adj-b', 0, '']
-    ];
-    ids.forEach(([id, val, suffix]) => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.value = val;
-            const valEl = document.getElementById(id + '-val');
-            if (valEl) valEl.textContent = val + suffix;
-        }
-    });
-    imgAdjustZoomMode = 'fit';
-}
-
-function rotateImgAdjust(delta) {
-    if (!imgAdjustState) return;
-    imgAdjustState.rotation = (imgAdjustState.rotation + delta) % 360;
-    scheduleImgAdjustRender(true);
-}
-
-function resetImgAdjustGroup(group) {
-    if (!imgAdjustState) return;
-    switch (group) {
-        case 'rotation':
-            imgAdjustState.rotation = 0;
-            imgAdjustState.rotationFine = 0;
-            break;
-        case 'basic':
-            imgAdjustState.brightness = 0;
-            imgAdjustState.contrast = 0;
-            imgAdjustState.saturation = 0;
-            break;
-        case 'sharpen':
-            imgAdjustState.sharpen = 0;
-            imgAdjustState.sharpenRadius = 1;
-            break;
-        case 'channels':
-            imgAdjustState.rLevel = 0;
-            imgAdjustState.gLevel = 0;
-            imgAdjustState.bLevel = 0;
-            break;
-    }
-    const map = {
-        rotation: [['adj-rot-fine', 0, '°']],
-        basic: [
-            ['adj-brightness', 0, ''],
-            ['adj-contrast', 0, ''],
-            ['adj-saturation', 0, '']
-        ],
-        sharpen: [
-            ['adj-sharpen', 0, '%'],
-            ['adj-sharpen-radius', 1, 'px']
-        ],
-        channels: [
-            ['adj-r', 0, ''],
-            ['adj-g', 0, ''],
-            ['adj-b', 0, '']
-        ]
-    };
-    (map[group] || []).forEach(([id, val, suffix]) => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.value = val;
-            const valEl = document.getElementById(id + '-val');
-            if (valEl) valEl.textContent = val + suffix;
-        }
-    });
-    scheduleImgAdjustRender(true);
-}
-
-function resetImgAdjust() {
-    if (!imgAdjustState) return;
-    imgAdjustState.rotation = 0;
-    imgAdjustState.rotationFine = 0;
-    imgAdjustState.brightness = 0;
-    imgAdjustState.contrast = 0;
-    imgAdjustState.saturation = 0;
-    imgAdjustState.sharpen = 0;
-    imgAdjustState.sharpenRadius = 1;
-    imgAdjustState.rLevel = 0;
-    imgAdjustState.gLevel = 0;
-    imgAdjustState.bLevel = 0;
-    resetImgAdjustUI();
-    scheduleImgAdjustRender(true);
-}
-
-function autoEnhanceImgAdjust() {
-    if (!imgAdjustState || !imgAdjustState.sourceCanvas) return;
-
-    const c = imgAdjustState.sourceCanvas;
-
-    const sampleSize = 120;
-    const sampleCanvas = document.createElement('canvas');
-    sampleCanvas.width = sampleSize;
-    sampleCanvas.height = sampleSize;
-    const sctx = sampleCanvas.getContext('2d', { willReadFrequently: true });
-    sctx.drawImage(c, 0, 0, sampleSize, sampleSize);
-    const data = sctx.getImageData(0, 0, sampleSize, sampleSize).data;
-
-    let sum = 0, min = 255, max = 0;
-    const n = sampleSize * sampleSize;
-    const hist = new Array(256).fill(0);
-    let rSum = 0, gSum = 0, bSum = 0;
-
-    for (let i = 0; i < data.length; i += 4) {
-        const r = data[i], g = data[i+1], b = data[i+2];
-        const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-        sum += lum;
-        if (lum < min) min = lum;
-        if (lum > max) max = lum;
-        hist[Math.round(lum)]++;
-        rSum += r; gSum += g; bSum += b;
-    }
-
-    const avgLum = sum / n;
-    const avgR = rSum / n, avgG = gSum / n, avgB = bSum / n;
-    const avgRGB = (avgR + avgG + avgB) / 3;
-
-    let cum = 0;
-    let p1 = 0, p99 = 255;
-    for (let i = 0; i < 256; i++) {
-        cum += hist[i];
-        if (cum >= n * 0.01) { p1 = i; break; }
-    }
-    cum = 0;
-    for (let i = 255; i >= 0; i--) {
-        cum += hist[i];
-        if (cum >= n * 0.01) { p99 = i; break; }
-    }
-
-    const range = Math.max(1, p99 - p1);
-    const targetRange = 220;
-    let contrast = Math.round((targetRange / range - 1) * 100);
-    contrast = Math.max(-30, Math.min(60, contrast));
-
-    let brightness = Math.round((128 - avgLum) * 0.6);
-    brightness = Math.max(-40, Math.min(40, brightness));
-
-    let rLevel = Math.round((avgRGB - avgR) * 0.8);
-    let gLevel = Math.round((avgRGB - avgG) * 0.8);
-    let bLevel = Math.round((avgRGB - avgB) * 0.8);
-    rLevel = Math.max(-25, Math.min(25, rLevel));
-    gLevel = Math.max(-25, Math.min(25, gLevel));
-    bLevel = Math.max(-25, Math.min(25, bLevel));
-
-    let saturation = 0;
-    if (Math.abs(brightness) < 30 && Math.abs(contrast) < 30) {
-        saturation = 8;
-    }
-
-    imgAdjustState.contrast = contrast;
-    imgAdjustState.brightness = brightness;
-    imgAdjustState.rLevel = rLevel;
-    imgAdjustState.gLevel = gLevel;
-    imgAdjustState.bLevel = bLevel;
-    imgAdjustState.saturation = saturation;
-    imgAdjustState.sharpen = 30;
-    imgAdjustState.sharpenRadius = 1;
-
-    const updates = [
-        ['adj-brightness', brightness, ''],
-        ['adj-contrast', contrast, ''],
-        ['adj-saturation', saturation, ''],
-        ['adj-sharpen', 30, '%'],
-        ['adj-sharpen-radius', 1, 'px'],
-        ['adj-r', rLevel, ''],
-        ['adj-g', gLevel, ''],
-        ['adj-b', bLevel, '']
-    ];
-    updates.forEach(([id, val, suffix]) => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.value = val;
-            const valEl = document.getElementById(id + '-val');
-            if (valEl) valEl.textContent = val + suffix;
-        }
-    });
-
-    scheduleImgAdjustRender(true);
-}
-
-function scheduleImgAdjustRender(immediate) {
-    if (imgAdjustRenderTimer) {
-        if (!immediate) return;
-        clearTimeout(imgAdjustRenderTimer);
-        imgAdjustRenderTimer = null;
-    }
-    if (immediate) {
-        renderImgAdjust();
-    } else {
-        imgAdjustRenderTimer = setTimeout(() => {
-            imgAdjustRenderTimer = null;
-            renderImgAdjust();
-        }, IMG_ADJ_CFG.THROTTLE_MS);
-    }
-}
-
-function renderImgAdjust() {
-    if (!imgAdjustState || !imgAdjustState.sourceCanvas || !imgAdjustState.previewCanvas) return;
-
-    const src = imgAdjustState.sourceCanvas;
-    const canvas = imgAdjustState.previewCanvas;
-    const ctx = imgAdjustState.previewCtx;
-
-    const totalRot = imgAdjustState.rotation + imgAdjustState.rotationFine;
-    const rad = totalRot * Math.PI / 180;
-
-    const cos = Math.abs(Math.cos(rad));
-    const sin = Math.abs(Math.sin(rad));
-    const newW = Math.max(1, Math.round(src.width * cos + src.height * sin));
-    const newH = Math.max(1, Math.round(src.width * sin + src.height * cos));
-
-    canvas.width = newW;
-    canvas.height = newH;
-
-    ctx.save();
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, newW, newH);
-    ctx.translate(newW / 2, newH / 2);
-    ctx.rotate(rad);
-    ctx.drawImage(src, -src.width / 2, -src.height / 2);
-    ctx.restore();
-
-    const imgData = ctx.getImageData(0, 0, newW, newH);
-    const d = imgData.data;
-
-    const brightness = imgAdjustState.brightness * 2.55;
-    const contrast = imgAdjustState.contrast;
-    const contrastFactor = (259 * (contrast + 255)) / (255 * (259 - contrast));
-    const saturation = 1 + imgAdjustState.saturation / 100;
-    const rLevel = imgAdjustState.rLevel * 2.55;
-    const gLevel = imgAdjustState.gLevel * 2.55;
-    const bLevel = imgAdjustState.bLevel * 2.55;
-
-    const lutR = new Uint8ClampedArray(256);
-    const lutG = new Uint8ClampedArray(256);
-    const lutB = new Uint8ClampedArray(256);
-    for (let i = 0; i < 256; i++) {
-        let vR = i + rLevel;
-        let vG = i + gLevel;
-        let vB = i + bLevel;
-        vR = contrastFactor * (vR - 128) + 128;
-        vG = contrastFactor * (vG - 128) + 128;
-        vB = contrastFactor * (vB - 128) + 128;
-        vR += brightness;
-        vG += brightness;
-        vB += brightness;
-        lutR[i] = Math.max(0, Math.min(255, vR));
-        lutG[i] = Math.max(0, Math.min(255, vG));
-        lutB[i] = Math.max(0, Math.min(255, vB));
-    }
-
-    for (let i = 0; i < d.length; i += 4) {
-        let r = lutR[d[i]];
-        let g = lutG[d[i + 1]];
-        let b = lutB[d[i + 2]];
-
-        if (saturation !== 1) {
-            const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-            r = lum + (r - lum) * saturation;
-            g = lum + (g - lum) * saturation;
-            b = lum + (b - lum) * saturation;
-        }
-
-        d[i]     = Math.max(0, Math.min(255, r));
-        d[i + 1] = Math.max(0, Math.min(255, g));
-        d[i + 2] = Math.max(0, Math.min(255, b));
-    }
-
-    ctx.putImageData(imgData, 0, 0);
-
-    if (imgAdjustState.sharpen > 0) {
-        applySharpen(ctx, newW, newH, imgAdjustState.sharpen / 100, imgAdjustState.sharpenRadius);
-    }
-
-    applyImgAdjustZoom();
-}
-
-function applySharpen(ctx, w, h, amount, radius) {
-    if (amount <= 0) return;
-
-    const tmp = document.createElement('canvas');
-    tmp.width = w;
-    tmp.height = h;
-    const tctx = tmp.getContext('2d', { willReadFrequently: true });
-    tctx.drawImage(ctx.canvas, 0, 0);
-
-    const srcData = tctx.getImageData(0, 0, w, h).data;
-    const outData = ctx.getImageData(0, 0, w, h);
-    const out = outData.data;
-
-    const r = Math.max(1, Math.round(radius));
-    const center = 1 + 4 * amount;
-    const side = -amount;
-
-    for (let y = r; y < h - r; y++) {
-        for (let x = r; x < w - r; x++) {
-            const i = (y * w + x) * 4;
-            const iL = (y * w + (x - r)) * 4;
-            const iR = (y * w + (x + r)) * 4;
-            const iT = ((y - r) * w + x) * 4;
-            const iB = ((y + r) * w + x) * 4;
-
-            for (let c = 0; c < 3; c++) {
-                const v = center * srcData[i + c]
-                        + side * (srcData[iL + c] + srcData[iR + c] + srcData[iT + c] + srcData[iB + c]);
-                out[i + c] = Math.max(0, Math.min(255, v));
-            }
-            out[i + 3] = srcData[i + 3];
-        }
-    }
-
-    ctx.putImageData(outData, 0, 0);
-}
-
-function confirmImgAdjust() {
-    if (!imgAdjustState || !imgAdjustState.previewCanvas) return;
-
-    const { key, doc, side } = imgAdjustState;
-
-    try {
-        const dataUrl = imgAdjustState.previewCanvas.toDataURL('image/png');
-
-        processedImages[key] = dataUrl;
-
-        const prev = document.getElementById(`preview-${key}`);
-        if (prev) {
-            prev.src = dataUrl;
-            prev.style.display = 'block';
-        }
-
-        setStatus(doc, side, 'success', 'Immagine regolata (luminosità/contrasto/colore).');
-        updateAdjustButtonState(doc, side);
-        updateProgress();
-        checkExportStatus();
-        saveState();
-        refreshPreviewIfOpen();
-        closeImgAdjustModal();
-    } catch (e) {
-        console.error(e);
-        alert('Errore durante l\'applicazione delle regolazioni.');
-    }
-}
-
-function updateAdjustButtonState(doc, side) {
-    const k = keyOf(doc, side);
-    const btn = document.getElementById(`adjust-btn-${k}`);
-    if (!btn) return;
-    btn.disabled = !processedImages[k];
-}
-
-(function bindImgAdjustEvents() {
-    const bindSlider = (id, prop, suffix) => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.addEventListener('input', () => {
-            const val = parseFloat(el.value);
-            const valEl = document.getElementById(id + '-val');
-            if (valEl) valEl.textContent = val + suffix;
-            if (imgAdjustState) {
-                imgAdjustState[prop] = val;
-                scheduleImgAdjustRender(false);
-            }
-        });
-    };
-
-    bindSlider('adj-rot-fine', 'rotationFine', '°');
-    bindSlider('adj-brightness', 'brightness', '');
-    bindSlider('adj-contrast', 'contrast', '');
-    bindSlider('adj-saturation', 'saturation', '');
-    bindSlider('adj-sharpen', 'sharpen', '%');
-    bindSlider('adj-sharpen-radius', 'sharpenRadius', 'px');
-    bindSlider('adj-r', 'rLevel', '');
-    bindSlider('adj-g', 'gLevel', '');
-    bindSlider('adj-b', 'bLevel', '');
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && document.getElementById('img-adjust-overlay').classList.contains('open')) {
-            closeImgAdjustModal();
-        }
-    });
-
-    window.addEventListener('resize', () => {
-        if (imgAdjustState && document.getElementById('img-adjust-overlay').classList.contains('open')) {
-            applyImgAdjustZoom();
+            } catch (e) { /* ignore */ }
         }
     });
 })();
@@ -7376,9 +6429,7 @@ function updateAdjustButtonState(doc, side) {
    ============================================================ */
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
-        if (document.getElementById('img-adjust-overlay').classList.contains('open')) {
-            closeImgAdjustModal();
-        } else if (editorState) {
+        if (editorState) {
             closeEditorModal();
         } else if (multiScanPending) {
             cancelMultiScan();
@@ -7396,10 +6447,16 @@ document.addEventListener('keydown', e => {
 
 document.getElementById('pdf-filename').addEventListener('input', saveState);
 
+/* FIX: usa il flush sincrono sul beforeunload, così i dati non si perdono */
 window.addEventListener('beforeunload', saveStateNow);
+
+/* FIX: flush anche su pagehide (iOS/Android WebView non sempre emettono beforeunload) */
 window.addEventListener('pagehide', saveStateNow);
 
-console.log('%cCardScan AI', 'color:#22d3ee;font-weight:bold;font-size:16px;', 'Ambiente:', APP_ENV.label, '| Editor regolazione immagine attivo.');
+/* ============================================================
+   LOG
+   ============================================================ */
+console.log('%cCardScan AI', 'color:#22d3ee;font-weight:bold;font-size:16px;', 'Ambiente:', APP_ENV.label);
 </script>
 
 </body>
