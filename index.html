@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-title" content="CardScan AI">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="CardScan AI">
-  <meta name="app-version" content="1.1.0">
+  <meta name="app-version" content="1.2.0">
 
   <!-- Favicon SVG inline -->
   <link rel="icon" type="image/svg+xml"
@@ -45,6 +45,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <!-- QRCode.js (generazione QR Code PayPal lato client) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Tesseract.js (OCR) - caricato lazy al primo utilizzo -->
 
   <style>
       :root {
@@ -1406,12 +1407,6 @@
           border: 1px dashed rgba(0, 255, 176, 0.35);
           pointer-events: none;
       }
-      /* ============================================================
-         [FIX PREVIEW] BOX ANTEPRIMA MIGLIORATO
-         - Bordo verde glow per distinguerla dallo sfondo dell'editor
-         - Larghezza massima aumentata per sfruttare il canvas 480×302
-         - Sfondo bianco solido
-         ============================================================ */
       .editor-preview-box {
           position: absolute;
           right: 14px;
@@ -1827,10 +1822,221 @@
           color: var(--text-primary);
       }
 
+      /* ============================================================
+         [NEW v1.2.0] Pannello OCR — rilevamento testo
+         ============================================================ */
+      .btn-editor-ocr {
+          background: linear-gradient(135deg, #00ffb0 0%, #3b82f6 100%);
+          color: #0a0e27;
+          font-weight: 800;
+          box-shadow:
+              0 4px 14px rgba(0, 255, 176, 0.42),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      }
+      .btn-editor-ocr:hover:not(:disabled) {
+          box-shadow:
+              0 8px 22px rgba(0, 255, 176, 0.6),
+              0 0 26px rgba(59, 130, 246, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      }
+
+      .editor-ocr-panel {
+          position: absolute;
+          top: 60px;
+          right: 12px;
+          z-index: 21;
+          width: 340px;
+          max-width: calc(100% - 24px);
+          max-height: calc(100% - 80px);
+          overflow-y: auto;
+          background: rgba(10, 14, 39, 0.96);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(0, 255, 176, 0.45);
+          border-radius: var(--radius-md);
+          box-shadow:
+              0 18px 50px rgba(0, 0, 0, 0.7),
+              0 0 0 1px rgba(255, 255, 255, 0.05),
+              0 0 34px rgba(0, 255, 176, 0.18);
+          padding: 14px;
+          color: var(--text-primary);
+          font-size: 12px;
+          transition: transform .28s ease, opacity .28s ease;
+          -webkit-overflow-scrolling: touch;
+      }
+      .editor-ocr-panel.collapsed {
+          transform: translateX(calc(100% + 22px));
+          opacity: 0;
+          pointer-events: none;
+      }
+      .editor-ocr-panel h4 {
+          margin: 0 0 10px;
+          font-family: 'Space Grotesk', 'Inter', sans-serif;
+          font-size: 13px;
+          letter-spacing: 0.4px;
+          color: #00ffb0;
+          text-transform: uppercase;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+      }
+      .editor-ocr-panel h4::before {
+          content: '';
+          display: inline-block;
+          width: 3px; height: 14px;
+          border-radius: 2px;
+          background: linear-gradient(180deg, #00ffb0, #3b82f6);
+          box-shadow: 0 0 8px rgba(0, 255, 176, 0.6);
+          margin-right: 6px;
+      }
+      .ocr-mode-buttons {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          margin-bottom: 10px;
+      }
+      .ocr-mode-buttons .btn-ocr-mode {
+          width: 100%;
+          justify-content: flex-start;
+          padding: 9px 12px;
+          font-size: 11.5px;
+          font-weight: 700;
+          background: rgba(255, 255, 255, 0.05);
+          color: var(--text-secondary);
+          border: 1px solid var(--border);
+          box-shadow: none;
+          transition: all .18s;
+      }
+      .ocr-mode-buttons .btn-ocr-mode:hover:not(:disabled) {
+          background: rgba(0, 255, 176, 0.1);
+          border-color: rgba(0, 255, 176, 0.45);
+          color: var(--text-primary);
+      }
+      .ocr-mode-buttons .btn-ocr-mode.active {
+          background: linear-gradient(135deg, #00ffb0 0%, #3b82f6 100%);
+          color: #0a0e27;
+          border-color: rgba(0, 255, 176, 0.85);
+          box-shadow: 0 4px 14px rgba(0, 255, 176, 0.4);
+      }
+      .ocr-status {
+          font-size: 11px;
+          color: var(--text-muted);
+          margin: 6px 0 8px;
+          line-height: 1.45;
+          min-height: 14px;
+      }
+      .ocr-status.busy { color: #fbbf24; }
+      .ocr-status.ok   { color: #34d399; }
+      .ocr-status.err  { color: #f87171; }
+      .ocr-output {
+          width: 100%;
+          min-height: 120px;
+          max-height: 240px;
+          resize: vertical;
+          background: rgba(0, 0, 0, 0.35);
+          color: #e2e8f0;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 10px;
+          font-family: 'Consolas', 'Monaco', monospace;
+          font-size: 11.5px;
+          line-height: 1.5;
+          outline: none;
+          -webkit-appearance: none;
+      }
+      .ocr-output:focus {
+          border-color: rgba(0, 255, 176, 0.6);
+          box-shadow: 0 0 0 3px rgba(0, 255, 176, 0.15);
+      }
+      .ocr-actions {
+          display: flex;
+          gap: 6px;
+          flex-wrap: wrap;
+          margin-top: 10px;
+      }
+      .ocr-actions .btn {
+          flex: 1;
+          min-width: 0;
+          justify-content: center;
+          font-size: 11px;
+          padding: 8px 10px;
+          font-weight: 700;
+      }
+      .ocr-progress-bar {
+          width: 100%;
+          height: 6px;
+          background: rgba(255, 255, 255, 0.08);
+          border-radius: 999px;
+          overflow: hidden;
+          margin: 4px 0 8px;
+          display: none;
+      }
+      .ocr-progress-bar.visible { display: block; }
+      .ocr-progress-bar > div {
+          height: 100%;
+          width: 0%;
+          background: linear-gradient(90deg, #00ffb0, #3b82f6, #8b5cf6);
+          background-size: 220% 100%;
+          transition: width .3s ease;
+          animation: progressShimmer 3.5s linear infinite;
+      }
       @media (max-width: 640px) {
           .editor-image-tools { width: 260px; padding: 10px; font-size: 11px; }
           .editor-tool-row label { flex: 0 0 62px; font-size: 10.5px; }
           .editor-tool-value { flex: 0 0 36px; font-size: 10px; }
+          .editor-ocr-panel {
+              width: calc(100% - 16px);
+              right: 8px;
+              top: 52px;
+              padding: 12px;
+          }
+      }
+
+      /* ============================================================
+         [NEW v1.2.0] Pulsanti condivisione file e sito web
+         ============================================================ */
+      .share-actions {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          flex-wrap: wrap;
+          margin-top: 12px;
+      }
+      .btn-share {
+          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 55%, #f97316 100%);
+          font-size: 12px;
+          padding: 9px 16px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          box-shadow:
+              0 4px 14px rgba(139, 92, 246, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.24);
+          background-size: 200% 200%;
+          animation: gradientShift 7s ease infinite;
+      }
+      .btn-share:hover:not(:disabled) {
+          box-shadow:
+              0 8px 22px rgba(236, 72, 153, 0.55),
+              0 0 30px rgba(139, 92, 246, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.32);
+      }
+      .btn-share-small {
+          background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+          font-size: 11px;
+          padding: 7px 14px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          box-shadow:
+              0 3px 10px rgba(6, 182, 212, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.22);
+          margin-top: 4px;
+      }
+      .btn-share-small:hover:not(:disabled) {
+          box-shadow:
+              0 6px 18px rgba(139, 92, 246, 0.55),
+              0 0 22px rgba(6, 182, 212, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
       }
 
       .multiscan-assignments {
@@ -2623,9 +2829,6 @@
           .cookie-actions { justify-content: center; }
       }
 
-      /* ============================================================
-         PAIRING MAP + SLOT DRAG&DROP (multi-scan/PDF)
-         ============================================================ */
       .multiscan-pairing-wrap {
           margin: 10px 0 8px;
           padding: 10px;
@@ -2830,9 +3033,6 @@
           z-index: 3;
       }
 
-      /* ============================================================
-         [SUGG 3] EDITOR CARD PICKER (multi-tessera in edit mode)
-         ============================================================ */
       .editor-card-picker {
           position: absolute;
           top: 12px;
@@ -3099,6 +3299,20 @@
     </div>
 
     <!-- ============================================================
+         [NEW v1.2.0] Pulsanti condivisione file (PDF / JPG)
+         ============================================================ -->
+    <div class="share-actions">
+        <button id="btn-share-pdf" class="btn btn-share" disabled onclick="sharePdf()"
+                title="Condividi il PDF con le app del dispositivo (WhatsApp, Gmail, Drive, …)">
+            📤 Condividi PDF
+        </button>
+        <button id="btn-share-jpg" class="btn btn-share" disabled onclick="shareJpg()"
+                title="Condividi il JPG con le app del dispositivo (WhatsApp, Gmail, Foto, …)">
+            📤 Condividi JPG
+        </button>
+    </div>
+
+    <!-- ============================================================
          SUPPORTO PAYPAL + QR CODE
          ============================================================ -->
     <div class="paypal-support">
@@ -3107,6 +3321,12 @@
         </a>
         <button type="button" class="btn btn-qr-show" onclick="openQrModal()" aria-label="Mostra QR Code PayPal">
             📱 Mostra QR Code PayPal
+        </button>
+        <!-- [NEW v1.2.0] Condivisione sito sui social -->
+        <button type="button" class="btn btn-share-small" onclick="shareWebsite()"
+                aria-label="Condividi il sito sui social"
+                title="Condividi CardScan AI sui social">
+            📢 Condividi CardScan AI
         </button>
     </div>
 
@@ -3128,6 +3348,10 @@
         <strong>Modifica manuale:</strong> clicca <strong>✎ Modifica bordi</strong> sotto l'anteprima
         per aprire un editor con zoom, trascinamento e <strong>lente di ingrandimento</strong>
         per correggere con precisione gli angoli del ritaglio.<br>
+        <strong>OCR:</strong> nell'editor, il pulsante <strong>🔤 OCR</strong> apre un pannello che riconosce il testo
+        in <strong>3 modalità</strong> (tessera selezionata, immagine intera, zona MRZ).<br>
+        <strong>Condivisione:</strong> dopo l'esportazione, i pulsanti <strong>📤 Condividi PDF/JPG</strong>
+        permettono di inviare i file tramite le app del dispositivo (WhatsApp, Gmail, Drive, ecc.).<br>
         <strong>Multi-Scan:</strong> con "📸 Acquisisci più tessere" puoi fotografare più tessere
         insieme: verranno rilevate e potrai <strong>assegnare manualmente</strong> ciascuna al fronte/retro
         del documento desiderato, con riordino drag &amp; drop, <strong>mappa abbinamenti visuale</strong>
@@ -3152,7 +3376,6 @@
         <div class="pdf-modal-header">
             <h3 id="pdf-modal-title">Anteprima PDF</h3>
             <div class="pdf-modal-actions">
-                <!-- [ZOOM] Controlli zoom anteprima PDF -->
                 <div class="pdf-zoom-controls" role="group" aria-label="Controlli zoom anteprima">
                     <button type="button" id="pdf-zoom-minus" class="btn-zoom"
                             onclick="setPreviewZoom(previewZoom - 0.25)"
@@ -3166,7 +3389,6 @@
                             onclick="setPreviewZoom(previewZoom + 0.25)"
                             title="Aumenta zoom (Ctrl + +)" aria-label="Aumenta zoom">+</button>
                 </div>
-                <!-- FINE [ZOOM] -->
 
                 <button class="btn btn-refresh-preview" onclick="refreshPreview()">↻ Aggiorna</button>
                 <button class="btn btn-open-tab" onclick="openPreviewInNewTab()">↗ Apri in nuova scheda</button>
@@ -3196,6 +3418,10 @@
         <div class="editor-modal-header">
             <h3 id="editor-modal-title">Modifica bordi</h3>
             <div class="editor-modal-actions">
+                <!-- [NEW v1.2.0] Pulsante OCR -->
+                <button class="btn btn-editor-ocr" onclick="toggleOcrPanel()" title="Rileva testo OCR all'interno dei bordi selezionati">
+                    🔤 OCR
+                </button>
                 <button class="btn btn-editor-reset" onclick="resetEditorCorners()">↺ Reset bordi</button>
                 <button class="btn btn-editor-confirm" onclick="confirmEditorChanges()">✓ Conferma</button>
                 <button class="btn btn-editor-cancel" onclick="closeEditorModal()">✕ Chiudi</button>
@@ -3205,8 +3431,40 @@
             <canvas id="editor-canvas"></canvas>
 
             <!-- ============================================================
-                 [SUGG 3] CARD PICKER — seleziona tessera su cui lavorare
+                 [NEW v1.2.0] PANNELLO OCR — rilevamento testo in 3 modalità
                  ============================================================ -->
+            <div id="editor-ocr-panel" class="editor-ocr-panel collapsed" aria-label="Rilevamento testo OCR">
+                <h4>Rilevamento testo OCR</h4>
+
+                <div class="ocr-mode-buttons">
+                    <button type="button" class="btn btn-ocr-mode active" data-mode="card"
+                            onclick="selectOcrMode('card')">
+                        📇 Tessera selezionata (bordi 1-2-3-4)
+                    </button>
+                    <button type="button" class="btn btn-ocr-mode" data-mode="full"
+                            onclick="selectOcrMode('full')">
+                        🖼 Immagine intera
+                    </button>
+                    <button type="button" class="btn btn-ocr-mode" data-mode="mrz"
+                            onclick="selectOcrMode('mrz')">
+                        🔠 Zona MRZ (inferiore)
+                    </button>
+                </div>
+
+                <div class="ocr-progress-bar" id="ocr-progress-bar"><div id="ocr-progress-fill"></div></div>
+                <div class="ocr-status" id="ocr-status">Seleziona una modalità e premi «Avvia OCR».</div>
+
+                <textarea id="ocr-output" class="ocr-output" readonly
+                          placeholder="Il testo riconosciuto apparirà qui…"></textarea>
+
+                <div class="ocr-actions">
+                    <button type="button" class="btn btn-editor-confirm" id="btn-ocr-run" onclick="runOcr()">▶ Avvia OCR</button>
+                    <button type="button" class="btn btn-editor-reset" onclick="copyOcrText()">📋 Copia</button>
+                    <button type="button" class="btn btn-editor-cancel" onclick="clearOcrText()">🗑 Pulisci</button>
+                    <button type="button" class="btn btn-editor-cancel" onclick="closeOcrPanel()">✕ Chiudi</button>
+                </div>
+            </div>
+
             <div id="editor-card-picker" class="editor-card-picker" aria-label="Selezione tessera">
                 <span class="editor-card-picker-label">Tessera:</span>
                 <div id="editor-card-picker-buttons" class="editor-card-picker-buttons"></div>
@@ -3307,11 +3565,6 @@
             </button>
 
             <div id="editor-magnifier" class="editor-magnifier"><canvas></canvas></div>
-            <!-- ============================================================
-                 [FIX PREVIEW] Canvas anteprima portato a 480×302 per nitidezza HiDPI.
-                 Il CSS lo vincola a max-width: 240px, quindi la resa visiva
-                 rimane identica ma più definita su schermi ad alta densità.
-                 ============================================================ -->
             <div class="editor-preview-box" id="editor-preview-box" aria-hidden="true">
                 <div class="editor-preview-label">Anteprima</div>
                 <canvas id="editor-preview-canvas" width="480" height="302"></canvas>
@@ -3393,13 +3646,17 @@
                 <span class="menu-ico">✉️</span>
                 <span class="menu-label">Contatti</span>
             </button>
+            <button class="menu-item" onclick="closeAppMenu(); shareWebsite()">
+                <span class="menu-ico">📢</span>
+                <span class="menu-label">Condividi CardScan AI</span>
+            </button>
             <button class="menu-item danger" onclick="closeAppMenu(); clearAllData()">
                 <span class="menu-ico">🗑</span>
                 <span class="menu-label">Svuota dati locali</span>
             </button>
         </div>
         <div class="app-menu-footer">
-            CardScan AI · v1.1.0<br>
+            CardScan AI · v1.2.0<br>
             <span id="menu-env-info">Web App</span>
         </div>
     </aside>
@@ -3448,7 +3705,6 @@
         <button class="btn btn-reset" onclick="openLegalModal('cookie')">Dettagli</button>
     </div>
 </div>
-
 <script>
 /* ============================================================
    CONFIGURAZIONE
@@ -3466,20 +3722,19 @@ const CONFIG = {
     maxBrightness: 240,
     jpegQuality:  0.92,
     maxDocs:      12,
-    docsPerPage:  8 // slot (immagini) per pagina A4 → 4 righe × 2 colonne
+    docsPerPage:  8
 };
 
 const SIDES = ['fronte', 'retro'];
 const STORAGE_KEY = 'scanner_tessere_state_v2';
 const COOKIE_KEY  = 'cardsCanCookieAccepted_v1';
-
-/* [SUGG 4] Chiave sessionStorage per la persistenza delle assegnazioni multi-scan */
 const MULTISCAN_PENDING_KEY = 'cardsCanMultiScanPending_v1';
 
 /* ============================================================
    QR CODE PAYPAL
    ============================================================ */
 const PAYPAL_URL = 'https://www.paypal.com/qrcodes/p2pqrc/XGG2DHDAHXMMQ';
+const WEBSITE_URL = 'https://mkboxself.github.io/CardScanAI/';
 let qrRendered = false;
 
 let currentDocs = 0;
@@ -3494,12 +3749,11 @@ let currentBlobUrl = null;
 let currentBlob = null;
 let renderToken = 0;
 
-/* [ZOOM] Stato zoom anteprima PDF */
 let previewZoom = 1.0;
 const PDF_ZOOM_MIN   = 0.25;
 const PDF_ZOOM_MAX   = 4.0;
 const PDF_ZOOM_STEP  = 0.25;
-const PDF_RENDER_BOOST = 2;   // Render a 2× per zoom nitido fino al 200%
+const PDF_RENDER_BOOST = 2;
 
 let deferredInstallPrompt = null;
 let multiScanPending = null;
@@ -3528,9 +3782,6 @@ const APP_ENV = (function () {
     if (el) el.textContent = APP_ENV.label;
 })();
 
-/* ============================================================
-   APK-READY: BACK BUTTON HANDLING
-   ============================================================ */
 function isAnyModalOpen() {
     return !!(
         document.getElementById('app-menu-overlay').classList.contains('open') ||
@@ -3573,9 +3824,6 @@ function closeTopmostModal() {
     } catch (_) {}
 })();
 
-/* ============================================================
-   TEMA
-   ============================================================ */
 function applyTheme(theme) {
     if (theme !== 'light' && theme !== 'dark') theme = 'dark';
     document.documentElement.setAttribute('data-theme', theme);
@@ -3603,9 +3851,6 @@ function toggleTheme() {
     applyTheme(saved);
 })();
 
-/* ============================================================
-   PWA
-   ============================================================ */
 (function injectManifest() {
     try {
         const iconSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235BB0FF'/%3E%3Cstop offset='1' stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='8' width='184' height='184' rx='44' fill='url(%23b)'/%3E%3Crect x='44' y='64' width='112' height='72' rx='8' fill='none' stroke='%23fff' stroke-width='4'/%3E%3Ccircle cx='69' cy='86' r='7' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Cpath d='M 56 103 Q 69 93 82 103' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='82' x2='140' y2='82' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='90' x2='134' y2='90' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='98' x2='126' y2='98' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='30' y1='100' x2='170' y2='100' stroke='%2300FFB0' stroke-width='4'/%3E%3C/svg%3E";
@@ -3663,9 +3908,6 @@ document.getElementById('btn-install').addEventListener('click', async () => {
     deferredInstallPrompt = null;
 });
 
-/* ============================================================
-   PDF.JS WORKER
-   ============================================================ */
 (function initPdfJsWorker() {
     if (window.pdfjsLib) {
         try {
@@ -3677,9 +3919,6 @@ document.getElementById('btn-install').addEventListener('click', async () => {
     }
 })();
 
-/* ============================================================
-   APK-READY: COOKIE BANNER
-   ============================================================ */
 function acceptCookies() {
     try { localStorage.setItem(COOKIE_KEY, '1'); } catch (_) {}
     const b = document.getElementById('cookie-banner');
@@ -3697,9 +3936,6 @@ function acceptCookies() {
     }
 })();
 
-/* ============================================================
-   APK-READY: APP MENU
-   ============================================================ */
 function toggleAppMenu() {
     const overlay = document.getElementById('app-menu-overlay');
     if (!overlay) return;
@@ -3719,9 +3955,6 @@ function closeAppMenu() {
     if (!isAnyModalOpen()) document.body.style.overflow = '';
 }
 
-/* ============================================================
-   QR CODE PAYPAL — APRI / CHIUDI / RENDER
-   ============================================================ */
 function openQrModal() {
     const overlay = document.getElementById('qr-modal-overlay');
     if (!overlay) return;
@@ -3786,9 +4019,6 @@ function renderPayPalQr() {
     }
 }
 
-/* ============================================================
-   LIGHTBOX ANTEPRIMA INGRANDITA
-   ============================================================ */
 function openCardLightbox(srcUrl, caption) {
     const overlay = document.getElementById('card-lightbox-overlay');
     const img = document.getElementById('card-lightbox-img');
@@ -3809,9 +4039,6 @@ function closeCardLightbox() {
     if (!isAnyModalOpen()) document.body.style.overflow = '';
 }
 
-/* ============================================================
-   APK-READY: LEGAL MODAL
-   ============================================================ */
 const LEGAL_DATA = {
     owner:      'Spina Michele',
     address:    '',
@@ -3819,7 +4046,7 @@ const LEGAL_DATA = {
     email:      'michelespinabox@gmail.com',
     website:    'https://mkboxself.github.io/GOSELF/',
     appName:    'CardScan AI',
-    appVersion: '1.1.0',
+    appVersion: '1.2.0',
     pkgName:    '[Spina Michele.CardScanAI]',
     lastUpdate: new Date().toLocaleDateString('it-IT'),
     thirdParties: [
@@ -3827,6 +4054,7 @@ const LEGAL_DATA = {
         { name: 'jsPDF (cdnjs.cloudflare.com)', purpose: 'Generazione del PDF lato client.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
         { name: 'PDF.js (cdnjs.cloudflare.com)', purpose: 'Anteprima PDF e importazione PDF.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
         { name: 'QRCode.js (cdnjs.cloudflare.com)', purpose: 'Generazione del QR Code PayPal lato client.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
+        { name: 'Tesseract.js (cdn.jsdelivr.net)', purpose: 'Riconoscimento testo OCR lato client (elaborazione locale).', privacy: 'https://tesseract.projectnaptha.com/' },
         { name: 'Google Fonts (fonts.googleapis.com / fonts.gstatic.com)', purpose: 'Caricamento dei font tipografici.', privacy: 'https://policies.google.com/privacy' }
     ]
 };
@@ -3887,12 +4115,15 @@ function buildInfoHtml() {
                 <li>Ritaglio e raddrizzamento prospettico</li>
                 <li>Editor manuale bordi con lente di ingrandimento</li>
                 <li>Regolazioni immagine (rotazione, luce, colore, nitidezza, canali RGB)</li>
+                <li>Riconoscimento testo OCR in 3 modalità (tessera, intera, MRZ)</li>
                 <li>Miglioramento automatico dell'immagine</li>
                 <li>Forzatura acquisizione per foto non ottimali</li>
                 <li>Multi-scan (più tessere in un'unica foto) con mappa abbinamenti visuale</li>
                 <li>Importazione da PDF esistente con assegnazione manuale</li>
                 <li>Spostamento/scambio di immagini tra slot tramite drag &amp; drop</li>
                 <li>Esportazione PDF e JPG in formato A4</li>
+                <li>Condivisione file tramite app del dispositivo (Web Share API)</li>
+                <li>Condivisione del sito sui social</li>
                 <li>Salvataggio locale delle sessioni (sessionStorage)</li>
             </ul>
 
@@ -3901,14 +4132,15 @@ function buildInfoHtml() {
                 <li>OpenCV.js — visione artificiale lato client</li>
                 <li>jsPDF — generazione PDF</li>
                 <li>PDF.js — lettura/anteprima PDF</li>
+                <li>Tesseract.js — OCR lato client</li>
                 <li>QRCode.js — generazione QR Code PayPal</li>
-                <li>Web APIs (Camera, File, Canvas, Storage)</li>
+                <li>Web APIs (Camera, File, Canvas, Storage, Web Share)</li>
             </ul>
 
             <div class="legal-note">
                 ℹ️ Questa app funziona <strong>interamente offline</strong> per quanto riguarda l'elaborazione delle immagini:
                 nessuna foto viene inviata a server remoti. Le uniche connessioni esterne sono il caricamento delle librerie
-                da CDN (OpenCV, jsPDF, PDF.js, QRCode.js, Google Fonts) e il worker di PDF.js.
+                da CDN (OpenCV, jsPDF, PDF.js, QRCode.js, Tesseract.js, Google Fonts) e il worker di PDF.js.
             </div>
         `
     };
@@ -3941,7 +4173,7 @@ function buildPrivacyHtml() {
             </ul>
             <p>Le immagini dei documenti che l'utente carica (foto dalla fotocamera o file dal dispositivo)
                sono elaborate <strong>esclusivamente in locale</strong>, all'interno del browser/WebView del dispositivo,
-               e non vengono mai trasmesse all'esterno.</p>
+               e non vengono mai trasmesse all'esterno. Anche l'elaborazione OCR avviene localmente tramite WebAssembly.</p>
 
             <h4>3. Dati memorizzati localmente</h4>
             <p>L'app utilizza le seguenti tecnologie di storage locale:</p>
@@ -3956,6 +4188,7 @@ function buildPrivacyHtml() {
                 <li><strong>Fotocamera</strong> — per scattare foto delle tessere. Utilizzata solo su azione dell'utente.</li>
                 <li><strong>Accesso file</strong> — per caricare immagini esistenti e salvare i PDF generati.</li>
                 <li><strong>Archiviazione</strong> — per salvare i file di output.</li>
+                <li><strong>Condivisione</strong> — per inviare i file alle app del dispositivo su azione dell'utente.</li>
             </ul>
 
             <h4>5. Servizi di terze parti</h4>
@@ -4023,7 +4256,7 @@ function buildCookieHtml() {
 
             <h4>3. Cookie di terze parti</h4>
             <p>L'app <strong>non installa cookie di terze parti</strong> propriamente detti. Tuttavia, il caricamento
-               di risorse da CDN esterne (OpenCV, jsPDF, PDF.js, QRCode.js, Google Fonts) può comportare l'impostazione di
+               di risorse da CDN esterne (OpenCV, jsPDF, PDF.js, QRCode.js, Tesseract.js, Google Fonts) può comportare l'impostazione di
                cookie tecnici da parte di tali fornitori, in base alle loro rispettive privacy policy.</p>
             <p>Si rimanda alle informative dei rispettivi fornitori:
                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google</a>,
@@ -4075,13 +4308,13 @@ function buildTermsHtml() {
 
             <h4>4. Esclusione di garanzia</h4>
             <p>L'app è fornita <strong>"così com'è"</strong>, senza garanzie di alcun tipo, esplicite o implicite.
-               Il Titolare non garantisce che il riconoscimento automatico dei bordi funzioni correttamente
+               Il Titolare non garantisce che il riconoscimento automatico dei bordi o l'OCR funzionino correttamente
                in qualsiasi condizione di luminosità, angolazione o qualità dell'immagine.</p>
 
             <h4>5. Limitazione di responsabilità</h4>
             <p>Il Titolare non è responsabile per:</p>
             <ul>
-                <li>eventuali errori di scansione o esportazione</li>
+                <li>eventuali errori di scansione, OCR o esportazione</li>
                 <li>perdita di dati locali (chiusura app, cancellazione cache, disinstallazione)</li>
                 <li>utilizzi impropri dell'app da parte dell'utente</li>
                 <li>danni diretti o indiretti derivanti dall'uso dell'app</li>
@@ -4089,8 +4322,8 @@ function buildTermsHtml() {
 
             <h4>6. Proprietà intellettuale</h4>
             <p>Il marchio, il logo e il codice sorgente di ${LEGAL_DATA.appName} sono di proprietà del Titolare.
-               Le librerie di terze parti (OpenCV, jsPDF, PDF.js) sono soggette alle rispettive licenze
-               (Apache 2.0, MIT, Apache 2.0).</p>
+               Le librerie di terze parti (OpenCV, jsPDF, PDF.js, Tesseract.js) sono soggette alle rispettive licenze
+               (Apache 2.0, MIT, Apache 2.0, Apache 2.0).</p>
 
             <h4>7. Modifiche ai termini</h4>
             <p>Il Titolare si riserva il diritto di modificare i presenti termini in qualsiasi momento.
@@ -4141,6 +4374,17 @@ function buildPermissionsHtml() {
                 </div>
             </div>
 
+            <div class="perm-row" id="perm-row-share">
+                <div class="perm-row-info">
+                    <span class="perm-name">📤 Condivisione</span>
+                    <span class="perm-desc">Usata per inviare PDF/JPG e link del sito alle app del dispositivo.<br>
+                    <em>Uso: solo quando premi i pulsanti "Condividi".</em></span>
+                </div>
+                <div class="perm-action">
+                    <span class="legal-badge ok" id="perm-badge-share">Supportata</span>
+                </div>
+            </div>
+
             <div class="perm-row" id="perm-row-notifications">
                 <div class="perm-row-info">
                     <span class="perm-name">🔔 Notifiche</span>
@@ -4178,25 +4422,39 @@ function buildPermissionsHtml() {
 
 async function refreshPermissionStatus() {
     const badge = document.getElementById('perm-badge-camera');
-    if (!badge) return;
-    badge.className = 'legal-badge warn';
-    badge.textContent = 'Verifica…';
+    if (badge) {
+        badge.className = 'legal-badge warn';
+        badge.textContent = 'Verifica…';
 
-    if (navigator.permissions && navigator.permissions.query) {
-        try {
-            const status = await navigator.permissions.query({ name: 'camera' });
-            updateCameraBadge(status.state);
-            status.onchange = () => updateCameraBadge(status.state);
-            return;
-        } catch (_) { /* non supportato */ }
+        if (navigator.permissions && navigator.permissions.query) {
+            try {
+                const status = await navigator.permissions.query({ name: 'camera' });
+                updateCameraBadge(status.state);
+                status.onchange = () => updateCameraBadge(status.state);
+            } catch (_) {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    badge.className = 'legal-badge warn';
+                    badge.textContent = 'Da richiedere';
+                } else {
+                    badge.className = 'legal-badge err';
+                    badge.textContent = 'Non supportata';
+                }
+            }
+        }
     }
 
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        badge.className = 'legal-badge warn';
-        badge.textContent = 'Da richiedere';
-    } else {
-        badge.className = 'legal-badge err';
-        badge.textContent = 'Non supportata';
+    const shareBadge = document.getElementById('perm-badge-share');
+    if (shareBadge) {
+        if (navigator.share) {
+            shareBadge.className = 'legal-badge ok';
+            shareBadge.textContent = 'Supportata';
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+            shareBadge.className = 'legal-badge warn';
+            shareBadge.textContent = 'Solo copia link';
+        } else {
+            shareBadge.className = 'legal-badge err';
+            shareBadge.textContent = 'Non supportata';
+        }
     }
 }
 
@@ -4268,9 +4526,6 @@ function buildContactsHtml() {
     };
 }
 
-/* ============================================================
-   PERSISTENZA — con debounce per performance
-   ============================================================ */
 let saveStateTimer = null;
 function saveState() {
     if (saveStateTimer) return;
@@ -4326,9 +4581,6 @@ function clearState() {
     } catch (_) {}
 }
 
-/* ============================================================
-   [SUGG 4] PERSISTENZA ASSEGNAZIONI MULTI-SCAN
-   ============================================================ */
 function saveMultiScanPending() {
     if (!multiScanPending) {
         try { sessionStorage.removeItem(MULTISCAN_PENDING_KEY); } catch (_) {}
@@ -4375,9 +4627,6 @@ function clearMultiScanPending() {
     try { sessionStorage.removeItem(MULTISCAN_PENDING_KEY); } catch (_) {}
 }
 
-/* ============================================================
-   OPENCV READY
-   ============================================================ */
 let cvReady = false;
 let cvReadyCallbacks = [];
 
@@ -4413,14 +4662,8 @@ function markCvReady() {
     }
 })();
 
-/* ============================================================
-   UI HELPERS
-   ============================================================ */
 function triggerInput(id) { document.getElementById(id).click(); }
 
-/* ============================================================
-   DOCUMENTI DINAMICI
-   ============================================================ */
 function buildDocSection(docNum) {
     const section = document.createElement('div');
     section.className = 'doc-section';
@@ -4675,9 +4918,6 @@ function updateProgress() {
     document.getElementById('progress-fill').style.width = pct + '%';
 }
 
-/* ============================================================
-   SVUOTA TUTTO
-   ============================================================ */
 function clearAllData() {
     if (!confirm('🗑 Sei sicuro di voler cancellare TUTTE le tessere caricate?\n\nL\'operazione non è reversibile.')) {
         return;
@@ -4695,6 +4935,7 @@ function clearAllData() {
     if (previewOpen) closePreviewModal();
     cancelMultiScan();
     closeEditorModal();
+    closeOcrPanel();
 
     document.getElementById('pdf-filename').value = 'documenti_tessera';
 
@@ -4712,9 +4953,6 @@ function clearAllData() {
     }, 1400);
 }
 
-/* ============================================================
-   INIZIALIZZAZIONE
-   ============================================================ */
 function initializeApp() {
     const saved = loadState();
 
@@ -4756,9 +4994,6 @@ function initializeApp() {
 
 initializeApp();
 
-/* ============================================================
-   DRAG & DROP — file esterni sugli slot
-   ============================================================ */
 (function initDragAndDrop() {
     const isFileDrag = (e) => {
         if (!e.dataTransfer) return false;
@@ -4836,11 +5071,6 @@ initializeApp();
     });
 })();
 
-/* ============================================================
-   HOME PAGE — Spostamento/Scambio immagini tra slot (drag & drop)
-   Permette di trascinare un'anteprima su un altro slot per
-   spostare l'immagine o scambiarla con quella presente.
-   ============================================================ */
 (function initSlotMoveDragDrop() {
     const container = document.getElementById('docs-container');
     if (!container) return;
@@ -5008,9 +5238,6 @@ function _applySlotData(doc, side, data) {
     }
 }
 
-/* ============================================================
-   RESET / STATUS
-   ============================================================ */
 function resetSlot(doc, side) {
     const k = keyOf(doc, side);
     processedImages[k] = null;
@@ -5059,6 +5286,12 @@ function checkExportStatus() {
     document.getElementById('btn-export').disabled = !allDone;
     document.getElementById('btn-preview').disabled = !allDone;
     document.getElementById('btn-export-jpg').disabled = !allDone;
+
+    /* [NEW v1.2.0] Abilita/disabilita pulsanti condivisione */
+    const shPdf = document.getElementById('btn-share-pdf');
+    const shJpg = document.getElementById('btn-share-jpg');
+    if (shPdf) shPdf.disabled = !allDone;
+    if (shJpg) shJpg.disabled = !allDone;
 }
 
 function setStatus(doc, side, type, text) {
@@ -5070,9 +5303,6 @@ function setStatus(doc, side, type, text) {
     m.innerText = text || '';
 }
 
-/* ============================================================
-   PANNELLO FORZATURA
-   ============================================================ */
 function showForcePanel(k, reason) {
     const el = document.getElementById(`force-${k}`);
     if (!el) return;
@@ -5150,9 +5380,6 @@ async function forceAcceptImage(doc, side) {
     }
 }
 
-/* ============================================================
-   PIPELINE
-   ============================================================ */
 function processImage(input, doc, side) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
@@ -5373,9 +5600,6 @@ function runScanner(img, doc, side, input) {
     });
 }
 
-/* ============================================================
-   OVERLAY BORDI (da cv.Mat)
-   ============================================================ */
 function buildDetectionOverlay(srcMat, corners) {
     const W = srcMat.cols;
     const H = srcMat.rows;
@@ -5494,9 +5718,7 @@ function buildDetectionOverlayFromImage(img, corners) {
 
     return thumb.toDataURL('image/png');
 }
-/* ============================================================
-   MULTI-SCAN — rilevamento tessere in una singola foto
-   ============================================================ */
+
 function triggerMultiScan() {
     if (!cvReady) {
         alert('Il motore di scansione non è ancora pronto. Attendi qualche secondo.');
@@ -5592,9 +5814,6 @@ function runMultiScan(img) {
     }
 }
 
-/* ============================================================
-   SUGGERIMENTO AUTOMATICO FRONTE/RETRO
-   ============================================================ */
 function scheduleSideSuggestions(cards) {
     setTimeout(() => {
         try {
@@ -5697,9 +5916,6 @@ function analyzeCardImage(img) {
     return null;
 }
 
-/* ============================================================
-   MULTI-SCAN — pannello unificato (foto + PDF)
-   ============================================================ */
 function showMultiScanPanel(cards, previewUrl, srcImg, infoText) {
     multiScanPending = {
         cards: cards,
@@ -5736,9 +5952,6 @@ function showMultiScanPanel(cards, previewUrl, srcImg, infoText) {
     saveMultiScanPending();
 }
 
-/* ============================================================
-   COSTRUZIONE OPZIONI DI ASSEGNAZIONE
-   ============================================================ */
 function buildAssignmentOptions() {
     const options = [];
 
@@ -5777,9 +5990,6 @@ function buildAssignmentOptions() {
     return options;
 }
 
-/* ============================================================
-   RENDERIZZA UI DI ASSEGNAZIONE
-   ============================================================ */
 function renderMultiScanAssignments() {
     if (!multiScanPending) return;
     const container = document.getElementById('multiscan-assignments');
@@ -5959,9 +6169,6 @@ function renderMultiScanAssignments() {
     updatePairingCompleteness();
 }
 
-/* ============================================================
-   EVIDENZIA CONFLITTI
-   ============================================================ */
 function updateAssignmentConflicts() {
     if (!multiScanPending) return;
     const rows = document.querySelectorAll('#multiscan-assignments .multiscan-assignment-row');
@@ -5978,9 +6185,6 @@ function updateAssignmentConflicts() {
     });
 }
 
-/* ============================================================
-   RIEPILOGO ASSEGNAZIONI
-   ============================================================ */
 function updateAssignmentsSummary() {
     if (!multiScanPending) return;
     const sumEl = document.getElementById('multiscan-summary');
@@ -6009,9 +6213,6 @@ function updateAssignmentsSummary() {
     sumEl.style.display = 'flex';
 }
 
-/* ============================================================
-   [SUGG 3] INDICATORE "COPPIA COMPLETA"
-   ============================================================ */
 function updatePairingCompleteness() {
     if (!multiScanPending) return;
     const cells = document.querySelectorAll('#multiscan-pairing-map .pairing-map-cell');
@@ -6035,9 +6236,6 @@ function updatePairingCompleteness() {
     });
 }
 
-/* ============================================================
-   MAPPA ABBINAMENTI VISUALE (multi-scan/PDF)
-   ============================================================ */
 function renderPairingMap() {
     const wrap = document.getElementById('multiscan-pairing-wrap');
     const container = document.getElementById('multiscan-pairing-map');
@@ -6222,9 +6420,6 @@ function buildPairingCell(ctx) {
     return cell;
 }
 
-/* ============================================================
-   AUTO-ASSEGNAZIONE SEQUENZIALE
-   ============================================================ */
 function autoAssignSequential() {
     if (!multiScanPending) return;
     const cards = multiScanPending.cards;
@@ -6256,9 +6451,6 @@ function autoAssignSequential() {
     saveMultiScanPending();
 }
 
-/* ============================================================
-   AUTO-ASSEGNAZIONE INTELLIGENTE (fronte/retro)
-   ============================================================ */
 function autoAssignFrontBack() {
     if (!multiScanPending) return;
     const cards = multiScanPending.cards;
@@ -6312,9 +6504,6 @@ function autoAssignFrontBack() {
     saveMultiScanPending();
 }
 
-/* ============================================================
-   [SUGG 1] AUTO-ABBINA CON ESISTENTI
-   ============================================================ */
 function autoPairWithExisting() {
     if (!multiScanPending) return;
     const cards = multiScanPending.cards;
@@ -6387,9 +6576,6 @@ function autoPairWithExisting() {
     }
 }
 
-/* ============================================================
-   CANCELLA MULTI-SCAN
-   ============================================================ */
 function cancelMultiScan() {
     multiScanPending = null;
     const panel = document.getElementById('multiscan-panel');
@@ -6409,9 +6595,6 @@ function cancelMultiScan() {
     clearMultiScanPending();
 }
 
-/* ============================================================
-   RIPRISTINO MULTI-SCAN DOPO RICARICA PAGINA
-   ============================================================ */
 function restoreMultiScanPendingIfAny() {
     const saved = loadMultiScanPending();
     if (!saved || !saved.cards || saved.cards.length === 0) return;
@@ -6459,9 +6642,6 @@ function restoreMultiScanPendingIfAny() {
     renderMultiScanAssignments();
 }
 
-/* ============================================================
-   CONFERMA MULTI-SCAN — applica le assegnazioni
-   ============================================================ */
 async function confirmMultiScan() {
     if (!multiScanPending || multiScanPending.cards.length === 0) {
         cancelMultiScan();
@@ -6471,7 +6651,6 @@ async function confirmMultiScan() {
     const cards = multiScanPending.cards.slice();
     const srcImg = multiScanPending.srcImg || null;
 
-    /* ---- 1) Conflitti interni al pannello ---- */
     const slotUsage = {};
     cards.forEach(c => {
         if (c.assignment && /^\d+-/.test(c.assignment)) {
@@ -6487,7 +6666,6 @@ async function confirmMultiScan() {
         if (!proceed) return;
     }
 
-    /* ---- 2) Avvisa se qualche slot esistente verrà sovrascritto ---- */
     const occupiedTargets = [];
     cards.forEach(c => {
         if (!c.assignment) return;
@@ -6507,7 +6685,6 @@ async function confirmMultiScan() {
         if (!proceed) return;
     }
 
-    /* ---- 3) Risoluzione assegnazioni (new-X → doc reali) ---- */
     const newDocMapping = {};
     let nextNewDoc = currentDocs;
 
@@ -6533,7 +6710,6 @@ async function confirmMultiScan() {
         return null;
     }
 
-    /* ---- 4) Piano di applicazione + rilevazione slot da svuotare ---- */
     const plan = cards.map(card => ({ card, target: resolveAssignment(card.assignment) }));
 
     const slotsToFill = new Set();
@@ -6556,7 +6732,6 @@ async function confirmMultiScan() {
         }
     });
 
-    /* ---- 5) Applicazione tessere ---- */
     let assigned = 0;
     let failed = 0;
 
@@ -6630,7 +6805,6 @@ async function confirmMultiScan() {
         assigned++;
     }
 
-    /* ---- 6) Ricolloca le immagini esistenti spostate ---- */
     for (const disp of displaced) {
         let free = findNextFreeSlot();
 
@@ -6751,9 +6925,6 @@ function findNextFreeSlot() {
     return null;
 }
 
-/* ============================================================
-   MULTI-SCAN DETECTION — RILEVAMENTO MIGLIORATO
-   ============================================================ */
 function detectMultipleCards(src) {
     const allCandidates = [];
     const targetAspect = CONFIG.cardWidthMM / CONFIG.cardHeightMM;
@@ -6979,9 +7150,6 @@ function buildMultiDetectionOverlay(srcMat, cards) {
     return thumb.toDataURL('image/png');
 }
 
-/* ============================================================
-   LETTURA SORGENTE
-   ============================================================ */
 function readSourceMat(img) {
     const maxDim = Math.max(img.naturalWidth, img.naturalHeight);
     if (maxDim <= CONFIG.maxSrcDim) return cv.imread(img);
@@ -7012,9 +7180,6 @@ function getSourceDataUrl(img) {
     return c.toDataURL('image/jpeg', 0.92);
 }
 
-/* ============================================================
-   RICONOSCIMENTO SINGOLO
-   ============================================================ */
 function detectCard(src) {
     const maxDim = 900;
     const scale  = Math.min(1, maxDim / Math.max(src.cols, src.rows));
@@ -7096,9 +7261,6 @@ function detectCard(src) {
     return best;
 }
 
-/* ============================================================
-   WARP
-   ============================================================ */
 function warpCard(src, corners, W, H) {
     const srcPts = cv.matFromArray(4, 1, cv.CV_32FC2, [
         corners[0].x, corners[0].y,
@@ -7156,9 +7318,6 @@ function roundRectPath(ctx, x, y, w, h, r) {
     ctx.closePath();
 }
 
-/* ============================================================
-   GEOMETRIA
-   ============================================================ */
 function orderPoints(pts) {
     const sums  = pts.map(p => p.x + p.y);
     const diffs = pts.map(p => p.y - p.x);
@@ -7177,9 +7336,6 @@ function computeAspect(o) {
     return avgW / avgH;
 }
 
-/* ============================================================
-   QUALITÀ
-   ============================================================ */
 function loadImage(src) {
     return new Promise((resolve, reject) => {
         const i = new Image();
@@ -7228,9 +7384,6 @@ function checkQuality(img) {
     return { isValid: true };
 }
 
-/* ============================================================
-   COSTRUZIONE PDF — 4 documenti (8 tessere) per pagina A4
-   ============================================================ */
 function buildPDFDocument() {
     for (let d = 1; d <= currentDocs; d++) {
         const hasFronte = !!processedImages[keyOf(d, 'fronte')];
@@ -7304,9 +7457,6 @@ function getCleanFilename() {
     return name;
 }
 
-/* ============================================================
-   SALVATAGGIO FILE CON FALLBACK PROGRESSIVO
-   ============================================================ */
 function blobToBase64(blob) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -7428,9 +7578,6 @@ async function generatePDF() {
     }, 400);
 }
 
-/* ============================================================
-   ANTEPRIMA PDF
-   ============================================================ */
 function showPdfFallback(show) {
     const fb = document.getElementById('pdf-fallback');
     const pages = document.getElementById('pdf-pages-container');
@@ -7443,9 +7590,6 @@ function showPdfFallback(show) {
     }
 }
 
-/* ============================================================
-   [ZOOM] CONTROLLI ZOOM ANTEPRIMA PDF
-   ============================================================ */
 function setPreviewZoom(newZoom) {
     if (!isFinite(newZoom)) return;
     newZoom = Math.max(PDF_ZOOM_MIN, Math.min(PDF_ZOOM_MAX, newZoom));
@@ -7683,9 +7827,6 @@ function refreshPreviewIfOpen() {
     }, 600);
 }
 
-/* ============================================================
-   IMPORT DA PDF — accumula tutte le tessere e mostra pannello
-   ============================================================ */
 function triggerImportPDF() {
     if (!cvReady) {
         alert('Il motore di scansione non è ancora pronto. Attendi qualche secondo.');
@@ -7824,9 +7965,6 @@ async function processImportPDFBlob(blob) {
     scheduleSideSuggestions(allCards);
 }
 
-/* ============================================================
-   ESPORTAZIONE JPG A4
-   ============================================================ */
 async function exportJPG_A4() {
     for (let d = 1; d <= currentDocs; d++) {
         const hasFronte = !!processedImages[keyOf(d, 'fronte')];
@@ -8351,9 +8489,6 @@ function syncEditorAdjustUI() {
 let editorState = null;
 let editorPreviewTimer = null;
 
-/* ============================================================
-   EDITOR — FUNZIONI DI SELEZIONE TESSERA
-   ============================================================ */
 function findEditorSiblingCards(srcUrl, currentKey) {
     const map = new Map();
     if (!srcUrl) return map;
@@ -8557,10 +8692,15 @@ function openEditorModal(doc, side) {
 
     updateEditorCornerInfo(-1);
 
+    /* [NEW v1.2.0] Pannello "Regolazioni immagine" chiuso all'avvio */
     const toolsPanel = document.getElementById('editor-image-tools');
     const toolsOpenBtn = document.getElementById('editor-tools-open-btn');
-    if (toolsPanel) toolsPanel.classList.remove('collapsed');
-    if (toolsOpenBtn) toolsOpenBtn.classList.remove('visible');
+    if (toolsPanel) toolsPanel.classList.add('collapsed');
+    if (toolsOpenBtn) toolsOpenBtn.classList.add('visible');
+
+    /* [NEW v1.2.0] Chiudi sempre il pannello OCR all'apertura dell'editor */
+    const ocrPanel = document.getElementById('editor-ocr-panel');
+    if (ocrPanel) ocrPanel.classList.add('collapsed');
 
     const picker = document.getElementById('editor-card-picker');
     const pickerBtns = document.getElementById('editor-card-picker-buttons');
@@ -8615,6 +8755,9 @@ function closeEditorModal() {
     if (picker) picker.style.display = 'none';
     const pickerBtns = document.getElementById('editor-card-picker-buttons');
     if (pickerBtns) pickerBtns.innerHTML = '';
+
+    const ocrPanel = document.getElementById('editor-ocr-panel');
+    if (ocrPanel) ocrPanel.classList.add('collapsed');
 }
 
 function resetEditorCorners() {
@@ -9353,11 +9496,6 @@ function scheduleEditorPreview() {
     }, EDITOR_CFG.PREVIEW_THROTTLE_MS);
 }
 
-/* ============================================================
-   [FIX PREVIEW] renderEditorPreview — mostra SOLO la selezione
-   definita dai 4 corner (1-2-3-4), senza contenuti estranei.
-   Bug risolto: scalatura corner ↔ canvas regolato.
-   ============================================================ */
 function renderEditorPreview() {
     if (!editorState || !editorState.img) return;
     if (!cvReady) return;
@@ -9365,7 +9503,6 @@ function renderEditorPreview() {
     const canvas = document.getElementById('editor-preview-canvas');
     if (!canvas) return;
 
-    /* Usa la risoluzione REALE del canvas (480×302) per un output nitido */
     const W = canvas.width  || EDITOR_CFG.WARP_PREVIEW_W;
     const H = canvas.height || EDITOR_CFG.WARP_PREVIEW_H;
 
@@ -9374,25 +9511,18 @@ function renderEditorPreview() {
         const srcW = srcImg.naturalWidth;
         const srcH = srcImg.naturalHeight;
 
-        /* --- 1) Applica regolazioni alla massima risoluzione consentita. --- */
         const adjusted = applyEditorAdjustments(srcImg, editorAdjustments, CONFIG.maxSrcDim);
 
-        /* --- 2) Scala i corner dallo spazio immagine originale
-               allo spazio del canvas regolato. --- */
         const totalRotDeg = ((editorBaseRotation + (editorAdjustments.rotation || 0)) % 360 + 360) % 360;
 
         let cornersToUse;
         if (totalRotDeg === 0) {
-            /* Nessuna rotazione: semplice scalatura proporzionale. */
             const scale = adjusted.width / srcW;
             cornersToUse = editorState.corners.map(c => ({
                 x: c.x * scale,
                 y: c.y * scale
             }));
         } else {
-            /* Con rotazione (base 90/180/270 o fine): usa la funzione di mapping
-               già esistente, che gestisce in un solo passo la rotazione + la
-               scalatura verso le dimensioni finali del canvas regolato. */
             cornersToUse = mapCornersThroughRotation(
                 editorState.corners,
                 srcW,
@@ -9402,19 +9532,13 @@ function renderEditorPreview() {
                 adjusted.width,
                 adjusted.height
             );
-            /* Cicla i corner per far ruotare effettivamente il risultato del warp */
             cornersToUse = cycleCornersForRotation(cornersToUse, totalRotDeg);
         }
 
-        /* --- 3) Warp prospettico: estrae ESATTAMENTE il quadrilatero definito
-               dai 4 corner e lo mappa nel rettangolo W×H (proporzioni tessera). --- */
         const src = cv.imread(adjusted);
         const dataUrl = warpCard(src, cornersToUse, W, H);
         src.delete();
 
-        /* --- 4) Disegna sul canvas di anteprima con sfondo bianco pieno
-               (nasconde i bordi arrotondati trasparenti generati dal warp
-               e garantisce che si veda SOLO la selezione). --- */
         const img = new Image();
         img.onload = () => {
             const ctx = canvas.getContext('2d');
@@ -9491,11 +9615,6 @@ function onEditorArrowKey(e) {
     });
 })();
 
-/* ============================================================
-   [ZOOM] GESTURE ZOOM PER L'ANTEPRIMA PDF
-   - Ctrl/Cmd + rotella del mouse = zoom
-   - Pinch a 2 dita (touch) = zoom
-   ============================================================ */
 (function initPdfPreviewZoomGestures() {
     const body = document.getElementById('pdf-modal-body');
     if (!body) return;
@@ -9536,9 +9655,6 @@ function onEditorArrowKey(e) {
     }, { passive: true });
 })();
 
-/* ============================================================
-   TASTIERA
-   ============================================================ */
 document.addEventListener('keydown', e => {
     if (previewOpen && (e.ctrlKey || e.metaKey)) {
         if (e.key === '+' || e.key === '=') {
@@ -9560,7 +9676,12 @@ document.addEventListener('keydown', e => {
 
     if (e.key === 'Escape') {
         if (editorState) {
-            closeEditorModal();
+            const ocrPanel = document.getElementById('editor-ocr-panel');
+            if (ocrPanel && !ocrPanel.classList.contains('collapsed')) {
+                closeOcrPanel();
+            } else {
+                closeEditorModal();
+            }
         } else if (multiScanPending) {
             cancelMultiScan();
         } else if (document.getElementById('card-lightbox-overlay').classList.contains('open')) {
@@ -9583,13 +9704,490 @@ window.addEventListener('beforeunload', saveStateNow);
 window.addEventListener('pagehide', saveStateNow);
 
 /* ============================================================
+   [NEW v1.2.0] OCR — Rilevamento testo (3 modalità)
+   ------------------------------------------------------------
+   Modalità:
+     • card  → solo area racchiusa dai 4 corner dell'editor
+     • full  → immagine intera (con regolazioni applicate)
+     • mrz   → striscia inferiore della tessera (MRZ / codice a barre)
+   Libreria: Tesseract.js (caricata lazy al primo utilizzo)
+   ============================================================ */
+let tesseractLoaded = false;
+let tesseractLoading = null;
+let ocrCurrentMode = 'card';
+let ocrRunning = false;
+
+function loadTesseract() {
+    if (tesseractLoaded && typeof Tesseract !== 'undefined') return Promise.resolve();
+    if (tesseractLoading) return tesseractLoading;
+
+    tesseractLoading = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js';
+        script.async = true;
+        script.onload = () => {
+            tesseractLoaded = true;
+            resolve();
+        };
+        script.onerror = () => {
+            tesseractLoading = null;
+            reject(new Error('Impossibile caricare Tesseract.js'));
+        };
+        document.head.appendChild(script);
+    });
+    return tesseractLoading;
+}
+
+function toggleOcrPanel() {
+    const panel = document.getElementById('editor-ocr-panel');
+    if (!panel) return;
+    panel.classList.toggle('collapsed');
+}
+
+function closeOcrPanel() {
+    const panel = document.getElementById('editor-ocr-panel');
+    if (panel) panel.classList.add('collapsed');
+}
+
+function selectOcrMode(mode) {
+    ocrCurrentMode = mode;
+    document.querySelectorAll('.btn-ocr-mode').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    const status = document.getElementById('ocr-status');
+    if (status) {
+        const labels = {
+            card: 'Modalità: tessera selezionata (solo area dentro i bordi 1-2-3-4).',
+            full: 'Modalità: immagine intera con regolazioni applicate.',
+            mrz:  'Modalità: zona MRZ (striscia inferiore della tessera).'
+        };
+        status.className = 'ocr-status';
+        status.textContent = labels[mode] || '';
+    }
+}
+
+function setOcrStatus(text, cls) {
+    const el = document.getElementById('ocr-status');
+    if (!el) return;
+    el.className = 'ocr-status' + (cls ? ' ' + cls : '');
+    el.textContent = text || '';
+}
+
+function setOcrProgress(percent, visible) {
+    const bar = document.getElementById('ocr-progress-bar');
+    const fill = document.getElementById('ocr-progress-fill');
+    if (!bar || !fill) return;
+    bar.classList.toggle('visible', !!visible);
+    fill.style.width = Math.max(0, Math.min(100, percent || 0)) + '%';
+}
+
+function clearOcrText() {
+    const out = document.getElementById('ocr-output');
+    if (out) out.value = '';
+    setOcrStatus('Testo pulito.', '');
+    setOcrProgress(0, false);
+}
+
+async function copyOcrText() {
+    const out = document.getElementById('ocr-output');
+    if (!out || !out.value) {
+        setOcrStatus('Nessun testo da copiare.', 'err');
+        return;
+    }
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(out.value);
+        } else {
+            out.removeAttribute('readonly');
+            out.select();
+            document.execCommand('copy');
+            out.setAttribute('readonly', 'readonly');
+        }
+        setOcrStatus('Testo copiato negli appunti.', 'ok');
+    } catch (e) {
+        setOcrStatus('Impossibile copiare: ' + e.message, 'err');
+    }
+}
+
+/* --- Costruzione canvas da passare a Tesseract --- */
+async function buildOcrCanvas(mode) {
+    if (!editorState || !editorState.img) return null;
+
+    const srcImg = editorState.img;
+    const srcW = srcImg.naturalWidth;
+    const srcH = srcImg.naturalHeight;
+
+    let adjusted;
+    try {
+        adjusted = applyEditorAdjustments(srcImg, editorAdjustments, CONFIG.maxSrcDim);
+    } catch (e) {
+        adjusted = null;
+    }
+    if (!adjusted) {
+        adjusted = document.createElement('canvas');
+        adjusted.width  = srcW;
+        adjusted.height = srcH;
+        adjusted.getContext('2d').drawImage(srcImg, 0, 0);
+    }
+
+    if (mode === 'full') {
+        return adjusted;
+    }
+
+    const totalRotDeg = ((editorBaseRotation + (editorAdjustments.rotation || 0)) % 360 + 360) % 360;
+    let cornersToUse;
+    if (totalRotDeg === 0) {
+        const scale = adjusted.width / srcW;
+        cornersToUse = editorState.corners.map(c => ({ x: c.x * scale, y: c.y * scale }));
+    } else {
+        cornersToUse = mapCornersThroughRotation(
+            editorState.corners, srcW, srcH,
+            editorBaseRotation, editorAdjustments.rotation || 0,
+            adjusted.width, adjusted.height
+        );
+        cornersToUse = cycleCornersForRotation(cornersToUse, totalRotDeg);
+    }
+
+    const OCR_W = 1600;
+    const OCR_H = Math.round(OCR_W * CONFIG.cardHeightMM / CONFIG.cardWidthMM);
+
+    let warpedDataUrl;
+    try {
+        const src = cv.imread(adjusted);
+        warpedDataUrl = warpCard(src, cornersToUse, OCR_W, OCR_H);
+        src.delete();
+    } catch (e) {
+        console.warn('Warp OCR fallito:', e);
+        return null;
+    }
+
+    const warpedCanvas = document.createElement('canvas');
+    warpedCanvas.width  = OCR_W;
+    warpedCanvas.height = OCR_H;
+    const wctx = warpedCanvas.getContext('2d');
+
+    wctx.fillStyle = '#ffffff';
+    wctx.fillRect(0, 0, OCR_W, OCR_H);
+
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            wctx.drawImage(img, 0, 0);
+
+            if (mode === 'mrz') {
+                const cropY = Math.floor(OCR_H * 0.68);
+                const cropH = OCR_H - cropY;
+                const mrz = document.createElement('canvas');
+                mrz.width  = OCR_W;
+                mrz.height = cropH;
+                const mctx = mrz.getContext('2d');
+                mctx.fillStyle = '#ffffff';
+                mctx.fillRect(0, 0, OCR_W, cropH);
+                mctx.drawImage(warpedCanvas, 0, cropY, OCR_W, cropH, 0, 0, OCR_W, cropH);
+                resolve(mrz);
+            } else {
+                resolve(warpedCanvas);
+            }
+        };
+        img.onerror = () => resolve(warpedCanvas);
+        img.src = warpedDataUrl;
+    });
+}
+
+/* --- Esecuzione OCR --- */
+async function runOcr() {
+    if (ocrRunning) return;
+    if (!editorState || !editorState.img) {
+        setOcrStatus('Nessuna immagine caricata nell\'editor.', 'err');
+        return;
+    }
+
+    const out = document.getElementById('ocr-output');
+    const btnRun = document.getElementById('btn-ocr-run');
+
+    ocrRunning = true;
+    if (btnRun) { btnRun.disabled = true; btnRun.textContent = '⏳ OCR…'; }
+    setOcrStatus('Caricamento motore OCR…', 'busy');
+    setOcrProgress(2, true);
+
+    try {
+        await loadTesseract();
+    } catch (e) {
+        ocrRunning = false;
+        if (btnRun) { btnRun.disabled = false; btnRun.textContent = '▶ Avvia OCR'; }
+        setOcrProgress(0, false);
+        setOcrStatus('Impossibile caricare Tesseract.js. Controlla la connessione.', 'err');
+        return;
+    }
+
+    setOcrStatus('Preparazione immagine…', 'busy');
+    setOcrProgress(10, true);
+
+    let targetCanvas;
+    try {
+        targetCanvas = await buildOcrCanvas(ocrCurrentMode);
+    } catch (e) {
+        console.warn(e);
+        targetCanvas = null;
+    }
+    if (!targetCanvas) {
+        ocrRunning = false;
+        if (btnRun) { btnRun.disabled = false; btnRun.textContent = '▶ Avvia OCR'; }
+        setOcrProgress(0, false);
+        setOcrStatus('Errore durante la preparazione dell\'immagine.', 'err');
+        return;
+    }
+
+    setOcrStatus('Riconoscimento testo in corso… (può richiedere alcuni secondi)', 'busy');
+
+    try {
+        const result = await Tesseract.recognize(
+            targetCanvas,
+            'ita+eng',
+            {
+                logger: (m) => {
+                    if (!m) return;
+                    if (m.status === 'recognizing text' && typeof m.progress === 'number') {
+                        setOcrProgress(20 + m.progress * 78, true);
+                    }
+                }
+            }
+        );
+
+        const text = (result && result.data && result.data.text) ? result.data.text.trim() : '';
+        if (out) out.value = text || '(nessun testo riconosciuto)';
+        setOcrProgress(100, true);
+        setOcrStatus(
+            text
+                ? `✓ OCR completato (${text.length} caratteri, modalità: ${ocrCurrentMode}).`
+                : '✓ OCR completato: nessun testo rilevato.',
+            'ok'
+        );
+        setTimeout(() => setOcrProgress(0, false), 1200);
+    } catch (e) {
+        console.error('OCR error:', e);
+        setOcrStatus('Errore OCR: ' + (e && e.message ? e.message : 'sconosciuto'), 'err');
+        setOcrProgress(0, false);
+    } finally {
+        ocrRunning = false;
+        if (btnRun) { btnRun.disabled = false; btnRun.textContent = '▶ Avvia OCR'; }
+    }
+}
+
+/* ============================================================
+   [NEW v1.2.0] CONDIVISIONE FILE (PDF / JPG) con app del device
+   ============================================================ */
+async function shareFilesNative(files, title, text) {
+    if (navigator.canShare && navigator.canShare({ files })) {
+        try {
+            await navigator.share({ files, title, text });
+            return { ok: true, method: 'share' };
+        } catch (e) {
+            if (e && e.name === 'AbortError') return { ok: false, method: 'share', reason: 'annullato' };
+            console.warn('Web Share con file fallita:', e);
+        }
+    }
+
+    if (files && files.length > 0) {
+        const file = files[0];
+        const result = await saveFileWithPicker(file, file.name, file.type, ['.pdf', '.jpg', '.jpeg']);
+        return result;
+    }
+    return { ok: false, method: 'share', reason: 'unsupported' };
+}
+
+async function sharePdf() {
+    const btn = document.getElementById('btn-share-pdf');
+    if (btn) btn.disabled = true;
+    try {
+        const doc = buildPDFDocument();
+        if (!doc) { if (btn) btn.disabled = false; return; }
+
+        const base = getCleanFilename();
+        const filename = /\.pdf$/i.test(base) ? base : base + '.pdf';
+        const blob = doc.output('blob');
+        const file = new File([blob], filename, { type: 'application/pdf' });
+
+        const res = await shareFilesNative([file], 'CardScan AI — PDF', 'Documenti formato tessera esportati in PDF');
+        if (res && res.ok === false && res.reason === 'unsupported') {
+            alert('La condivisione nativa non è supportata su questo dispositivo.\nIl file è stato scaricato nella cartella Download.');
+        }
+    } catch (e) {
+        console.error(e);
+        alert('Errore durante la condivisione del PDF.');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+async function renderA4JpgBlobsForShare() {
+    for (let d = 1; d <= currentDocs; d++) {
+        const hasFronte = !!processedImages[keyOf(d, 'fronte')];
+        const hasRetro  = !!processedImages[keyOf(d, 'retro')];
+        if (!hasFronte && !hasRetro) return null;
+    }
+
+    const DPI = 300;
+    const A4_W_MM = 210, A4_H_MM = 297;
+    const pxPerMM = DPI / 25.4;
+    const A4_W_PX = Math.round(A4_W_MM * pxPerMM);
+    const A4_H_PX = Math.round(A4_H_MM * pxPerMM);
+
+    const cW = CONFIG.cardWidthMM, cH = CONFIG.cardHeightMM;
+    const gap = CONFIG.gapMM;
+    const pairW = cW * 2 + gap;
+    const leftMargin = (A4_W_MM - pairW) / 2;
+    const rowH = cH;
+    const rowsPerPage = CONFIG.docsPerPage / 2;
+    const blockH = rowH * rowsPerPage + gap * (rowsPerPage - 1);
+    const maxBlockH = A4_H_MM - 20;
+    let startY, actualGap = gap;
+    if (blockH > maxBlockH) {
+        actualGap = Math.max(2, (maxBlockH - rowH * rowsPerPage) / (rowsPerPage - 1));
+        startY = (A4_H_MM - (rowH * rowsPerPage + actualGap * (rowsPerPage - 1))) / 2;
+    } else {
+        startY = (A4_H_MM - blockH) / 2;
+    }
+
+    const docsPerPage = rowsPerPage;
+    const pages = Math.ceil(currentDocs / docsPerPage);
+
+    const images = {};
+    for (let d = 1; d <= currentDocs; d++) {
+        for (const s of SIDES) {
+            const k = keyOf(d, s);
+            if (processedImages[k] && !images[k]) {
+                images[k] = await loadImage(processedImages[k]);
+            }
+        }
+    }
+
+    const baseName = (document.getElementById('pdf-filename').value || 'documenti_tessera')
+        .replace(/[\\/:*?"<>|]/g, '_').replace(/\.(pdf|jpg|jpeg)$/i, '');
+
+    const blobs = [];
+    const names = [];
+
+    for (let p = 0; p < pages; p++) {
+        const canvas = document.createElement('canvas');
+        canvas.width = A4_W_PX;
+        canvas.height = A4_H_PX;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, A4_W_PX, A4_H_PX);
+
+        for (let r = 0; r < rowsPerPage; r++) {
+            const docIndex = p * docsPerPage + r;
+            const docNum = docIndex + 1;
+            if (docNum > currentDocs) break;
+
+            const yMM = startY + r * (rowH + actualGap);
+            const frontX = leftMargin;
+            const backX  = leftMargin + cW + gap;
+
+            const fImg = images[keyOf(docNum, 'fronte')];
+            const bImg = images[keyOf(docNum, 'retro')];
+
+            if (fImg) {
+                const fx = frontX * pxPerMM, fy = yMM * pxPerMM;
+                const fw = cW * pxPerMM, fh = cH * pxPerMM;
+                ctx.save();
+                roundRectPath(ctx, fx, fy, fw, fh, CONFIG.cornerRadiusMM * pxPerMM);
+                ctx.clip();
+                ctx.drawImage(fImg, fx, fy, fw, fh);
+                ctx.restore();
+            }
+            if (bImg) {
+                const bx = backX * pxPerMM, by = yMM * pxPerMM;
+                const bw = cW * pxPerMM, bh = cH * pxPerMM;
+                ctx.save();
+                roundRectPath(ctx, bx, by, bw, bh, CONFIG.cornerRadiusMM * pxPerMM);
+                ctx.clip();
+                ctx.drawImage(bImg, bx, by, bw, bh);
+                ctx.restore();
+            }
+        }
+
+        const jpgData = canvas.toDataURL('image/jpeg', 0.95);
+        const blob = await (await fetch(jpgData)).blob();
+        blobs.push(blob);
+        names.push(pages === 1 ? `${baseName}.jpg` : `${baseName}_pagina${p + 1}.jpg`);
+    }
+
+    return { blobs, names };
+}
+
+async function shareJpg() {
+    const btn = document.getElementById('btn-share-jpg');
+    if (btn) btn.disabled = true;
+    try {
+        const res = await renderA4JpgBlobsForShare();
+        if (!res || !res.blobs || res.blobs.length === 0) {
+            alert('Nessuna immagine da condividere.');
+            return;
+        }
+
+        const files = res.blobs.map((b, i) =>
+            new File([b], res.names[i], { type: 'image/jpeg' })
+        );
+
+        const shareRes = await shareFilesNative(
+            files,
+            'CardScan AI — JPG A4',
+            'Documenti formato tessera esportati in JPG'
+        );
+        if (shareRes && shareRes.ok === false && shareRes.reason === 'unsupported') {
+            alert('La condivisione nativa non è supportata su questo dispositivo.\nI file sono stati salvati nella cartella Download.');
+        }
+    } catch (e) {
+        console.error(e);
+        alert('Errore durante la condivisione del JPG.');
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+/* ============================================================
+   [NEW v1.2.0] CONDIVISIONE DEL SITO SU SOCIAL / MESSAGGISTICA
+   ============================================================ */
+async function shareWebsite() {
+    const url  = WEBSITE_URL;
+    const text = '📇 CardScan AI — scanner gratuito di documenti formato tessera. Riconosce, ritaglia e raddrizza automaticamente le tue tessere e le esporta in PDF A4. Provalo qui:';
+    const title = 'CardScan AI — Scanner Documenti Formato Tessera';
+
+    if (navigator.share) {
+        try {
+            await navigator.share({ title, text, url });
+            return;
+        } catch (e) {
+            if (e && e.name === 'AbortError') return;
+            console.warn('Web Share fallita, provo fallback:', e);
+        }
+    }
+
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(url);
+            alert('🔗 Link copiato negli appunti!\n\nIncollalo su WhatsApp, Telegram, Instagram, Facebook, e-mail…\n\n' + url);
+            return;
+        }
+    } catch (e) {
+        console.warn('Clipboard non disponibile:', e);
+    }
+
+    window.prompt('Copia e condividi questo link:', url);
+}
+
+/* ============================================================
    LOG
    ============================================================ */
-console.log('%cCardScan AI', 'color:#22d3ee;font-weight:bold;font-size:16px;', 'Ambiente:', APP_ENV.label);
+console.log('%cCardScan AI v1.2.0', 'color:#22d3ee;font-weight:bold;font-size:16px;', 'Ambiente:', APP_ENV.label);
 console.log('%c🗺 Pairing Map + Slot Drag&Drop attivi', 'color:#00ffb0;font-weight:bold;');
 console.log('%c🃏 Editor multi-tessera + detection migliorato attivi', 'color:#c4b5fd;font-weight:bold;');
 console.log('%c🔍 Zoom anteprima PDF attivo (Ctrl +/−, pinch, +/−/0)', 'color:#fbbf24;font-weight:bold;');
-console.log('%c✨ Preview editor: solo selezione 1-2-3-4 (FIX applicato)', 'color:#f472b6;font-weight:bold;');
+console.log('%c🔤 OCR (Tesseract.js) — 3 modalità attive', 'color:#00ffb0;font-weight:bold;');
+console.log('%c📤 Condivisione file (PDF/JPG) + sito — attive', 'color:#ec4899;font-weight:bold;');
+console.log('%c✨ Regolazioni immagine chiuse di default all\'apertura editor', 'color:#60a5fa;font-weight:bold;');
 </script>
 
 </body>
