@@ -45,7 +45,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <!-- QRCode.js (generazione QR Code PayPal lato client) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <!-- Tesseract.js (OCR) - caricato lazy al primo utilizzo -->
+  <!-- Tesseract.js (OCR lato client) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js"></script>
 
   <style>
       :root {
@@ -1407,6 +1408,9 @@
           border: 1px dashed rgba(0, 255, 176, 0.35);
           pointer-events: none;
       }
+      /* ============================================================
+         [FIX PREVIEW] BOX ANTEPRIMA MIGLIORATO
+         ============================================================ */
       .editor-preview-box {
           position: absolute;
           right: 14px;
@@ -1822,221 +1826,10 @@
           color: var(--text-primary);
       }
 
-      /* ============================================================
-         [NEW v1.2.0] Pannello OCR — rilevamento testo
-         ============================================================ */
-      .btn-editor-ocr {
-          background: linear-gradient(135deg, #00ffb0 0%, #3b82f6 100%);
-          color: #0a0e27;
-          font-weight: 800;
-          box-shadow:
-              0 4px 14px rgba(0, 255, 176, 0.42),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      }
-      .btn-editor-ocr:hover:not(:disabled) {
-          box-shadow:
-              0 8px 22px rgba(0, 255, 176, 0.6),
-              0 0 26px rgba(59, 130, 246, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.4);
-      }
-
-      .editor-ocr-panel {
-          position: absolute;
-          top: 60px;
-          right: 12px;
-          z-index: 21;
-          width: 340px;
-          max-width: calc(100% - 24px);
-          max-height: calc(100% - 80px);
-          overflow-y: auto;
-          background: rgba(10, 14, 39, 0.96);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(0, 255, 176, 0.45);
-          border-radius: var(--radius-md);
-          box-shadow:
-              0 18px 50px rgba(0, 0, 0, 0.7),
-              0 0 0 1px rgba(255, 255, 255, 0.05),
-              0 0 34px rgba(0, 255, 176, 0.18);
-          padding: 14px;
-          color: var(--text-primary);
-          font-size: 12px;
-          transition: transform .28s ease, opacity .28s ease;
-          -webkit-overflow-scrolling: touch;
-      }
-      .editor-ocr-panel.collapsed {
-          transform: translateX(calc(100% + 22px));
-          opacity: 0;
-          pointer-events: none;
-      }
-      .editor-ocr-panel h4 {
-          margin: 0 0 10px;
-          font-family: 'Space Grotesk', 'Inter', sans-serif;
-          font-size: 13px;
-          letter-spacing: 0.4px;
-          color: #00ffb0;
-          text-transform: uppercase;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 8px;
-      }
-      .editor-ocr-panel h4::before {
-          content: '';
-          display: inline-block;
-          width: 3px; height: 14px;
-          border-radius: 2px;
-          background: linear-gradient(180deg, #00ffb0, #3b82f6);
-          box-shadow: 0 0 8px rgba(0, 255, 176, 0.6);
-          margin-right: 6px;
-      }
-      .ocr-mode-buttons {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          margin-bottom: 10px;
-      }
-      .ocr-mode-buttons .btn-ocr-mode {
-          width: 100%;
-          justify-content: flex-start;
-          padding: 9px 12px;
-          font-size: 11.5px;
-          font-weight: 700;
-          background: rgba(255, 255, 255, 0.05);
-          color: var(--text-secondary);
-          border: 1px solid var(--border);
-          box-shadow: none;
-          transition: all .18s;
-      }
-      .ocr-mode-buttons .btn-ocr-mode:hover:not(:disabled) {
-          background: rgba(0, 255, 176, 0.1);
-          border-color: rgba(0, 255, 176, 0.45);
-          color: var(--text-primary);
-      }
-      .ocr-mode-buttons .btn-ocr-mode.active {
-          background: linear-gradient(135deg, #00ffb0 0%, #3b82f6 100%);
-          color: #0a0e27;
-          border-color: rgba(0, 255, 176, 0.85);
-          box-shadow: 0 4px 14px rgba(0, 255, 176, 0.4);
-      }
-      .ocr-status {
-          font-size: 11px;
-          color: var(--text-muted);
-          margin: 6px 0 8px;
-          line-height: 1.45;
-          min-height: 14px;
-      }
-      .ocr-status.busy { color: #fbbf24; }
-      .ocr-status.ok   { color: #34d399; }
-      .ocr-status.err  { color: #f87171; }
-      .ocr-output {
-          width: 100%;
-          min-height: 120px;
-          max-height: 240px;
-          resize: vertical;
-          background: rgba(0, 0, 0, 0.35);
-          color: #e2e8f0;
-          border: 1px solid var(--border);
-          border-radius: 8px;
-          padding: 10px;
-          font-family: 'Consolas', 'Monaco', monospace;
-          font-size: 11.5px;
-          line-height: 1.5;
-          outline: none;
-          -webkit-appearance: none;
-      }
-      .ocr-output:focus {
-          border-color: rgba(0, 255, 176, 0.6);
-          box-shadow: 0 0 0 3px rgba(0, 255, 176, 0.15);
-      }
-      .ocr-actions {
-          display: flex;
-          gap: 6px;
-          flex-wrap: wrap;
-          margin-top: 10px;
-      }
-      .ocr-actions .btn {
-          flex: 1;
-          min-width: 0;
-          justify-content: center;
-          font-size: 11px;
-          padding: 8px 10px;
-          font-weight: 700;
-      }
-      .ocr-progress-bar {
-          width: 100%;
-          height: 6px;
-          background: rgba(255, 255, 255, 0.08);
-          border-radius: 999px;
-          overflow: hidden;
-          margin: 4px 0 8px;
-          display: none;
-      }
-      .ocr-progress-bar.visible { display: block; }
-      .ocr-progress-bar > div {
-          height: 100%;
-          width: 0%;
-          background: linear-gradient(90deg, #00ffb0, #3b82f6, #8b5cf6);
-          background-size: 220% 100%;
-          transition: width .3s ease;
-          animation: progressShimmer 3.5s linear infinite;
-      }
       @media (max-width: 640px) {
           .editor-image-tools { width: 260px; padding: 10px; font-size: 11px; }
           .editor-tool-row label { flex: 0 0 62px; font-size: 10.5px; }
           .editor-tool-value { flex: 0 0 36px; font-size: 10px; }
-          .editor-ocr-panel {
-              width: calc(100% - 16px);
-              right: 8px;
-              top: 52px;
-              padding: 12px;
-          }
-      }
-
-      /* ============================================================
-         [NEW v1.2.0] Pulsanti condivisione file e sito web
-         ============================================================ */
-      .share-actions {
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          flex-wrap: wrap;
-          margin-top: 12px;
-      }
-      .btn-share {
-          background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 55%, #f97316 100%);
-          font-size: 12px;
-          padding: 9px 16px;
-          font-weight: 700;
-          letter-spacing: 0.3px;
-          box-shadow:
-              0 4px 14px rgba(139, 92, 246, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.24);
-          background-size: 200% 200%;
-          animation: gradientShift 7s ease infinite;
-      }
-      .btn-share:hover:not(:disabled) {
-          box-shadow:
-              0 8px 22px rgba(236, 72, 153, 0.55),
-              0 0 30px rgba(139, 92, 246, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.32);
-      }
-      .btn-share-small {
-          background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
-          font-size: 11px;
-          padding: 7px 14px;
-          font-weight: 700;
-          letter-spacing: 0.3px;
-          box-shadow:
-              0 3px 10px rgba(6, 182, 212, 0.4),
-              inset 0 1px 0 rgba(255, 255, 255, 0.22);
-          margin-top: 4px;
-      }
-      .btn-share-small:hover:not(:disabled) {
-          box-shadow:
-              0 6px 18px rgba(139, 92, 246, 0.55),
-              0 0 22px rgba(6, 182, 212, 0.35),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
       }
 
       .multiscan-assignments {
@@ -2829,6 +2622,9 @@
           .cookie-actions { justify-content: center; }
       }
 
+      /* ============================================================
+         PAIRING MAP + SLOT DRAG&DROP (multi-scan/PDF)
+         ============================================================ */
       .multiscan-pairing-wrap {
           margin: 10px 0 8px;
           padding: 10px;
@@ -3033,6 +2829,9 @@
           z-index: 3;
       }
 
+      /* ============================================================
+         [SUGG 3] EDITOR CARD PICKER (multi-tessera in edit mode)
+         ============================================================ */
       .editor-card-picker {
           position: absolute;
           top: 12px;
@@ -3131,6 +2930,274 @@
           .editor-card-btn { min-width: 22px; height: 22px; font-size: 10px; padding: 0 4px; }
           .editor-card-detect-btn { font-size: 10px; padding: 4px 8px; }
       }
+
+      /* ============================================================
+         [NUOVO] OCR PANEL + PULSANTI SOCIAL
+         ============================================================ */
+
+      /* --- Pulsante OCR nell'header editor --- */
+      .btn-editor-ocr {
+          background: linear-gradient(135deg, #00ffb0 0%, #06b6d4 55%, #3b82f6 100%);
+          color: #0a0e27;
+          font-weight: 800;
+          box-shadow:
+              0 4px 14px rgba(0, 255, 176, 0.42),
+              inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      }
+      .btn-editor-ocr:hover:not(:disabled) {
+          box-shadow:
+              0 8px 22px rgba(0, 255, 176, 0.6),
+              0 0 30px rgba(6, 182, 212, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+
+      /* --- Modale OCR --- */
+      .ocr-modal-overlay {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(5, 8, 22, 0.92);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          z-index: 10004;
+          justify-content: center;
+          align-items: center;
+          padding: 16px;
+          animation: overlayIn .25s ease;
+      }
+      .ocr-modal-overlay.open { display: flex; }
+      .ocr-modal {
+          background: var(--modal-bg);
+          border: 1px solid var(--border-strong);
+          border-radius: var(--radius-lg);
+          width: 100%;
+          max-width: 780px;
+          height: 88vh;
+          display: flex;
+          flex-direction: column;
+          box-shadow:
+              0 30px 80px rgba(0, 0, 0, 0.75),
+              0 0 0 1px rgba(255, 255, 255, 0.06),
+              0 0 60px rgba(0, 255, 176, 0.15);
+          overflow: hidden;
+          animation: modalIn .35s cubic-bezier(.2,.9,.3,1.2);
+      }
+      .ocr-modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 12px 16px;
+          background: var(--modal-header-bg);
+          border-bottom: 1px solid var(--border);
+          flex-wrap: wrap;
+          gap: 10px;
+      }
+      .ocr-modal-header h3 {
+          margin: 0;
+          font-family: 'Space Grotesk', 'Inter', sans-serif;
+          font-size: 15px;
+          color: var(--text-primary);
+          display: flex;
+          align-items: center;
+          gap: 8px;
+      }
+      .ocr-modal-header h3::before {
+          content: '';
+          display: inline-block;
+          width: 4px; height: 18px;
+          border-radius: 2px;
+          background: linear-gradient(180deg, #00ffb0, #06b6d4);
+          box-shadow: 0 0 10px rgba(0, 255, 176, 0.7);
+      }
+      .ocr-modal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      .ocr-modal-body {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          background: var(--modal-body-bg);
+      }
+      .ocr-preview-wrap {
+          flex: 0 0 auto;
+          padding: 12px;
+          background: rgba(0, 0, 0, 0.2);
+          border-bottom: 1px solid var(--border);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          max-height: 32%;
+      }
+      [data-theme="light"] .ocr-preview-wrap { background: rgba(15, 23, 42, 0.04); }
+      .ocr-preview-wrap img {
+          max-width: 100%;
+          max-height: 100%;
+          border-radius: 6px;
+          background: #fff;
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08);
+          object-fit: contain;
+      }
+      .ocr-text-wrap {
+          flex: 1;
+          padding: 14px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+      }
+      .ocr-status {
+          font-size: 12px;
+          color: var(--text-muted);
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          margin-bottom: 8px;
+          min-height: 18px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+      }
+      .ocr-status.working { color: #60a5fa; }
+      .ocr-status.error   { color: #f87171; }
+      .ocr-status.success { color: #34d399; }
+      .ocr-status .ocr-spinner {
+          width: 14px; height: 14px;
+          border: 2px solid rgba(96, 165, 250, 0.3);
+          border-top-color: #60a5fa;
+          border-radius: 50%;
+          animation: ocrSpin .8s linear infinite;
+          flex-shrink: 0;
+      }
+      @keyframes ocrSpin { to { transform: rotate(360deg); } }
+
+      .ocr-text {
+          flex: 1;
+          width: 100%;
+          resize: none;
+          background: var(--input-bg);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-sm);
+          color: var(--text-primary);
+          font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+          font-size: 13px;
+          line-height: 1.55;
+          padding: 12px 14px;
+          white-space: pre-wrap;
+          word-break: break-word;
+          -webkit-overflow-scrolling: touch;
+      }
+      .ocr-text:focus {
+          outline: none;
+          border-color: rgba(0, 255, 176, 0.55);
+          background: rgba(0, 255, 176, 0.04);
+          box-shadow: 0 0 0 4px rgba(0, 255, 176, 0.14);
+      }
+      .ocr-text:disabled {
+          opacity: 0.65;
+          cursor: wait;
+      }
+      .ocr-modal-footer {
+          padding: 10px 16px;
+          background: var(--modal-header-bg);
+          border-top: 1px solid var(--border);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px;
+          font-size: 11.5px;
+          color: var(--text-muted);
+      }
+      .ocr-footer-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      .ocr-info {
+          font-size: 11px;
+          color: var(--text-muted);
+          line-height: 1.5;
+          flex: 1;
+          min-width: 180px;
+      }
+      .ocr-info strong { color: #60a5fa; }
+
+      /* --- Pulsanti condivisione social --- */
+      .share-social-row {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          margin: 14px 0 4px;
+      }
+      .share-label {
+          width: 100%;
+          text-align: center;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 1.2px;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-bottom: 8px;
+      }
+      .btn-social {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          min-width: 44px;
+          height: 44px;
+          padding: 0 14px;
+          border-radius: 12px;
+          border: 1.5px solid rgba(255, 255, 255, 0.12);
+          color: #fff;
+          font-family: inherit;
+          font-size: 12.5px;
+          font-weight: 700;
+          letter-spacing: 0.2px;
+          cursor: pointer;
+          transition: transform .2s cubic-bezier(.2,.9,.3,1.4),
+                      box-shadow .25s ease,
+                      filter .2s ease;
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          -webkit-tap-highlight-color: transparent;
+          text-decoration: none;
+          white-space: nowrap;
+      }
+      .btn-social svg {
+          width: 20px; height: 20px;
+          fill: currentColor;
+          flex-shrink: 0;
+      }
+      .btn-social:hover {
+          transform: translateY(-2px) scale(1.03);
+          filter: brightness(1.1);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      }
+      .btn-social:active { transform: translateY(0) scale(0.98); }
+      .btn-social:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 3px var(--bg-deep), 0 0 0 6px rgba(59, 130, 246, 0.55);
+      }
+      .btn-social.mail     { background: linear-gradient(135deg, #6b7280 0%, #374151 100%); }
+      .btn-social.whatsapp { background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); }
+      .btn-social.telegram { background: linear-gradient(135deg, #29A9EB 0%, #1c7fba 100%); }
+      .btn-social.facebook { background: linear-gradient(135deg, #1877F2 0%, #0d5bc1 100%); }
+      .btn-social.linkedin { background: linear-gradient(135deg, #0A66C2 0%, #004182 100%); }
+      .btn-social.copy     { background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%); }
+      .btn-social.native   { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+      @media (max-width: 640px) {
+          .btn-social .social-label { display: none; }
+          .btn-social { min-width: 44px; padding: 0 10px; }
+      }
+      .share-feedback {
+          display: block;
+          width: 100%;
+          text-align: center;
+          font-size: 11.5px;
+          font-weight: 700;
+          color: #34d399;
+          margin-top: 6px;
+          min-height: 14px;
+          letter-spacing: 0.3px;
+          opacity: 0;
+          transition: opacity .25s;
+      }
+      .share-feedback.visible { opacity: 1; }
   </style>
 </head>
 <body>
@@ -3298,18 +3365,41 @@
         </button>
     </div>
 
-    <!-- ============================================================
-         [NEW v1.2.0] Pulsanti condivisione file (PDF / JPG)
-         ============================================================ -->
-    <div class="share-actions">
-        <button id="btn-share-pdf" class="btn btn-share" disabled onclick="sharePdf()"
-                title="Condividi il PDF con le app del dispositivo (WhatsApp, Gmail, Drive, …)">
-            📤 Condividi PDF
+    <!-- [NUOVO] Condivisione dopo export -->
+    <div class="share-social-row" id="share-after-export">
+        <span class="share-label">📤 Condividi CardScan AI</span>
+
+        <button type="button" class="btn-social native" onclick="shareNative()" title="Condividi tramite app di sistema">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+            <span class="social-label">Altro…</span>
         </button>
-        <button id="btn-share-jpg" class="btn btn-share" disabled onclick="shareJpg()"
-                title="Condividi il JPG con le app del dispositivo (WhatsApp, Gmail, Foto, …)">
-            📤 Condividi JPG
+
+        <a class="btn-social whatsapp" id="share-whatsapp" href="#" target="_blank" rel="noopener noreferrer" title="Condividi su WhatsApp">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+            <span class="social-label">WhatsApp</span>
+        </a>
+
+        <a class="btn-social telegram" id="share-telegram" href="#" target="_blank" rel="noopener noreferrer" title="Condividi su Telegram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            <span class="social-label">Telegram</span>
+        </a>
+
+        <a class="btn-social mail" id="share-mail" href="#" title="Condividi via Email">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <span class="social-label">Email</span>
+        </a>
+
+        <a class="btn-social facebook" id="share-facebook" href="#" target="_blank" rel="noopener noreferrer" title="Condividi su Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            <span class="social-label">Facebook</span>
+        </a>
+
+        <button type="button" class="btn-social copy" id="share-copy" onclick="copyAppLink()" title="Copia link">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            <span class="social-label">Copia link</span>
         </button>
+
+        <span id="share-feedback" class="share-feedback"></span>
     </div>
 
     <!-- ============================================================
@@ -3322,12 +3412,48 @@
         <button type="button" class="btn btn-qr-show" onclick="openQrModal()" aria-label="Mostra QR Code PayPal">
             📱 Mostra QR Code PayPal
         </button>
-        <!-- [NEW v1.2.0] Condivisione sito sui social -->
-        <button type="button" class="btn btn-share-small" onclick="shareWebsite()"
-                aria-label="Condividi il sito sui social"
-                title="Condividi CardScan AI sui social">
-            📢 Condividi CardScan AI
-        </button>
+
+        <!-- [NUOVO] Condivisione social della pagina -->
+        <div class="share-social-row" id="share-app-row" style="margin-top:6px;width:100%;">
+            <span class="share-label">💬 Fai conoscere CardScan AI</span>
+
+            <button type="button" class="btn-social native" onclick="shareNative()" title="Condividi tramite app di sistema">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                <span class="social-label">Altro…</span>
+            </button>
+
+            <a class="btn-social whatsapp" id="share-app-whatsapp" href="#" target="_blank" rel="noopener noreferrer" title="Condividi su WhatsApp">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                <span class="social-label">WhatsApp</span>
+            </a>
+
+            <a class="btn-social telegram" id="share-app-telegram" href="#" target="_blank" rel="noopener noreferrer" title="Condividi su Telegram">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                <span class="social-label">Telegram</span>
+            </a>
+
+            <a class="btn-social mail" id="share-app-mail" href="#" title="Condividi via Email">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                <span class="social-label">Email</span>
+            </a>
+
+            <a class="btn-social facebook" id="share-app-facebook" href="#" target="_blank" rel="noopener noreferrer" title="Condividi su Facebook">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <span class="social-label">Facebook</span>
+            </a>
+
+            <a class="btn-social linkedin" id="share-app-linkedin" href="#" target="_blank" rel="noopener noreferrer" title="Condividi su LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                <span class="social-label">LinkedIn</span>
+            </a>
+
+            <button type="button" class="btn-social copy" id="share-app-copy" onclick="copyAppLink()" title="Copia link">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                <span class="social-label">Copia link</span>
+            </button>
+
+            <span id="share-app-feedback" class="share-feedback"></span>
+        </div>
     </div>
 
     <button id="btn-clear-all" class="btn btn-clear-all" onclick="clearAllData()">
@@ -3348,10 +3474,8 @@
         <strong>Modifica manuale:</strong> clicca <strong>✎ Modifica bordi</strong> sotto l'anteprima
         per aprire un editor con zoom, trascinamento e <strong>lente di ingrandimento</strong>
         per correggere con precisione gli angoli del ritaglio.<br>
-        <strong>OCR:</strong> nell'editor, il pulsante <strong>🔤 OCR</strong> apre un pannello che riconosce il testo
-        in <strong>3 modalità</strong> (tessera selezionata, immagine intera, zona MRZ).<br>
-        <strong>Condivisione:</strong> dopo l'esportazione, i pulsanti <strong>📤 Condividi PDF/JPG</strong>
-        permettono di inviare i file tramite le app del dispositivo (WhatsApp, Gmail, Drive, ecc.).<br>
+        <strong>OCR:</strong> nell'editor puoi cliccare <strong>🔤 Leggi testo (OCR)</strong>
+        per estrarre il testo contenuto nella selezione corrente (utile per MRZ, codici, numeri documento).<br>
         <strong>Multi-Scan:</strong> con "📸 Acquisisci più tessere" puoi fotografare più tessere
         insieme: verranno rilevate e potrai <strong>assegnare manualmente</strong> ciascuna al fronte/retro
         del documento desiderato, con riordino drag &amp; drop, <strong>mappa abbinamenti visuale</strong>
@@ -3368,7 +3492,6 @@
         luce uniforme, evita ombre nette e riflessi.
     </div>
 </div>
-
 <canvas id="proc-canvas"></canvas>
 
 <div id="pdf-modal-overlay" class="pdf-modal-overlay" onclick="if(event.target===this) closePreviewModal()">
@@ -3418,10 +3541,7 @@
         <div class="editor-modal-header">
             <h3 id="editor-modal-title">Modifica bordi</h3>
             <div class="editor-modal-actions">
-                <!-- [NEW v1.2.0] Pulsante OCR -->
-                <button class="btn btn-editor-ocr" onclick="toggleOcrPanel()" title="Rileva testo OCR all'interno dei bordi selezionati">
-                    🔤 OCR
-                </button>
+                <button class="btn btn-editor-ocr" onclick="openOcrModal()" title="Estrai il testo dalla selezione corrente">🔤 Leggi testo (OCR)</button>
                 <button class="btn btn-editor-reset" onclick="resetEditorCorners()">↺ Reset bordi</button>
                 <button class="btn btn-editor-confirm" onclick="confirmEditorChanges()">✓ Conferma</button>
                 <button class="btn btn-editor-cancel" onclick="closeEditorModal()">✕ Chiudi</button>
@@ -3429,41 +3549,6 @@
         </div>
         <div class="editor-modal-body">
             <canvas id="editor-canvas"></canvas>
-
-            <!-- ============================================================
-                 [NEW v1.2.0] PANNELLO OCR — rilevamento testo in 3 modalità
-                 ============================================================ -->
-            <div id="editor-ocr-panel" class="editor-ocr-panel collapsed" aria-label="Rilevamento testo OCR">
-                <h4>Rilevamento testo OCR</h4>
-
-                <div class="ocr-mode-buttons">
-                    <button type="button" class="btn btn-ocr-mode active" data-mode="card"
-                            onclick="selectOcrMode('card')">
-                        📇 Tessera selezionata (bordi 1-2-3-4)
-                    </button>
-                    <button type="button" class="btn btn-ocr-mode" data-mode="full"
-                            onclick="selectOcrMode('full')">
-                        🖼 Immagine intera
-                    </button>
-                    <button type="button" class="btn btn-ocr-mode" data-mode="mrz"
-                            onclick="selectOcrMode('mrz')">
-                        🔠 Zona MRZ (inferiore)
-                    </button>
-                </div>
-
-                <div class="ocr-progress-bar" id="ocr-progress-bar"><div id="ocr-progress-fill"></div></div>
-                <div class="ocr-status" id="ocr-status">Seleziona una modalità e premi «Avvia OCR».</div>
-
-                <textarea id="ocr-output" class="ocr-output" readonly
-                          placeholder="Il testo riconosciuto apparirà qui…"></textarea>
-
-                <div class="ocr-actions">
-                    <button type="button" class="btn btn-editor-confirm" id="btn-ocr-run" onclick="runOcr()">▶ Avvia OCR</button>
-                    <button type="button" class="btn btn-editor-reset" onclick="copyOcrText()">📋 Copia</button>
-                    <button type="button" class="btn btn-editor-cancel" onclick="clearOcrText()">🗑 Pulisci</button>
-                    <button type="button" class="btn btn-editor-cancel" onclick="closeOcrPanel()">✕ Chiudi</button>
-                </div>
-            </div>
 
             <div id="editor-card-picker" class="editor-card-picker" aria-label="Selezione tessera">
                 <span class="editor-card-picker-label">Tessera:</span>
@@ -3579,6 +3664,40 @@
 </div>
 
 <!-- ============================================================
+     OCR MODAL — Lettura testo dalla selezione corrente
+     ============================================================ -->
+<div id="ocr-modal-overlay" class="ocr-modal-overlay" onclick="if(event.target===this) closeOcrModal()">
+    <div class="ocr-modal" role="dialog" aria-modal="true" aria-labelledby="ocr-modal-title">
+        <div class="ocr-modal-header">
+            <h3 id="ocr-modal-title">Testo rilevato</h3>
+            <div class="ocr-modal-actions">
+                <button class="btn btn-refresh-preview" onclick="runOcrOnEditorSelection()">↻ Rileggi</button>
+                <button class="btn btn-download-preview" onclick="copyOcrText()">📋 Copia</button>
+                <button class="btn btn-editor-cancel" onclick="closeOcrModal()">✕ Chiudi</button>
+            </div>
+        </div>
+        <div class="ocr-modal-body">
+            <div class="ocr-preview-wrap">
+                <img id="ocr-preview-img" alt="Anteprima selezione per OCR" src="">
+            </div>
+            <div class="ocr-text-wrap">
+                <div id="ocr-status" class="ocr-status"></div>
+                <textarea id="ocr-text" class="ocr-text" readonly placeholder="Il testo rilevato apparirà qui…"></textarea>
+            </div>
+        </div>
+        <div class="ocr-modal-footer">
+            <div class="ocr-info">
+                🔍 Motore OCR: <strong>Tesseract.js</strong> (open source, esecuzione locale nel browser).<br>
+                Lingue: <strong>Italiano + Inglese</strong>. La prima esecuzione richiede il download del modello (~10 MB).
+            </div>
+            <div class="ocr-footer-actions">
+                <button class="btn btn-editor-cancel" onclick="closeOcrModal()">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
      QR CODE MODAL (PayPal)
      ============================================================ -->
 <div id="qr-modal-overlay" class="qr-modal-overlay" onclick="if(event.target===this) closeQrModal()">
@@ -3645,10 +3764,6 @@
             <button class="menu-item" onclick="closeAppMenu(); openLegalModal('contacts')">
                 <span class="menu-ico">✉️</span>
                 <span class="menu-label">Contatti</span>
-            </button>
-            <button class="menu-item" onclick="closeAppMenu(); shareWebsite()">
-                <span class="menu-ico">📢</span>
-                <span class="menu-label">Condividi CardScan AI</span>
             </button>
             <button class="menu-item danger" onclick="closeAppMenu(); clearAllData()">
                 <span class="menu-ico">🗑</span>
@@ -3734,7 +3849,6 @@ const MULTISCAN_PENDING_KEY = 'cardsCanMultiScanPending_v1';
    QR CODE PAYPAL
    ============================================================ */
 const PAYPAL_URL = 'https://www.paypal.com/qrcodes/p2pqrc/XGG2DHDAHXMMQ';
-const WEBSITE_URL = 'https://mkboxself.github.io/CardScanAI/';
 let qrRendered = false;
 
 let currentDocs = 0;
@@ -3782,6 +3896,9 @@ const APP_ENV = (function () {
     if (el) el.textContent = APP_ENV.label;
 })();
 
+/* ============================================================
+   APK-READY: BACK BUTTON HANDLING
+   ============================================================ */
 function isAnyModalOpen() {
     return !!(
         document.getElementById('app-menu-overlay').classList.contains('open') ||
@@ -3789,12 +3906,14 @@ function isAnyModalOpen() {
         document.getElementById('pdf-modal-overlay').classList.contains('open') ||
         document.getElementById('editor-modal-overlay').classList.contains('open') ||
         document.getElementById('qr-modal-overlay').classList.contains('open') ||
-        document.getElementById('card-lightbox-overlay').classList.contains('open')
+        document.getElementById('card-lightbox-overlay').classList.contains('open') ||
+        (document.getElementById('ocr-modal-overlay') && document.getElementById('ocr-modal-overlay').classList.contains('open'))
     );
 }
 
 function closeTopmostModal() {
     if (document.getElementById('card-lightbox-overlay').classList.contains('open')) { closeCardLightbox(); return true; }
+    if (document.getElementById('ocr-modal-overlay') && document.getElementById('ocr-modal-overlay').classList.contains('open')) { closeOcrModal(); return true; }
     if (document.getElementById('app-menu-overlay').classList.contains('open')) { closeAppMenu(); return true; }
     if (document.getElementById('legal-modal-overlay').classList.contains('open')) { closeLegalModal(); return true; }
     if (document.getElementById('editor-modal-overlay').classList.contains('open')) { closeEditorModal(); return true; }
@@ -3824,6 +3943,9 @@ function closeTopmostModal() {
     } catch (_) {}
 })();
 
+/* ============================================================
+   TEMA
+   ============================================================ */
 function applyTheme(theme) {
     if (theme !== 'light' && theme !== 'dark') theme = 'dark';
     document.documentElement.setAttribute('data-theme', theme);
@@ -3851,6 +3973,9 @@ function toggleTheme() {
     applyTheme(saved);
 })();
 
+/* ============================================================
+   PWA
+   ============================================================ */
 (function injectManifest() {
     try {
         const iconSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235BB0FF'/%3E%3Cstop offset='1' stop-color='%230B4DA0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='8' y='8' width='184' height='184' rx='44' fill='url(%23b)'/%3E%3Crect x='44' y='64' width='112' height='72' rx='8' fill='none' stroke='%23fff' stroke-width='4'/%3E%3Ccircle cx='69' cy='86' r='7' fill='none' stroke='%23fff' stroke-width='3'/%3E%3Cpath d='M 56 103 Q 69 93 82 103' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='82' x2='140' y2='82' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='90' x2='134' y2='90' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='92' y1='98' x2='126' y2='98' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3Cline x1='30' y1='100' x2='170' y2='100' stroke='%2300FFB0' stroke-width='4'/%3E%3C/svg%3E";
@@ -3908,6 +4033,9 @@ document.getElementById('btn-install').addEventListener('click', async () => {
     deferredInstallPrompt = null;
 });
 
+/* ============================================================
+   PDF.JS WORKER
+   ============================================================ */
 (function initPdfJsWorker() {
     if (window.pdfjsLib) {
         try {
@@ -3919,6 +4047,9 @@ document.getElementById('btn-install').addEventListener('click', async () => {
     }
 })();
 
+/* ============================================================
+   COOKIE BANNER
+   ============================================================ */
 function acceptCookies() {
     try { localStorage.setItem(COOKIE_KEY, '1'); } catch (_) {}
     const b = document.getElementById('cookie-banner');
@@ -3936,6 +4067,9 @@ function acceptCookies() {
     }
 })();
 
+/* ============================================================
+   APP MENU
+   ============================================================ */
 function toggleAppMenu() {
     const overlay = document.getElementById('app-menu-overlay');
     if (!overlay) return;
@@ -3955,6 +4089,9 @@ function closeAppMenu() {
     if (!isAnyModalOpen()) document.body.style.overflow = '';
 }
 
+/* ============================================================
+   QR CODE PAYPAL
+   ============================================================ */
 function openQrModal() {
     const overlay = document.getElementById('qr-modal-overlay');
     if (!overlay) return;
@@ -4019,6 +4156,9 @@ function renderPayPalQr() {
     }
 }
 
+/* ============================================================
+   LIGHTBOX ANTEPRIMA INGRANDITA
+   ============================================================ */
 function openCardLightbox(srcUrl, caption) {
     const overlay = document.getElementById('card-lightbox-overlay');
     const img = document.getElementById('card-lightbox-img');
@@ -4039,6 +4179,9 @@ function closeCardLightbox() {
     if (!isAnyModalOpen()) document.body.style.overflow = '';
 }
 
+/* ============================================================
+   LEGAL MODAL
+   ============================================================ */
 const LEGAL_DATA = {
     owner:      'Spina Michele',
     address:    '',
@@ -4054,7 +4197,7 @@ const LEGAL_DATA = {
         { name: 'jsPDF (cdnjs.cloudflare.com)', purpose: 'Generazione del PDF lato client.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
         { name: 'PDF.js (cdnjs.cloudflare.com)', purpose: 'Anteprima PDF e importazione PDF.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
         { name: 'QRCode.js (cdnjs.cloudflare.com)', purpose: 'Generazione del QR Code PayPal lato client.', privacy: 'https://www.cloudflare.com/privacypolicy/' },
-        { name: 'Tesseract.js (cdn.jsdelivr.net)', purpose: 'Riconoscimento testo OCR lato client (elaborazione locale).', privacy: 'https://tesseract.projectnaptha.com/' },
+        { name: 'Tesseract.js (jsdelivr.net)', purpose: 'Riconoscimento ottico caratteri (OCR) lato client.', privacy: 'https://www.jsdelivr.com/privacy-policy-jsdelivr-net' },
         { name: 'Google Fonts (fonts.googleapis.com / fonts.gstatic.com)', purpose: 'Caricamento dei font tipografici.', privacy: 'https://policies.google.com/privacy' }
     ]
 };
@@ -4115,15 +4258,14 @@ function buildInfoHtml() {
                 <li>Ritaglio e raddrizzamento prospettico</li>
                 <li>Editor manuale bordi con lente di ingrandimento</li>
                 <li>Regolazioni immagine (rotazione, luce, colore, nitidezza, canali RGB)</li>
-                <li>Riconoscimento testo OCR in 3 modalità (tessera, intera, MRZ)</li>
                 <li>Miglioramento automatico dell'immagine</li>
+                <li>OCR (riconoscimento testo) tramite Tesseract.js</li>
                 <li>Forzatura acquisizione per foto non ottimali</li>
                 <li>Multi-scan (più tessere in un'unica foto) con mappa abbinamenti visuale</li>
                 <li>Importazione da PDF esistente con assegnazione manuale</li>
                 <li>Spostamento/scambio di immagini tra slot tramite drag &amp; drop</li>
                 <li>Esportazione PDF e JPG in formato A4</li>
-                <li>Condivisione file tramite app del dispositivo (Web Share API)</li>
-                <li>Condivisione del sito sui social</li>
+                <li>Condivisione social della pagina</li>
                 <li>Salvataggio locale delle sessioni (sessionStorage)</li>
             </ul>
 
@@ -4132,15 +4274,15 @@ function buildInfoHtml() {
                 <li>OpenCV.js — visione artificiale lato client</li>
                 <li>jsPDF — generazione PDF</li>
                 <li>PDF.js — lettura/anteprima PDF</li>
-                <li>Tesseract.js — OCR lato client</li>
                 <li>QRCode.js — generazione QR Code PayPal</li>
+                <li>Tesseract.js — OCR lato client</li>
                 <li>Web APIs (Camera, File, Canvas, Storage, Web Share)</li>
             </ul>
 
             <div class="legal-note">
                 ℹ️ Questa app funziona <strong>interamente offline</strong> per quanto riguarda l'elaborazione delle immagini:
                 nessuna foto viene inviata a server remoti. Le uniche connessioni esterne sono il caricamento delle librerie
-                da CDN (OpenCV, jsPDF, PDF.js, QRCode.js, Tesseract.js, Google Fonts) e il worker di PDF.js.
+                da CDN (OpenCV, jsPDF, PDF.js, QRCode.js, Tesseract.js, Google Fonts).
             </div>
         `
     };
@@ -4173,7 +4315,7 @@ function buildPrivacyHtml() {
             </ul>
             <p>Le immagini dei documenti che l'utente carica (foto dalla fotocamera o file dal dispositivo)
                sono elaborate <strong>esclusivamente in locale</strong>, all'interno del browser/WebView del dispositivo,
-               e non vengono mai trasmesse all'esterno. Anche l'elaborazione OCR avviene localmente tramite WebAssembly.</p>
+               e non vengono mai trasmesse all'esterno. Anche l'OCR è eseguito localmente tramite WebAssembly.</p>
 
             <h4>3. Dati memorizzati localmente</h4>
             <p>L'app utilizza le seguenti tecnologie di storage locale:</p>
@@ -4188,7 +4330,6 @@ function buildPrivacyHtml() {
                 <li><strong>Fotocamera</strong> — per scattare foto delle tessere. Utilizzata solo su azione dell'utente.</li>
                 <li><strong>Accesso file</strong> — per caricare immagini esistenti e salvare i PDF generati.</li>
                 <li><strong>Archiviazione</strong> — per salvare i file di output.</li>
-                <li><strong>Condivisione</strong> — per inviare i file alle app del dispositivo su azione dell'utente.</li>
             </ul>
 
             <h4>5. Servizi di terze parti</h4>
@@ -4261,7 +4402,8 @@ function buildCookieHtml() {
             <p>Si rimanda alle informative dei rispettivi fornitori:
                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google</a>,
                <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare</a>,
-               <a href="https://opencv.org/privacy/" target="_blank" rel="noopener noreferrer">OpenCV</a>.</p>
+               <a href="https://opencv.org/privacy/" target="_blank" rel="noopener noreferrer">OpenCV</a>,
+               <a href="https://www.jsdelivr.com/privacy-policy-jsdelivr-net" target="_blank" rel="noopener noreferrer">jsDelivr</a>.</p>
 
             <h4>4. Gestione del consenso</h4>
             <p>Al primo avvio viene mostrato un banner informativo. Cliccando <strong>"✓ Accetta"</strong> si conferma
@@ -4308,13 +4450,13 @@ function buildTermsHtml() {
 
             <h4>4. Esclusione di garanzia</h4>
             <p>L'app è fornita <strong>"così com'è"</strong>, senza garanzie di alcun tipo, esplicite o implicite.
-               Il Titolare non garantisce che il riconoscimento automatico dei bordi o l'OCR funzionino correttamente
+               Il Titolare non garantisce che il riconoscimento automatico dei bordi funzioni correttamente
                in qualsiasi condizione di luminosità, angolazione o qualità dell'immagine.</p>
 
             <h4>5. Limitazione di responsabilità</h4>
             <p>Il Titolare non è responsabile per:</p>
             <ul>
-                <li>eventuali errori di scansione, OCR o esportazione</li>
+                <li>eventuali errori di scansione o esportazione</li>
                 <li>perdita di dati locali (chiusura app, cancellazione cache, disinstallazione)</li>
                 <li>utilizzi impropri dell'app da parte dell'utente</li>
                 <li>danni diretti o indiretti derivanti dall'uso dell'app</li>
@@ -4322,8 +4464,8 @@ function buildTermsHtml() {
 
             <h4>6. Proprietà intellettuale</h4>
             <p>Il marchio, il logo e il codice sorgente di ${LEGAL_DATA.appName} sono di proprietà del Titolare.
-               Le librerie di terze parti (OpenCV, jsPDF, PDF.js, Tesseract.js) sono soggette alle rispettive licenze
-               (Apache 2.0, MIT, Apache 2.0, Apache 2.0).</p>
+               Le librerie di terze parti (OpenCV, jsPDF, PDF.js, QRCode.js, Tesseract.js) sono soggette alle rispettive licenze
+               (Apache 2.0, MIT, Apache 2.0, MIT, Apache 2.0).</p>
 
             <h4>7. Modifiche ai termini</h4>
             <p>Il Titolare si riserva il diritto di modificare i presenti termini in qualsiasi momento.
@@ -4374,17 +4516,6 @@ function buildPermissionsHtml() {
                 </div>
             </div>
 
-            <div class="perm-row" id="perm-row-share">
-                <div class="perm-row-info">
-                    <span class="perm-name">📤 Condivisione</span>
-                    <span class="perm-desc">Usata per inviare PDF/JPG e link del sito alle app del dispositivo.<br>
-                    <em>Uso: solo quando premi i pulsanti "Condividi".</em></span>
-                </div>
-                <div class="perm-action">
-                    <span class="legal-badge ok" id="perm-badge-share">Supportata</span>
-                </div>
-            </div>
-
             <div class="perm-row" id="perm-row-notifications">
                 <div class="perm-row-info">
                     <span class="perm-name">🔔 Notifiche</span>
@@ -4422,39 +4553,25 @@ function buildPermissionsHtml() {
 
 async function refreshPermissionStatus() {
     const badge = document.getElementById('perm-badge-camera');
-    if (badge) {
-        badge.className = 'legal-badge warn';
-        badge.textContent = 'Verifica…';
+    if (!badge) return;
+    badge.className = 'legal-badge warn';
+    badge.textContent = 'Verifica…';
 
-        if (navigator.permissions && navigator.permissions.query) {
-            try {
-                const status = await navigator.permissions.query({ name: 'camera' });
-                updateCameraBadge(status.state);
-                status.onchange = () => updateCameraBadge(status.state);
-            } catch (_) {
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    badge.className = 'legal-badge warn';
-                    badge.textContent = 'Da richiedere';
-                } else {
-                    badge.className = 'legal-badge err';
-                    badge.textContent = 'Non supportata';
-                }
-            }
-        }
+    if (navigator.permissions && navigator.permissions.query) {
+        try {
+            const status = await navigator.permissions.query({ name: 'camera' });
+            updateCameraBadge(status.state);
+            status.onchange = () => updateCameraBadge(status.state);
+            return;
+        } catch (_) {}
     }
 
-    const shareBadge = document.getElementById('perm-badge-share');
-    if (shareBadge) {
-        if (navigator.share) {
-            shareBadge.className = 'legal-badge ok';
-            shareBadge.textContent = 'Supportata';
-        } else if (navigator.clipboard && navigator.clipboard.writeText) {
-            shareBadge.className = 'legal-badge warn';
-            shareBadge.textContent = 'Solo copia link';
-        } else {
-            shareBadge.className = 'legal-badge err';
-            shareBadge.textContent = 'Non supportata';
-        }
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        badge.className = 'legal-badge warn';
+        badge.textContent = 'Da richiedere';
+    } else {
+        badge.className = 'legal-badge err';
+        badge.textContent = 'Non supportata';
     }
 }
 
@@ -4526,6 +4643,9 @@ function buildContactsHtml() {
     };
 }
 
+/* ============================================================
+   PERSISTENZA
+   ============================================================ */
 let saveStateTimer = null;
 function saveState() {
     if (saveStateTimer) return;
@@ -4627,6 +4747,9 @@ function clearMultiScanPending() {
     try { sessionStorage.removeItem(MULTISCAN_PENDING_KEY); } catch (_) {}
 }
 
+/* ============================================================
+   OPENCV READY
+   ============================================================ */
 let cvReady = false;
 let cvReadyCallbacks = [];
 
@@ -4662,8 +4785,14 @@ function markCvReady() {
     }
 })();
 
+/* ============================================================
+   UI HELPERS
+   ============================================================ */
 function triggerInput(id) { document.getElementById(id).click(); }
 
+/* ============================================================
+   DOCUMENTI DINAMICI
+   ============================================================ */
 function buildDocSection(docNum) {
     const section = document.createElement('div');
     section.className = 'doc-section';
@@ -4918,6 +5047,9 @@ function updateProgress() {
     document.getElementById('progress-fill').style.width = pct + '%';
 }
 
+/* ============================================================
+   SVUOTA TUTTO
+   ============================================================ */
 function clearAllData() {
     if (!confirm('🗑 Sei sicuro di voler cancellare TUTTE le tessere caricate?\n\nL\'operazione non è reversibile.')) {
         return;
@@ -4935,7 +5067,7 @@ function clearAllData() {
     if (previewOpen) closePreviewModal();
     cancelMultiScan();
     closeEditorModal();
-    closeOcrPanel();
+    closeOcrModal();
 
     document.getElementById('pdf-filename').value = 'documenti_tessera';
 
@@ -4953,6 +5085,9 @@ function clearAllData() {
     }, 1400);
 }
 
+/* ============================================================
+   INIZIALIZZAZIONE
+   ============================================================ */
 function initializeApp() {
     const saved = loadState();
 
@@ -4994,6 +5129,9 @@ function initializeApp() {
 
 initializeApp();
 
+/* ============================================================
+   DRAG & DROP — file esterni sugli slot
+   ============================================================ */
 (function initDragAndDrop() {
     const isFileDrag = (e) => {
         if (!e.dataTransfer) return false;
@@ -5071,6 +5209,9 @@ initializeApp();
     });
 })();
 
+/* ============================================================
+   HOME PAGE — Spostamento/Scambio immagini tra slot
+   ============================================================ */
 (function initSlotMoveDragDrop() {
     const container = document.getElementById('docs-container');
     if (!container) return;
@@ -5238,6 +5379,9 @@ function _applySlotData(doc, side, data) {
     }
 }
 
+/* ============================================================
+   RESET / STATUS
+   ============================================================ */
 function resetSlot(doc, side) {
     const k = keyOf(doc, side);
     processedImages[k] = null;
@@ -5286,12 +5430,6 @@ function checkExportStatus() {
     document.getElementById('btn-export').disabled = !allDone;
     document.getElementById('btn-preview').disabled = !allDone;
     document.getElementById('btn-export-jpg').disabled = !allDone;
-
-    /* [NEW v1.2.0] Abilita/disabilita pulsanti condivisione */
-    const shPdf = document.getElementById('btn-share-pdf');
-    const shJpg = document.getElementById('btn-share-jpg');
-    if (shPdf) shPdf.disabled = !allDone;
-    if (shJpg) shJpg.disabled = !allDone;
 }
 
 function setStatus(doc, side, type, text) {
@@ -5303,6 +5441,9 @@ function setStatus(doc, side, type, text) {
     m.innerText = text || '';
 }
 
+/* ============================================================
+   PANNELLO FORZATURA
+   ============================================================ */
 function showForcePanel(k, reason) {
     const el = document.getElementById(`force-${k}`);
     if (!el) return;
@@ -5380,6 +5521,9 @@ async function forceAcceptImage(doc, side) {
     }
 }
 
+/* ============================================================
+   PIPELINE
+   ============================================================ */
 function processImage(input, doc, side) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
@@ -5600,6 +5744,9 @@ function runScanner(img, doc, side, input) {
     });
 }
 
+/* ============================================================
+   OVERLAY BORDI (da cv.Mat)
+   ============================================================ */
 function buildDetectionOverlay(srcMat, corners) {
     const W = srcMat.cols;
     const H = srcMat.rows;
@@ -5719,6 +5866,9 @@ function buildDetectionOverlayFromImage(img, corners) {
     return thumb.toDataURL('image/png');
 }
 
+/* ============================================================
+   MULTI-SCAN
+   ============================================================ */
 function triggerMultiScan() {
     if (!cvReady) {
         alert('Il motore di scansione non è ancora pronto. Attendi qualche secondo.');
@@ -5820,8 +5970,10 @@ function scheduleSideSuggestions(cards) {
             cards.forEach((card) => {
                 try {
                     card.suggestedSide = suggestCardSide(card.dataUrl);
+                    card._suggestionDone = true;
                 } catch (e) {
                     card.suggestedSide = null;
+                    card._suggestionDone = true;
                 }
             });
             if (multiScanPending && multiScanPending.cards === cards) {
@@ -8692,15 +8844,14 @@ function openEditorModal(doc, side) {
 
     updateEditorCornerInfo(-1);
 
-    /* [NEW v1.2.0] Pannello "Regolazioni immagine" chiuso all'avvio */
     const toolsPanel = document.getElementById('editor-image-tools');
     const toolsOpenBtn = document.getElementById('editor-tools-open-btn');
     if (toolsPanel) toolsPanel.classList.add('collapsed');
     if (toolsOpenBtn) toolsOpenBtn.classList.add('visible');
-
-    /* [NEW v1.2.0] Chiudi sempre il pannello OCR all'apertura dell'editor */
-    const ocrPanel = document.getElementById('editor-ocr-panel');
-    if (ocrPanel) ocrPanel.classList.add('collapsed');
+    if (toolsPanel) {
+        const toggle = toolsPanel.querySelector('.editor-tools-toggle');
+        if (toggle) toggle.textContent = '+';
+    }
 
     const picker = document.getElementById('editor-card-picker');
     const pickerBtns = document.getElementById('editor-card-picker-buttons');
@@ -8755,9 +8906,6 @@ function closeEditorModal() {
     if (picker) picker.style.display = 'none';
     const pickerBtns = document.getElementById('editor-card-picker-buttons');
     if (pickerBtns) pickerBtns.innerHTML = '';
-
-    const ocrPanel = document.getElementById('editor-ocr-panel');
-    if (ocrPanel) ocrPanel.classList.add('collapsed');
 }
 
 function resetEditorCorners() {
@@ -9615,6 +9763,9 @@ function onEditorArrowKey(e) {
     });
 })();
 
+/* ============================================================
+   ZOOM GESTURES ANTEPRIMA PDF
+   ============================================================ */
 (function initPdfPreviewZoomGestures() {
     const body = document.getElementById('pdf-modal-body');
     if (!body) return;
@@ -9655,6 +9806,9 @@ function onEditorArrowKey(e) {
     }, { passive: true });
 })();
 
+/* ============================================================
+   TASTIERA
+   ============================================================ */
 document.addEventListener('keydown', e => {
     if (previewOpen && (e.ctrlKey || e.metaKey)) {
         if (e.key === '+' || e.key === '=') {
@@ -9675,13 +9829,13 @@ document.addEventListener('keydown', e => {
     }
 
     if (e.key === 'Escape') {
+        const ocrOverlay = document.getElementById('ocr-modal-overlay');
+        if (ocrOverlay && ocrOverlay.classList.contains('open')) {
+            closeOcrModal();
+            return;
+        }
         if (editorState) {
-            const ocrPanel = document.getElementById('editor-ocr-panel');
-            if (ocrPanel && !ocrPanel.classList.contains('collapsed')) {
-                closeOcrPanel();
-            } else {
-                closeEditorModal();
-            }
+            closeEditorModal();
         } else if (multiScanPending) {
             cancelMultiScan();
         } else if (document.getElementById('card-lightbox-overlay').classList.contains('open')) {
@@ -9704,490 +9858,359 @@ window.addEventListener('beforeunload', saveStateNow);
 window.addEventListener('pagehide', saveStateNow);
 
 /* ============================================================
-   [NEW v1.2.0] OCR — Rilevamento testo (3 modalità)
-   ------------------------------------------------------------
-   Modalità:
-     • card  → solo area racchiusa dai 4 corner dell'editor
-     • full  → immagine intera (con regolazioni applicate)
-     • mrz   → striscia inferiore della tessera (MRZ / codice a barre)
-   Libreria: Tesseract.js (caricata lazy al primo utilizzo)
+   OCR — Lettura testo dalla selezione corrente
    ============================================================ */
-let tesseractLoaded = false;
-let tesseractLoading = null;
-let ocrCurrentMode = 'card';
+let ocrWorker = null;
+let ocrWorkerLang = 'ita+eng';
 let ocrRunning = false;
 
-function loadTesseract() {
-    if (tesseractLoaded && typeof Tesseract !== 'undefined') return Promise.resolve();
-    if (tesseractLoading) return tesseractLoading;
-
-    tesseractLoading = new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.0.4/dist/tesseract.min.js';
-        script.async = true;
-        script.onload = () => {
-            tesseractLoaded = true;
-            resolve();
-        };
-        script.onerror = () => {
-            tesseractLoading = null;
-            reject(new Error('Impossibile caricare Tesseract.js'));
-        };
-        document.head.appendChild(script);
-    });
-    return tesseractLoading;
-}
-
-function toggleOcrPanel() {
-    const panel = document.getElementById('editor-ocr-panel');
-    if (!panel) return;
-    panel.classList.toggle('collapsed');
-}
-
-function closeOcrPanel() {
-    const panel = document.getElementById('editor-ocr-panel');
-    if (panel) panel.classList.add('collapsed');
-}
-
-function selectOcrMode(mode) {
-    ocrCurrentMode = mode;
-    document.querySelectorAll('.btn-ocr-mode').forEach(b => {
-        b.classList.toggle('active', b.dataset.mode === mode);
-    });
-    const status = document.getElementById('ocr-status');
-    if (status) {
-        const labels = {
-            card: 'Modalità: tessera selezionata (solo area dentro i bordi 1-2-3-4).',
-            full: 'Modalità: immagine intera con regolazioni applicate.',
-            mrz:  'Modalità: zona MRZ (striscia inferiore della tessera).'
-        };
-        status.className = 'ocr-status';
-        status.textContent = labels[mode] || '';
-    }
-}
-
-function setOcrStatus(text, cls) {
-    const el = document.getElementById('ocr-status');
-    if (!el) return;
-    el.className = 'ocr-status' + (cls ? ' ' + cls : '');
-    el.textContent = text || '';
-}
-
-function setOcrProgress(percent, visible) {
-    const bar = document.getElementById('ocr-progress-bar');
-    const fill = document.getElementById('ocr-progress-fill');
-    if (!bar || !fill) return;
-    bar.classList.toggle('visible', !!visible);
-    fill.style.width = Math.max(0, Math.min(100, percent || 0)) + '%';
-}
-
-function clearOcrText() {
-    const out = document.getElementById('ocr-output');
-    if (out) out.value = '';
-    setOcrStatus('Testo pulito.', '');
-    setOcrProgress(0, false);
-}
-
-async function copyOcrText() {
-    const out = document.getElementById('ocr-output');
-    if (!out || !out.value) {
-        setOcrStatus('Nessun testo da copiare.', 'err');
-        return;
-    }
-    try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(out.value);
-        } else {
-            out.removeAttribute('readonly');
-            out.select();
-            document.execCommand('copy');
-            out.setAttribute('readonly', 'readonly');
-        }
-        setOcrStatus('Testo copiato negli appunti.', 'ok');
-    } catch (e) {
-        setOcrStatus('Impossibile copiare: ' + e.message, 'err');
-    }
-}
-
-/* --- Costruzione canvas da passare a Tesseract --- */
-async function buildOcrCanvas(mode) {
-    if (!editorState || !editorState.img) return null;
-
-    const srcImg = editorState.img;
-    const srcW = srcImg.naturalWidth;
-    const srcH = srcImg.naturalHeight;
-
-    let adjusted;
-    try {
-        adjusted = applyEditorAdjustments(srcImg, editorAdjustments, CONFIG.maxSrcDim);
-    } catch (e) {
-        adjusted = null;
-    }
-    if (!adjusted) {
-        adjusted = document.createElement('canvas');
-        adjusted.width  = srcW;
-        adjusted.height = srcH;
-        adjusted.getContext('2d').drawImage(srcImg, 0, 0);
-    }
-
-    if (mode === 'full') {
-        return adjusted;
-    }
-
-    const totalRotDeg = ((editorBaseRotation + (editorAdjustments.rotation || 0)) % 360 + 360) % 360;
-    let cornersToUse;
-    if (totalRotDeg === 0) {
-        const scale = adjusted.width / srcW;
-        cornersToUse = editorState.corners.map(c => ({ x: c.x * scale, y: c.y * scale }));
-    } else {
-        cornersToUse = mapCornersThroughRotation(
-            editorState.corners, srcW, srcH,
-            editorBaseRotation, editorAdjustments.rotation || 0,
-            adjusted.width, adjusted.height
-        );
-        cornersToUse = cycleCornersForRotation(cornersToUse, totalRotDeg);
-    }
-
-    const OCR_W = 1600;
-    const OCR_H = Math.round(OCR_W * CONFIG.cardHeightMM / CONFIG.cardWidthMM);
-
-    let warpedDataUrl;
-    try {
-        const src = cv.imread(adjusted);
-        warpedDataUrl = warpCard(src, cornersToUse, OCR_W, OCR_H);
-        src.delete();
-    } catch (e) {
-        console.warn('Warp OCR fallito:', e);
-        return null;
-    }
-
-    const warpedCanvas = document.createElement('canvas');
-    warpedCanvas.width  = OCR_W;
-    warpedCanvas.height = OCR_H;
-    const wctx = warpedCanvas.getContext('2d');
-
-    wctx.fillStyle = '#ffffff';
-    wctx.fillRect(0, 0, OCR_W, OCR_H);
-
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-            wctx.drawImage(img, 0, 0);
-
-            if (mode === 'mrz') {
-                const cropY = Math.floor(OCR_H * 0.68);
-                const cropH = OCR_H - cropY;
-                const mrz = document.createElement('canvas');
-                mrz.width  = OCR_W;
-                mrz.height = cropH;
-                const mctx = mrz.getContext('2d');
-                mctx.fillStyle = '#ffffff';
-                mctx.fillRect(0, 0, OCR_W, cropH);
-                mctx.drawImage(warpedCanvas, 0, cropY, OCR_W, cropH, 0, 0, OCR_W, cropH);
-                resolve(mrz);
-            } else {
-                resolve(warpedCanvas);
-            }
-        };
-        img.onerror = () => resolve(warpedCanvas);
-        img.src = warpedDataUrl;
-    });
-}
-
-/* --- Esecuzione OCR --- */
-async function runOcr() {
-    if (ocrRunning) return;
+function openOcrModal() {
     if (!editorState || !editorState.img) {
-        setOcrStatus('Nessuna immagine caricata nell\'editor.', 'err');
+        alert('Nessuna immagine selezionata per l\'OCR.');
         return;
     }
 
-    const out = document.getElementById('ocr-output');
-    const btnRun = document.getElementById('btn-ocr-run');
+    if (typeof Tesseract === 'undefined') {
+        alert('❌ Motore OCR non disponibile.\n\n' +
+              'Controlla la connessione internet: Tesseract.js viene caricato da CDN alla prima apertura.');
+        return;
+    }
 
+    const overlay = document.getElementById('ocr-modal-overlay');
+    if (!overlay) return;
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    const statusEl = document.getElementById('ocr-status');
+    const textEl = document.getElementById('ocr-text');
+    const prevImg = document.getElementById('ocr-preview-img');
+    if (statusEl) {
+        statusEl.className = 'ocr-status';
+        statusEl.textContent = '';
+    }
+    if (textEl) textEl.value = '';
+    if (prevImg) prevImg.src = '';
+
+    try {
+        const srcImg = editorState.img;
+        const adjusted = applyEditorAdjustments(srcImg, editorAdjustments, 1200);
+        const totalRotDeg = ((editorBaseRotation + (editorAdjustments.rotation || 0)) % 360 + 360) % 360;
+
+        let cornersToUse;
+        if (totalRotDeg === 0) {
+            const scale = adjusted.width / srcImg.naturalWidth;
+            cornersToUse = editorState.corners.map(c => ({
+                x: c.x * scale,
+                y: c.y * scale
+            }));
+        } else {
+            cornersToUse = mapCornersThroughRotation(
+                editorState.corners,
+                srcImg.naturalWidth,
+                srcImg.naturalHeight,
+                editorBaseRotation,
+                editorAdjustments.rotation || 0,
+                adjusted.width,
+                adjusted.height
+            );
+            cornersToUse = cycleCornersForRotation(cornersToUse, totalRotDeg);
+        }
+
+        const src = cv.imread(adjusted);
+        const prevUrl = warpCard(src, cornersToUse, CONFIG.targetWidth, CONFIG.targetHeight);
+        src.delete();
+
+        if (prevImg) prevImg.src = prevUrl;
+        runOcrOnImage(prevUrl);
+    } catch (e) {
+        console.error(e);
+        const statusEl2 = document.getElementById('ocr-status');
+        if (statusEl2) {
+            statusEl2.className = 'ocr-status error';
+            statusEl2.textContent = 'Errore nella preparazione dell\'anteprima.';
+        }
+    }
+}
+
+function closeOcrModal() {
+    const overlay = document.getElementById('ocr-modal-overlay');
+    if (overlay) overlay.classList.remove('open');
+    if (!isAnyModalOpen()) document.body.style.overflow = '';
+}
+
+async function runOcrOnEditorSelection() {
+    if (!editorState || !editorState.img) return;
+    if (ocrRunning) return;
+    const prevImg = document.getElementById('ocr-preview-img');
+    if (prevImg && prevImg.src) {
+        runOcrOnImage(prevImg.src);
+    } else {
+        openOcrModal();
+    }
+}
+
+async function runOcrOnImage(dataUrl) {
+    if (ocrRunning) return;
     ocrRunning = true;
-    if (btnRun) { btnRun.disabled = true; btnRun.textContent = '⏳ OCR…'; }
-    setOcrStatus('Caricamento motore OCR…', 'busy');
-    setOcrProgress(2, true);
 
-    try {
-        await loadTesseract();
-    } catch (e) {
-        ocrRunning = false;
-        if (btnRun) { btnRun.disabled = false; btnRun.textContent = '▶ Avvia OCR'; }
-        setOcrProgress(0, false);
-        setOcrStatus('Impossibile caricare Tesseract.js. Controlla la connessione.', 'err');
-        return;
+    const statusEl = document.getElementById('ocr-status');
+    const textEl = document.getElementById('ocr-text');
+
+    if (textEl) {
+        textEl.value = '';
+        textEl.disabled = true;
     }
 
-    setOcrStatus('Preparazione immagine…', 'busy');
-    setOcrProgress(10, true);
+    const setStatus = (msg, cls) => {
+        if (!statusEl) return;
+        statusEl.className = 'ocr-status ' + (cls || '');
+        statusEl.innerHTML = msg;
+    };
 
-    let targetCanvas;
-    try {
-        targetCanvas = await buildOcrCanvas(ocrCurrentMode);
-    } catch (e) {
-        console.warn(e);
-        targetCanvas = null;
-    }
-    if (!targetCanvas) {
-        ocrRunning = false;
-        if (btnRun) { btnRun.disabled = false; btnRun.textContent = '▶ Avvia OCR'; }
-        setOcrProgress(0, false);
-        setOcrStatus('Errore durante la preparazione dell\'immagine.', 'err');
-        return;
-    }
-
-    setOcrStatus('Riconoscimento testo in corso… (può richiedere alcuni secondi)', 'busy');
+    setStatus('<span class="ocr-spinner"></span> Inizializzazione motore OCR…', 'working');
 
     try {
-        const result = await Tesseract.recognize(
-            targetCanvas,
-            'ita+eng',
-            {
+        if (!ocrWorker) {
+            setStatus('<span class="ocr-spinner"></span> Caricamento modello linguistico (ita+eng)…', 'working');
+            ocrWorker = await Tesseract.createWorker(ocrWorkerLang, 1, {
                 logger: (m) => {
-                    if (!m) return;
-                    if (m.status === 'recognizing text' && typeof m.progress === 'number') {
-                        setOcrProgress(20 + m.progress * 78, true);
+                    if (!m || !m.status) return;
+                    if (m.status === 'recognizing text') {
+                        const pct = Math.round((m.progress || 0) * 100);
+                        setStatus(`<span class="ocr-spinner"></span> Riconoscimento testo… ${pct}%`, 'working');
+                    } else if (m.status === 'loading tesseract core') {
+                        setStatus('<span class="ocr-spinner"></span> Caricamento core OCR…', 'working');
+                    } else if (m.status === 'loading language traineddata') {
+                        setStatus('<span class="ocr-spinner"></span> Caricamento dati lingua…', 'working');
+                    } else if (m.status === 'initializing api') {
+                        setStatus('<span class="ocr-spinner"></span> Inizializzazione API…', 'working');
                     }
                 }
-            }
-        );
+            });
+        }
 
-        const text = (result && result.data && result.data.text) ? result.data.text.trim() : '';
-        if (out) out.value = text || '(nessun testo riconosciuto)';
-        setOcrProgress(100, true);
-        setOcrStatus(
-            text
-                ? `✓ OCR completato (${text.length} caratteri, modalità: ${ocrCurrentMode}).`
-                : '✓ OCR completato: nessun testo rilevato.',
-            'ok'
-        );
-        setTimeout(() => setOcrProgress(0, false), 1200);
+        setStatus('<span class="ocr-spinner"></span> Analisi del testo in corso…', 'working');
+
+        const result = await ocrWorker.recognize(dataUrl);
+        const text = (result && result.data && result.data.text) ? result.data.text : '';
+        const cleaned = text.replace(/\n{3,}/g, '\n\n').trim();
+
+        if (textEl) {
+            textEl.disabled = false;
+            textEl.value = cleaned || '(Nessun testo riconosciuto)';
+        }
+
+        const words = cleaned ? cleaned.split(/\s+/).filter(Boolean).length : 0;
+        const chars = cleaned.length;
+        setStatus(`✅ Testo riconosciuto: ${chars} caratteri · ${words} parole`, 'success');
+
     } catch (e) {
         console.error('OCR error:', e);
-        setOcrStatus('Errore OCR: ' + (e && e.message ? e.message : 'sconosciuto'), 'err');
-        setOcrProgress(0, false);
+        if (textEl) textEl.disabled = false;
+        setStatus('❌ Errore OCR: ' + (e && e.message ? e.message : 'sconosciuto') +
+                  '. Verifica la connessione internet e riprova.', 'error');
     } finally {
         ocrRunning = false;
-        if (btnRun) { btnRun.disabled = false; btnRun.textContent = '▶ Avvia OCR'; }
     }
 }
 
-/* ============================================================
-   [NEW v1.2.0] CONDIVISIONE FILE (PDF / JPG) con app del device
-   ============================================================ */
-async function shareFilesNative(files, title, text) {
-    if (navigator.canShare && navigator.canShare({ files })) {
-        try {
-            await navigator.share({ files, title, text });
-            return { ok: true, method: 'share' };
-        } catch (e) {
-            if (e && e.name === 'AbortError') return { ok: false, method: 'share', reason: 'annullato' };
-            console.warn('Web Share con file fallita:', e);
+function copyOcrText() {
+    const textEl = document.getElementById('ocr-text');
+    if (!textEl) return;
+    const txt = textEl.value || '';
+    if (!txt) {
+        alert('Nessun testo da copiare.');
+        return;
+    }
+    const done = () => {
+        const statusEl = document.getElementById('ocr-status');
+        if (statusEl) {
+            const old = statusEl.textContent;
+            statusEl.className = 'ocr-status success';
+            statusEl.textContent = '📋 Testo copiato negli appunti!';
+            setTimeout(() => {
+                statusEl.textContent = old;
+                statusEl.className = 'ocr-status success';
+            }, 1800);
         }
-    }
+    };
 
-    if (files && files.length > 0) {
-        const file = files[0];
-        const result = await saveFileWithPicker(file, file.name, file.type, ['.pdf', '.jpg', '.jpeg']);
-        return result;
-    }
-    return { ok: false, method: 'share', reason: 'unsupported' };
-}
-
-async function sharePdf() {
-    const btn = document.getElementById('btn-share-pdf');
-    if (btn) btn.disabled = true;
-    try {
-        const doc = buildPDFDocument();
-        if (!doc) { if (btn) btn.disabled = false; return; }
-
-        const base = getCleanFilename();
-        const filename = /\.pdf$/i.test(base) ? base : base + '.pdf';
-        const blob = doc.output('blob');
-        const file = new File([blob], filename, { type: 'application/pdf' });
-
-        const res = await shareFilesNative([file], 'CardScan AI — PDF', 'Documenti formato tessera esportati in PDF');
-        if (res && res.ok === false && res.reason === 'unsupported') {
-            alert('La condivisione nativa non è supportata su questo dispositivo.\nIl file è stato scaricato nella cartella Download.');
-        }
-    } catch (e) {
-        console.error(e);
-        alert('Errore durante la condivisione del PDF.');
-    } finally {
-        if (btn) btn.disabled = false;
-    }
-}
-
-async function renderA4JpgBlobsForShare() {
-    for (let d = 1; d <= currentDocs; d++) {
-        const hasFronte = !!processedImages[keyOf(d, 'fronte')];
-        const hasRetro  = !!processedImages[keyOf(d, 'retro')];
-        if (!hasFronte && !hasRetro) return null;
-    }
-
-    const DPI = 300;
-    const A4_W_MM = 210, A4_H_MM = 297;
-    const pxPerMM = DPI / 25.4;
-    const A4_W_PX = Math.round(A4_W_MM * pxPerMM);
-    const A4_H_PX = Math.round(A4_H_MM * pxPerMM);
-
-    const cW = CONFIG.cardWidthMM, cH = CONFIG.cardHeightMM;
-    const gap = CONFIG.gapMM;
-    const pairW = cW * 2 + gap;
-    const leftMargin = (A4_W_MM - pairW) / 2;
-    const rowH = cH;
-    const rowsPerPage = CONFIG.docsPerPage / 2;
-    const blockH = rowH * rowsPerPage + gap * (rowsPerPage - 1);
-    const maxBlockH = A4_H_MM - 20;
-    let startY, actualGap = gap;
-    if (blockH > maxBlockH) {
-        actualGap = Math.max(2, (maxBlockH - rowH * rowsPerPage) / (rowsPerPage - 1));
-        startY = (A4_H_MM - (rowH * rowsPerPage + actualGap * (rowsPerPage - 1))) / 2;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(txt).then(done).catch(() => {
+            fallbackCopy(textEl, done);
+        });
     } else {
-        startY = (A4_H_MM - blockH) / 2;
+        fallbackCopy(textEl, done);
     }
-
-    const docsPerPage = rowsPerPage;
-    const pages = Math.ceil(currentDocs / docsPerPage);
-
-    const images = {};
-    for (let d = 1; d <= currentDocs; d++) {
-        for (const s of SIDES) {
-            const k = keyOf(d, s);
-            if (processedImages[k] && !images[k]) {
-                images[k] = await loadImage(processedImages[k]);
-            }
-        }
-    }
-
-    const baseName = (document.getElementById('pdf-filename').value || 'documenti_tessera')
-        .replace(/[\\/:*?"<>|]/g, '_').replace(/\.(pdf|jpg|jpeg)$/i, '');
-
-    const blobs = [];
-    const names = [];
-
-    for (let p = 0; p < pages; p++) {
-        const canvas = document.createElement('canvas');
-        canvas.width = A4_W_PX;
-        canvas.height = A4_H_PX;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, A4_W_PX, A4_H_PX);
-
-        for (let r = 0; r < rowsPerPage; r++) {
-            const docIndex = p * docsPerPage + r;
-            const docNum = docIndex + 1;
-            if (docNum > currentDocs) break;
-
-            const yMM = startY + r * (rowH + actualGap);
-            const frontX = leftMargin;
-            const backX  = leftMargin + cW + gap;
-
-            const fImg = images[keyOf(docNum, 'fronte')];
-            const bImg = images[keyOf(docNum, 'retro')];
-
-            if (fImg) {
-                const fx = frontX * pxPerMM, fy = yMM * pxPerMM;
-                const fw = cW * pxPerMM, fh = cH * pxPerMM;
-                ctx.save();
-                roundRectPath(ctx, fx, fy, fw, fh, CONFIG.cornerRadiusMM * pxPerMM);
-                ctx.clip();
-                ctx.drawImage(fImg, fx, fy, fw, fh);
-                ctx.restore();
-            }
-            if (bImg) {
-                const bx = backX * pxPerMM, by = yMM * pxPerMM;
-                const bw = cW * pxPerMM, bh = cH * pxPerMM;
-                ctx.save();
-                roundRectPath(ctx, bx, by, bw, bh, CONFIG.cornerRadiusMM * pxPerMM);
-                ctx.clip();
-                ctx.drawImage(bImg, bx, by, bw, bh);
-                ctx.restore();
-            }
-        }
-
-        const jpgData = canvas.toDataURL('image/jpeg', 0.95);
-        const blob = await (await fetch(jpgData)).blob();
-        blobs.push(blob);
-        names.push(pages === 1 ? `${baseName}.jpg` : `${baseName}_pagina${p + 1}.jpg`);
-    }
-
-    return { blobs, names };
 }
 
-async function shareJpg() {
-    const btn = document.getElementById('btn-share-jpg');
-    if (btn) btn.disabled = true;
+function fallbackCopy(textarea, cb) {
     try {
-        const res = await renderA4JpgBlobsForShare();
-        if (!res || !res.blobs || res.blobs.length === 0) {
-            alert('Nessuna immagine da condividere.');
-            return;
-        }
-
-        const files = res.blobs.map((b, i) =>
-            new File([b], res.names[i], { type: 'image/jpeg' })
-        );
-
-        const shareRes = await shareFilesNative(
-            files,
-            'CardScan AI — JPG A4',
-            'Documenti formato tessera esportati in JPG'
-        );
-        if (shareRes && shareRes.ok === false && shareRes.reason === 'unsupported') {
-            alert('La condivisione nativa non è supportata su questo dispositivo.\nI file sono stati salvati nella cartella Download.');
-        }
+        textarea.removeAttribute('disabled');
+        textarea.select();
+        textarea.setSelectionRange(0, 999999);
+        const ok = document.execCommand('copy');
+        if (ok && typeof cb === 'function') cb();
+        else alert('Impossibile copiare automaticamente. Seleziona e copia manualmente.');
     } catch (e) {
-        console.error(e);
-        alert('Errore durante la condivisione del JPG.');
-    } finally {
-        if (btn) btn.disabled = false;
+        alert('Impossibile copiare automaticamente.');
     }
 }
 
 /* ============================================================
-   [NEW v1.2.0] CONDIVISIONE DEL SITO SU SOCIAL / MESSAGGISTICA
+   CONDIVISIONE SOCIAL
    ============================================================ */
-async function shareWebsite() {
-    const url  = WEBSITE_URL;
-    const text = '📇 CardScan AI — scanner gratuito di documenti formato tessera. Riconosce, ritaglia e raddrizza automaticamente le tue tessere e le esporta in PDF A4. Provalo qui:';
-    const title = 'CardScan AI — Scanner Documenti Formato Tessera';
+function getAppShareUrl() {
+    try {
+        return window.location.origin + window.location.pathname;
+    } catch (_) {
+        return 'https://mkboxself.github.io/GOSELF/';
+    }
+}
+
+function getAppShareTitle() {
+    return 'CardScan AI — Scanner documenti formato tessera';
+}
+
+function getAppShareText() {
+    return '📇 CardScan AI: scansiona, ritaglia e raddrizza automaticamente documenti formato tessera. ' +
+           'Esporta in PDF/JPG A4, 100% gratuito e offline. Provalo:';
+}
+
+function buildShareLinks() {
+    const url = getAppShareUrl();
+    const title = getAppShareTitle();
+    const text = getAppShareText();
+    const fullText = text + ' ' + url;
+
+    const enc = encodeURIComponent;
+
+    const links = {
+        whatsapp: `https://wa.me/?text=${enc(fullText)}`,
+        telegram: `https://t.me/share/url?url=${enc(url)}&text=${enc(text)}`,
+        mail:     `mailto:?subject=${enc(title)}&body=${enc(text + '\n\n' + url)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${enc(url)}&quote=${enc(text)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`,
+        twitter:  `https://twitter.com/intent/tweet?text=${enc(text)}&url=${enc(url)}`
+    };
+
+    const ids = {
+        whatsapp: ['share-whatsapp', 'share-app-whatsapp'],
+        telegram: ['share-telegram', 'share-app-telegram'],
+        mail:     ['share-mail',     'share-app-mail'],
+        facebook: ['share-facebook', 'share-app-facebook'],
+        linkedin: ['share-app-linkedin']
+    };
+
+    Object.keys(ids).forEach(key => {
+        ids[key].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && links[key]) {
+                el.href = links[key];
+                if (key === 'mail') {
+                    el.removeAttribute('target');
+                } else {
+                    el.setAttribute('target', '_blank');
+                    el.setAttribute('rel', 'noopener noreferrer');
+                }
+            }
+        });
+    });
+}
+
+async function shareNative() {
+    const url = getAppShareUrl();
+    const title = getAppShareTitle();
+    const text = getAppShareText();
 
     if (navigator.share) {
         try {
             await navigator.share({ title, text, url });
+            showShareFeedback('✅ Condivisione avviata!', 'share-feedback');
+            showShareFeedback('✅ Condivisione avviata!', 'share-app-feedback');
             return;
         } catch (e) {
             if (e && e.name === 'AbortError') return;
-            console.warn('Web Share fallita, provo fallback:', e);
+            console.warn('Web Share fallito, provo fallback:', e);
         }
     }
 
-    try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(url);
-            alert('🔗 Link copiato negli appunti!\n\nIncollalo su WhatsApp, Telegram, Instagram, Facebook, e-mail…\n\n' + url);
-            return;
-        }
-    } catch (e) {
-        console.warn('Clipboard non disponibile:', e);
-    }
-
-    window.prompt('Copia e condividi questo link:', url);
+    copyAppLink();
 }
+
+function copyAppLink() {
+    const url = getAppShareUrl();
+    const done = () => {
+        showShareFeedback('📋 Link copiato negli appunti!', 'share-feedback');
+        showShareFeedback('📋 Link copiato negli appunti!', 'share-app-feedback');
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done).catch(() => {
+            fallbackCopyUrl(url, done);
+        });
+    } else {
+        fallbackCopyUrl(url, done);
+    }
+}
+
+function fallbackCopyUrl(url, cb) {
+    try {
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        ta.setSelectionRange(0, 999999);
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (ok && typeof cb === 'function') cb();
+        else alert('Impossibile copiare automaticamente. Link:\n' + url);
+    } catch (e) {
+        alert('Impossibile copiare automaticamente. Link:\n' + url);
+    }
+}
+
+function showShareFeedback(msg, elId) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('visible');
+    clearTimeout(el._fbTimer);
+    el._fbTimer = setTimeout(() => {
+        el.classList.remove('visible');
+    }, 2200);
+}
+
+(function initShareButtons() {
+    buildShareLinks();
+    window.addEventListener('popstate', buildShareLinks);
+
+    ['share-whatsapp', 'share-telegram', 'share-mail', 'share-facebook',
+     'share-app-whatsapp', 'share-app-telegram', 'share-app-mail',
+     'share-app-facebook', 'share-app-linkedin'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('click', () => {
+            showShareFeedback('↗ Apertura condivisione…', 'share-feedback');
+            showShareFeedback('↗ Apertura condivisione…', 'share-app-feedback');
+        });
+    });
+})();
 
 /* ============================================================
    LOG
    ============================================================ */
-console.log('%cCardScan AI v1.2.0', 'color:#22d3ee;font-weight:bold;font-size:16px;', 'Ambiente:', APP_ENV.label);
+console.log('%cCardScan AI', 'color:#22d3ee;font-weight:bold;font-size:16px;', 'Ambiente:', APP_ENV.label);
 console.log('%c🗺 Pairing Map + Slot Drag&Drop attivi', 'color:#00ffb0;font-weight:bold;');
 console.log('%c🃏 Editor multi-tessera + detection migliorato attivi', 'color:#c4b5fd;font-weight:bold;');
 console.log('%c🔍 Zoom anteprima PDF attivo (Ctrl +/−, pinch, +/−/0)', 'color:#fbbf24;font-weight:bold;');
-console.log('%c🔤 OCR (Tesseract.js) — 3 modalità attive', 'color:#00ffb0;font-weight:bold;');
-console.log('%c📤 Condivisione file (PDF/JPG) + sito — attive', 'color:#ec4899;font-weight:bold;');
-console.log('%c✨ Regolazioni immagine chiuse di default all\'apertura editor', 'color:#60a5fa;font-weight:bold;');
+console.log('%c✨ Preview editor: solo selezione 1-2-3-4 (FIX applicato)', 'color:#f472b6;font-weight:bold;');
+console.log('%c🔤 OCR (Tesseract.js) attivo', 'color:#00ffb0;font-weight:bold;');
+console.log('%c📤 Pulsanti condivisione social attivi', 'color:#ec4899;font-weight:bold;');
+console.log('%c⚙ Editor: pannello regolazioni chiuso all\'avvio', 'color:#fbbf24;font-weight:bold;');
 </script>
 
 </body>
